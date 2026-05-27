@@ -74,7 +74,7 @@ export default function AdminDashboard() {
   }, [navigate]);
 
   const { data: products } = trpc.product.list.useQuery();
-  const { data: enquiries } = trpc.enquiry.list.useQuery(undefined, {
+  const { data: enquiries } = trpc.enquiry.demoList.useQuery(undefined, {
     retry: false,
   });
   const { data: tips } = trpc.tip.list.useQuery();
@@ -291,10 +291,10 @@ export default function AdminDashboard() {
                       <td className="px-4 py-3 text-sm font-semibold" style={{ color: '#c75c2e' }}>{p.price}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <button onClick={() => openProductModal(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }}>
+                          <button onClick={() => openProductModal(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${p.name}`}>
                             <Pencil size={16} />
                           </button>
-                          <button className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }}>
+                          <button className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${p.name}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -348,6 +348,7 @@ export default function AdminDashboard() {
                             onClick={() => { setSelectedEnquiry(e); setShowEnquiryModal(true); }}
                             className="p-1 transition-colors hover:opacity-70"
                             style={{ color: '#5c7a4a' }}
+                            aria-label={`View enquiry from ${e.name}`}
                           >
                             <Eye size={16} />
                           </button>
@@ -398,10 +399,10 @@ export default function AdminDashboard() {
                       <td className="px-4 py-3 text-sm max-w-[300px] truncate" style={{ color: '#3d3d3d' }}>{t.excerpt}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <button onClick={() => openTipModal(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }}>
+                          <button onClick={() => openTipModal(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${t.title}`}>
                             <Pencil size={16} />
                           </button>
-                          <button className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }}>
+                          <button className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${t.title}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -433,7 +434,7 @@ export default function AdminDashboard() {
               <h2 className="font-display text-2xl" style={{ color: '#1a3a2f' }}>
                 {editingProduct ? 'Edit Product' : 'Add Product'}
               </h2>
-              <button onClick={() => setShowProductModal(false)} style={{ color: '#8b7d6b' }}>
+              <button onClick={() => setShowProductModal(false)} style={{ color: '#8b7d6b' }} aria-label="Close product form">
                 <X size={20} />
               </button>
             </div>
@@ -536,7 +537,7 @@ export default function AdminDashboard() {
               <h2 className="font-display text-2xl" style={{ color: '#1a3a2f' }}>
                 {editingTip ? 'Edit Tip' : 'Add Tip'}
               </h2>
-              <button onClick={() => setShowTipModal(false)} style={{ color: '#8b7d6b' }}>
+              <button onClick={() => setShowTipModal(false)} style={{ color: '#8b7d6b' }} aria-label="Close tip form">
                 <X size={20} />
               </button>
             </div>
@@ -614,7 +615,7 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl" style={{ color: '#1a3a2f' }}>Enquiry Details</h2>
-              <button onClick={() => setShowEnquiryModal(false)} style={{ color: '#8b7d6b' }}>
+              <button onClick={() => setShowEnquiryModal(false)} style={{ color: '#8b7d6b' }} aria-label="Close enquiry details">
                 <X size={20} />
               </button>
             </div>

@@ -85,6 +85,8 @@ export default function Navigation() {
             <button
               className="md:hidden text-[#f5f0e8]"
               onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileOpen}
             >
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -114,6 +116,7 @@ export default function Navigation() {
               <button
                 className="self-end text-[#f5f0e8] mb-8"
                 onClick={() => setMobileOpen(false)}
+                aria-label="Close navigation menu"
               >
                 <X size={24} />
               </button>

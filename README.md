@@ -41,6 +41,8 @@ npm run dev
 
 The app is configured for `http://localhost:3000`.
 
+When `DATABASE_URL` is not set in development, the API serves demo products, farming tips, and enquiries so the website can be reviewed immediately after cloning. Production still requires the environment values in `.env.example`.
+
 ## Useful Scripts
 
 ```bash

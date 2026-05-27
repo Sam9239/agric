@@ -15,13 +15,17 @@ export default function WhatsAppButton({ productName, className = '', fullWidth 
 
   const handleClick = () => {
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) {
+      newWindow.opener = null;
+    }
   };
 
   return (
     <button
       onClick={handleClick}
       className={`btn-whatsapp ${fullWidth ? 'w-full' : ''} ${className}`}
+      aria-label={productName ? `Enquire about ${productName} on WhatsApp` : 'Enquire on WhatsApp'}
     >
       <MessageCircle size={16} />
       Enquire on WhatsApp

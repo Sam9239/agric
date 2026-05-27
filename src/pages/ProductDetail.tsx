@@ -33,7 +33,7 @@ export default function ProductDetail() {
   );
 
   const { data: relatedProducts } = trpc.product.related.useQuery(
-    { id: productId, category: product?.category || '' },
+    { id: productId, category: product?.category ?? 'fertilizers' },
     { enabled: !!product?.category }
   );
 

@@ -7,14 +7,20 @@ import Footer from '../sections/Footer';
 import WhatsAppButton from '../sections/WhatsAppButton';
 import { trpc } from '@/providers/trpc';
 
-const categoryLabels: Record<string, string> = {
+const categoryLabels = {
   all: 'All Products',
   pesticides: 'Pesticides',
   manure: 'Manure',
   fertilizers: 'Fertilizers',
   farm_inputs: 'Farm Inputs',
   crop_protection: 'Crop Protection',
-};
+} as const;
+
+type ProductCategoryFilter = keyof typeof categoryLabels;
+
+function isProductCategoryFilter(value: string | null): value is ProductCategoryFilter {
+  return Boolean(value && value in categoryLabels);
+}
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -27,8 +33,11 @@ const fadeInUp = {
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialCategory = searchParams.get('category') || 'all';
-  const [activeCategory, setActiveCategory] = useState(initialCategory);
+  const categoryParam = searchParams.get('category');
+  const initialCategory = isProductCategoryFilter(categoryParam)
+    ? categoryParam
+    : 'all';
+  const [activeCategory, setActiveCategory] = useState<ProductCategoryFilter>(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data: products, isLoading } = trpc.product.list.useQuery(
@@ -39,7 +48,7 @@ export default function Products() {
     setActiveCategory(initialCategory);
   }, [initialCategory]);
 
-  const handleCategoryChange = (cat: string) => {
+  const handleCategoryChange = (cat: ProductCategoryFilter) => {
     setActiveCategory(cat);
     if (cat === 'all') {
       setSearchParams({});
@@ -88,7 +97,7 @@ export default function Products() {
                 Categories
               </h3>
               <div className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
-                {Object.entries(categoryLabels).map(([key, label]) => (
+                {(Object.entries(categoryLabels) as [ProductCategoryFilter, string][]).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => handleCategoryChange(key)}
@@ -109,6 +118,7 @@ export default function Products() {
                 <input
                   type="text"
                   placeholder="Search products..."
+                  aria-label="Search products"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-sm outline-none transition-colors duration-200"

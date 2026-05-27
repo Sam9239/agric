@@ -63,6 +63,7 @@ export default function AdminLogin() {
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="Enter password"
+              aria-label="Admin password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input-underline pr-10"
@@ -73,6 +74,7 @@ export default function AdminLogin() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-0 top-1/2 -translate-y-1/2"
               style={{ color: '#8b7d6b' }}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>

@@ -377,6 +377,7 @@ export default function Home() {
                 <input
                   type="text"
                   placeholder="Your Name *"
+                  aria-label="Your name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="input-underline"
@@ -385,6 +386,7 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Email Address *"
+                  aria-label="Email address"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="input-underline"
@@ -393,12 +395,14 @@ export default function Home() {
                 <input
                   type="tel"
                   placeholder="Phone Number"
+                  aria-label="Phone number"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="input-underline"
                 />
                 <textarea
                   placeholder="Your Message *"
+                  aria-label="Your message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="input-underline resize-none"
