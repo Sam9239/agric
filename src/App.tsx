@@ -7,6 +7,8 @@ import TipDetail from './pages/TipDetail'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import NotFound from './pages/NotFound'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsDisclaimer from './pages/TermsDisclaimer'
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
       <Route path="/farming-tips/:id" element={<TipDetail />} />
       <Route path="/admin" element={<AdminLogin />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/terms-disclaimer" element={<TermsDisclaimer />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

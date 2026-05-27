@@ -1,6 +1,6 @@
-# Kilimo Essentials
+# Jaosef Agro Supplies
 
-Kilimo Essentials is a React, TypeScript, Vite, Hono, and tRPC website for a Kenyan agricultural input supplier. It includes a public storefront, farming tips, WhatsApp enquiry flows, and an admin dashboard scaffold.
+Jaosef Agro Supplies is a React, TypeScript, Vite, Hono, and tRPC website for a Kenyan agricultural input supplier. It includes a public storefront, farming tips, WhatsApp enquiry flows, legal/disclaimer pages, and an admin dashboard scaffold.
 
 ## Features
 

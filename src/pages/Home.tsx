@@ -7,6 +7,7 @@ import WhatsAppButton from '../sections/WhatsAppButton';
 import { trpc } from '@/providers/trpc';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { siteConfig } from '@/config/site';
 
 const categoryImages: Record<string, string> = {
   pesticides: '/images/cat-pesticides.jpg',
@@ -76,13 +77,13 @@ export default function Home() {
               transition={{ duration: 0.8, ease: 'easeOut' }}
             >
               <p className="section-label-light mb-6">
-                KENYA'S TRUSTED AGRICULTURAL PARTNER
+                TRUSTED AGRICULTURAL SUPPLIES IN KENYA
               </p>
               <h1 className="text-4xl md:text-5xl lg:text-[56px] leading-[1.1] text-[#f5f0e8]">
                 Quality Farm Inputs for Better Harvests
               </h1>
               <p className="mt-5 text-lg max-w-[480px]" style={{ color: '#a09080' }}>
-                Premium pesticides, fertilizers, and crop protection products sourced for Kenyan farmers since 2010.
+                {siteConfig.name} supplies pesticides, fertilizers, manure, farm inputs, and crop protection products for Kenyan farmers.
               </p>
               <Link
                 to="/products"
@@ -124,7 +125,7 @@ export default function Home() {
                 Supporting Kenyan Agriculture
               </h2>
               <p className="mt-4 text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
-                We supply quality agricultural inputs to farmers across Kenya. From smallholders to large-scale operations, our products help protect crops, enrich soil, and improve yields.
+                {siteConfig.name} supplies quality agricultural inputs to farmers across Kenya. From smallholders to larger operations, our products help protect crops, enrich soil, and improve yields.
               </p>
               <p className="mt-4 text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
                 Our mission is to make premium farm inputs accessible and affordable, empowering Kenyan farmers to achieve better harvests and sustainable livelihoods.
@@ -343,16 +344,16 @@ export default function Home() {
               <div className="mt-8 space-y-6">
                 <div className="flex items-center gap-3">
                   <Phone size={18} style={{ color: '#5c7a4a' }} />
-                  <span className="text-base" style={{ color: '#3d3d3d' }}>+254 700 123 456</span>
+                  <a href={siteConfig.phoneHref} className="text-base hover:opacity-80" style={{ color: '#3d3d3d' }}>{siteConfig.phoneDisplay}</a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail size={18} style={{ color: '#5c7a4a' }} />
-                  <span className="text-base" style={{ color: '#3d3d3d' }}>info@kilimoessentials.co.ke</span>
+                  <a href={`mailto:${siteConfig.email}`} className="text-base hover:opacity-80" style={{ color: '#3d3d3d' }}>{siteConfig.email}</a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Sprout size={18} style={{ color: '#25d366' }} />
                   <a
-                    href="https://wa.me/254700123456"
+                    href={siteConfig.whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-base font-medium transition-colors hover:opacity-80"
@@ -363,7 +364,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin size={18} style={{ color: '#5c7a4a' }} />
-                  <span className="text-base" style={{ color: '#3d3d3d' }}>Nairobi, Kenya</span>
+                  <span className="text-base" style={{ color: '#3d3d3d' }}>{siteConfig.location}</span>
                 </div>
               </div>
             </motion.div>

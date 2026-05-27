@@ -20,6 +20,7 @@ import {
 import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
 import type { Enquiry, FarmingTip, Product } from '@db/schema';
+import { siteConfig } from '@/config/site';
 
 type TabType = 'overview' | 'products' | 'enquiries' | 'tips';
 type ProductCategory = Product['category'];
@@ -147,7 +148,7 @@ export default function AdminDashboard() {
       <aside className="fixed left-0 top-0 bottom-0 w-[240px] flex flex-col" style={{ backgroundColor: '#1a3a2f' }}>
         <div className="p-6">
           <Link to="/" className="text-[#f5f0e8] font-bold text-sm tracking-[3px]" style={{ fontFamily: 'Inter, sans-serif' }}>
-            KILIMO ESSENTIALS
+            {siteConfig.name.toUpperCase()}
           </Link>
         </div>
         <nav className="flex-1 px-4 mt-4">

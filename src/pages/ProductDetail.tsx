@@ -94,6 +94,9 @@ export default function ProductDetail() {
               <p className="mt-5 text-base leading-[1.7]" style={{ color: '#3d3d3d' }}>
                 {product.description}
               </p>
+              <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
+                Use as directed on the official product label. Product information is for enquiry purposes only and does not replace professional agronomic advice.
+              </p>
               <div className="mt-6">
                 <WhatsAppButton productName={product.name} fullWidth className="py-4 text-sm" />
               </div>

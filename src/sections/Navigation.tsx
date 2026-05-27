@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { siteConfig } from '@/config/site';
 
 const navLinks = [
   { label: 'Products', href: '/products' },
@@ -52,10 +53,10 @@ export default function Navigation() {
           {/* Logo */}
           <Link to="/" className="flex flex-col">
             <span className="text-[#f5f0e8] font-bold text-lg leading-tight tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
-              KILIMO
+              {siteConfig.navName}
             </span>
             <span className="text-[#8b7d6b] text-[10px] tracking-[4px] leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-              ESSENTIALS
+              {siteConfig.navTagline}
             </span>
           </Link>
 

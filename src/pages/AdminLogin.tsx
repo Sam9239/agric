@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
+import { siteConfig } from '@/config/site';
 
-const ADMIN_PASSWORD = 'kilimo2025';
+const ADMIN_PASSWORD = 'jaosef2026';
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
@@ -51,7 +52,7 @@ export default function AdminLogin() {
       >
         <div className="text-center">
           <span className="text-[#1a3a2f] font-bold text-base tracking-[3px]" style={{ fontFamily: 'Inter, sans-serif' }}>
-            KILIMO ESSENTIALS
+            {siteConfig.name.toUpperCase()}
           </span>
           <h1 className="font-display text-[28px] mt-6" style={{ color: '#1a3a2f' }}>
             Admin Login

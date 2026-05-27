@@ -1,11 +1,14 @@
 import { Link } from 'react-router';
 import { Phone, Mail, MapPin } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 
 const quickLinks = [
   { label: 'Products', href: '/products' },
   { label: 'Farming Tips', href: '/farming-tips' },
   { label: 'About', href: '/#about' },
   { label: 'Contact', href: '/#contact' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Terms & Disclaimer', href: '/terms-disclaimer' },
 ];
 
 const categoryLinks = [
@@ -24,10 +27,10 @@ export default function Footer() {
           {/* Column 1 - Brand */}
           <div>
             <span className="text-[#f5f0e8] font-bold text-base tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
-              KILIMO ESSENTIALS
+              {siteConfig.name.toUpperCase()}
             </span>
             <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
-              Quality agricultural inputs for Kenyan farmers. Trusted since 2010.
+              Quality agricultural inputs and farm supplies for Kenyan farmers.
             </p>
           </div>
 
@@ -79,15 +82,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2">
                 <Phone size={14} style={{ color: '#8b7d6b' }} />
-                <span className="text-sm" style={{ color: '#8b7d6b' }}>+254 700 123 456</span>
+                <a href={siteConfig.phoneHref} className="text-sm hover:text-[#f5f0e8]" style={{ color: '#8b7d6b' }}>{siteConfig.phoneDisplay}</a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={14} style={{ color: '#8b7d6b' }} />
-                <span className="text-sm" style={{ color: '#8b7d6b' }}>info@kilimoessentials.co.ke</span>
+                <a href={`mailto:${siteConfig.email}`} className="text-sm hover:text-[#f5f0e8]" style={{ color: '#8b7d6b' }}>{siteConfig.email}</a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={14} className="mt-0.5 flex-shrink-0" style={{ color: '#8b7d6b' }} />
-                <span className="text-sm" style={{ color: '#8b7d6b' }}>Nairobi, Kenya</span>
+                <span className="text-sm" style={{ color: '#8b7d6b' }}>{siteConfig.location}</span>
               </li>
             </ul>
           </div>
@@ -99,7 +102,7 @@ export default function Footer() {
           style={{ borderColor: 'rgba(255,255,255,0.1)' }}
         >
           <p className="text-xs text-center" style={{ color: '#8b7d6b' }}>
-            © 2025 Kilimo Essentials. All rights reserved.
+            © 2026 {siteConfig.name}. All rights reserved.
           </p>
         </div>
       </div>
