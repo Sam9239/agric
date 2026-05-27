@@ -1,0 +1,15 @@
+import { authRouter } from "./auth-router";
+import { productRouter } from "./product-router";
+import { tipRouter } from "./tip-router";
+import { enquiryRouter } from "./enquiry-router";
+import { createRouter, publicQuery } from "./middleware";
+
+export const appRouter = createRouter({
+  ping: publicQuery.query(() => ({ ok: true, ts: Date.now() })),
+  auth: authRouter,
+  product: productRouter,
+  tip: tipRouter,
+  enquiry: enquiryRouter,
+});
+
+export type AppRouter = typeof appRouter;

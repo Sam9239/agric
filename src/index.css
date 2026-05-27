@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 160 38% 17%;
+    --secondary: 95 25% 38%;
+    --accent: 17 64% 48%;
+    --background: 37 33% 93%;
+    --warm-sand: 33 23% 86%;
+    --dark-earth: 20 7% 16%;
+    --body-text: 0 0% 24%;
+    --muted: 30 12% 53%;
+    --border-color: 30 18% 78%;
+    --success: 137 27% 38%;
+    --whatsapp: 142 69% 45%;
+
+    --background-app: 37 33% 93%;
+    --foreground: 160 38% 17%;
+    --card: 37 33% 93%;
+    --card-foreground: 160 38% 17%;
+    --popover: 37 33% 93%;
+    --popover-foreground: 160 38% 17%;
+    --primary-hsl: 160 38% 17%;
+    --primary-foreground: 37 33% 93%;
+    --secondary-hsl: 95 25% 38%;
+    --secondary-foreground: 37 33% 93%;
+    --muted-hsl: 33 23% 86%;
+    --muted-foreground: 30 12% 53%;
+    --accent-hsl: 17 64% 48%;
+    --accent-foreground: 37 33% 93%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 18% 78%;
+    --input: 30 18% 78%;
+    --ring: 17 64% 48%;
+    --radius: 0px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: hsl(var(--body-text));
+    background-color: hsl(var(--background));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    color: hsl(var(--primary));
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200;
+    background-color: hsl(var(--accent));
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.02);
+    filter: brightness(0.9);
+  }
+
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 w-full;
+    background-color: hsl(var(--whatsapp));
+  }
+
+  .btn-whatsapp:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  }
+
+  .section-label {
+    @apply text-xs font-medium tracking-[3px] uppercase;
+    color: hsl(var(--accent));
+  }
+
+  .section-label-light {
+    @apply text-xs font-medium tracking-[3px] uppercase;
+    color: hsl(var(--secondary));
+  }
+
+  .nav-link {
+    @apply text-sm font-medium transition-all duration-200 relative;
+    color: hsl(var(--background));
+    opacity: 0.8;
+  }
+
+  .nav-link:hover {
+    opacity: 1;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-px transition-all duration-300;
+    background-color: hsl(var(--background));
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300;
+  }
+
+  .card-hover:hover {
+    border-color: hsl(var(--secondary));
+    box-shadow: 0 4px 12px rgba(26, 58, 47, 0.08);
+  }
+
+  .input-underline {
+    @apply w-full bg-transparent border-0 border-b px-0 py-3 text-base outline-none transition-colors duration-200;
+    border-color: hsl(var(--border-color));
+    color: hsl(var(--primary));
+  }
+
+  .input-underline:focus {
+    border-color: hsl(var(--accent));
+  }
+
+  .input-underline::placeholder {
+    color: hsl(var(--muted));
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+}
