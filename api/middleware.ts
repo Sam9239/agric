@@ -27,6 +27,10 @@ function requireRole(role: string) {
   return t.middleware(async (opts) => {
     const { ctx, next } = opts;
 
+    if (role === "admin" && ctx.adminAuthenticated) {
+      return next({ ctx });
+    }
+
     if (!ctx.user || ctx.user.role !== role) {
       throw new TRPCError({
         code: "FORBIDDEN",
@@ -39,4 +43,4 @@ function requireRole(role: string) {
 }
 
 export const authedQuery = t.procedure.use(requireAuth);
-export const adminQuery = authedQuery.use(requireRole("admin"));
+export const adminQuery = t.procedure.use(requireRole("admin"));

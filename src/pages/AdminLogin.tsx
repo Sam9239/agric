@@ -1,44 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { siteConfig } from '@/config/site';
-
-const ADMIN_PASSWORD = 'jaosef2026';
+import { trpc } from '@/providers/trpc';
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const auth = localStorage.getItem('admin_auth');
-    if (auth) {
-      try {
-        const parsed = JSON.parse(auth);
-        const now = Date.now();
-        if (parsed.authenticated && now - parsed.timestamp < 24 * 60 * 60 * 1000) {
-          navigate('/admin/dashboard');
-        }
-      } catch {
-        localStorage.removeItem('admin_auth');
+  const adminLogin = trpc.auth.adminLogin.useMutation({
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success('Login successful');
+        navigate('/admin/dashboard');
+      } else {
+        setError('Invalid password');
+        toast.error('Invalid password');
       }
-    }
-  }, [navigate]);
+    },
+    onError: () => {
+      setError('Login failed. Please try again.');
+      toast.error('Login failed');
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (password === ADMIN_PASSWORD) {
-      localStorage.setItem('admin_auth', JSON.stringify({ authenticated: true, timestamp: Date.now() }));
-      toast.success('Login successful');
-      navigate('/admin/dashboard');
-    } else {
-      setError('Invalid password');
-      toast.error('Invalid password');
-    }
+    adminLogin.mutate({ password });
   };
 
   return (
@@ -89,10 +81,11 @@ export default function AdminLogin() {
 
           <button
             type="submit"
+            disabled={adminLogin.isPending}
             className="w-full mt-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02]"
             style={{ backgroundColor: '#c75c2e' }}
           >
-            Login
+            {adminLogin.isPending ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </motion.div>

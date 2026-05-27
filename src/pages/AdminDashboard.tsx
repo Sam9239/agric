@@ -19,18 +19,55 @@ import {
 } from 'lucide-react';
 import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
-import type { Enquiry, FarmingTip, Product } from '@db/schema';
 import { siteConfig } from '@/config/site';
+import { productCategories, type CatalogueProduct, type ProductCategory } from '@contracts/product-catalog';
+import type { Enquiry, FarmingTip } from '@db/schema';
 
 type TabType = 'overview' | 'products' | 'enquiries' | 'tips';
-type ProductCategory = Product['category'];
 type ProductForm = {
   name: string;
   category: ProductCategory;
-  price: string;
+  shortDescription: string;
   description: string;
+  specs: string;
+  bestSuitedFor: string;
+  usageTip: string;
+  safetyNote: string;
+  packSizes: string;
   imageUrl: string;
   featured: boolean;
+  activeIngredient: string;
+  formulation: string;
+  targetUse: string;
+  registeredCropUse: string;
+  pcpbStatus: string;
+  phi: string;
+  rei: string;
+  ppe: string;
+  storageWarning: string;
+};
+
+const emptyProductForm: ProductForm = {
+  name: '',
+  category: 'crop_nutrition',
+  shortDescription: '',
+  description: '',
+  specs: '',
+  bestSuitedFor: '',
+  usageTip: '',
+  safetyNote: '',
+  packSizes: '',
+  imageUrl: '',
+  featured: false,
+  activeIngredient: '',
+  formulation: '',
+  targetUse: '',
+  registeredCropUse: '',
+  pcpbStatus: '',
+  phi: '',
+  rei: '',
+  ppe: '',
+  storageWarning: '',
 };
 
 const sidebarItems: { id: TabType; label: string; icon: typeof Package }[] = [
@@ -47,59 +84,112 @@ export default function AdminDashboard() {
   const [showTipModal, setShowTipModal] = useState(false);
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editingProduct, setEditingProduct] = useState<CatalogueProduct | null>(null);
   const [editingTip, setEditingTip] = useState<FarmingTip | null>(null);
 
-  const [productForm, setProductForm] = useState<ProductForm>({
-    name: '', category: 'fertilizers' as const, price: '', description: '', imageUrl: '', featured: false,
-  });
+  const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
   const [tipForm, setTipForm] = useState({ title: '', content: '', excerpt: '', imageUrl: '', date: '' });
 
-  useEffect(() => {
-    const auth = localStorage.getItem('admin_auth');
-    if (!auth) {
-      navigate('/admin');
-      return;
-    }
-    try {
-      const parsed = JSON.parse(auth);
-      const now = Date.now();
-      if (!parsed.authenticated || now - parsed.timestamp >= 24 * 60 * 60 * 1000) {
-        localStorage.removeItem('admin_auth');
-        navigate('/admin');
-      }
-    } catch {
-      localStorage.removeItem('admin_auth');
-      navigate('/admin');
-    }
-  }, [navigate]);
+  const { data: adminSession, isLoading: isCheckingAdmin } = trpc.auth.adminMe.useQuery();
 
+  const productUtils = trpc.useUtils();
   const { data: products } = trpc.product.list.useQuery();
-  const { data: enquiries } = trpc.enquiry.demoList.useQuery(undefined, {
+  const { data: enquiries } = trpc.enquiry.list.useQuery(undefined, {
     retry: false,
+    enabled: adminSession?.authenticated === true,
   });
   const { data: tips } = trpc.tip.list.useQuery();
+  const createProduct = trpc.product.create.useMutation({
+    onSuccess: () => {
+      productUtils.product.list.invalidate();
+      productUtils.product.featured.invalidate();
+      toast.success('Product saved');
+      setShowProductModal(false);
+    },
+  });
+  const updateProduct = trpc.product.update.useMutation({
+    onSuccess: () => {
+      productUtils.product.list.invalidate();
+      productUtils.product.featured.invalidate();
+      toast.success('Product updated');
+      setShowProductModal(false);
+    },
+  });
+  const deleteProduct = trpc.product.delete.useMutation({
+    onSuccess: () => {
+      productUtils.product.list.invalidate();
+      productUtils.product.featured.invalidate();
+      toast.success('Product deleted');
+    },
+  });
+  const createTip = trpc.tip.create.useMutation({
+    onSuccess: () => {
+      productUtils.tip.list.invalidate();
+      productUtils.tip.recent.invalidate();
+      toast.success('Tip saved');
+      setShowTipModal(false);
+    },
+  });
+  const updateTip = trpc.tip.update.useMutation({
+    onSuccess: () => {
+      productUtils.tip.list.invalidate();
+      productUtils.tip.recent.invalidate();
+      toast.success('Tip updated');
+      setShowTipModal(false);
+    },
+  });
+  const deleteTip = trpc.tip.delete.useMutation({
+    onSuccess: () => {
+      productUtils.tip.list.invalidate();
+      productUtils.tip.recent.invalidate();
+      toast.success('Tip deleted');
+    },
+  });
+  const adminLogout = trpc.auth.adminLogout.useMutation({
+    onSuccess: () => {
+      toast.success('Logged out');
+      navigate('/admin');
+    },
+  });
+
+  useEffect(() => {
+    if (!isCheckingAdmin && adminSession?.authenticated === false) {
+      navigate('/admin');
+    }
+  }, [adminSession?.authenticated, isCheckingAdmin, navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('admin_auth');
-    toast.success('Logged out');
-    navigate('/admin');
+    adminLogout.mutate();
   };
 
-  const openProductModal = (product?: Product) => {
+  const openProductModal = (product?: CatalogueProduct) => {
     if (product) {
       setEditingProduct(product);
       setProductForm({
         name: product.name,
         category: product.category,
-        price: product.price,
+        shortDescription: product.shortDescription,
         description: product.description,
+        specs: product.specs,
+        bestSuitedFor: product.bestSuitedFor,
+        usageTip: product.usageTip,
+        safetyNote: product.safetyNote,
+        packSizes: product.packSizes,
         imageUrl: product.imageUrl,
         featured: product.featured,
+        activeIngredient: product.activeIngredient || '',
+        formulation: product.formulation || '',
+        targetUse: product.targetUse || '',
+        registeredCropUse: product.registeredCropUse || '',
+        pcpbStatus: product.pcpbStatus || '',
+        phi: product.phi || '',
+        rei: product.rei || '',
+        ppe: product.ppe || '',
+        storageWarning: product.storageWarning || '',
       });
     } else {
       setEditingProduct(null);
-      setProductForm({ name: '', category: 'fertilizers', price: '', description: '', imageUrl: '', featured: false });
+      setProductForm(emptyProductForm);
     }
     setShowProductModal(true);
   };
@@ -127,20 +217,38 @@ export default function AdminDashboard() {
   const newEnquiries = enquiries?.filter((e) => e.status === 'new').length || 0;
 
   const categoryColors: Record<string, string> = {
-    fertilizers: '#5c7a4a',
-    pesticides: '#c75c2e',
-    manure: '#8b7d6b',
-    farm_inputs: '#1a3a2f',
+    crop_nutrition: '#5c7a4a',
+    seeds: '#4a7c59',
+    soil_health: '#8b7d6b',
     crop_protection: '#4a7c59',
+    irrigation: '#2f6f73',
+    tools: '#1a3a2f',
+    nursery: '#6f8d45',
+    safety: '#c75c2e',
+    post_harvest: '#78624d',
   };
 
-  const categoryLabels: Record<string, string> = {
-    fertilizers: 'Fertilizers',
-    pesticides: 'Pesticides',
-    manure: 'Manure',
-    farm_inputs: 'Farm Inputs',
-    crop_protection: 'Crop Protection',
+  const categoryLabels = productCategories;
+
+  const saveProduct = () => {
+    if (editingProduct) {
+      updateProduct.mutate({ id: editingProduct.id, ...productForm });
+    } else {
+      createProduct.mutate(productForm);
+    }
   };
+
+  const saveTip = () => {
+    if (editingTip) {
+      updateTip.mutate({ id: editingTip.id, ...tipForm });
+    } else {
+      createTip.mutate(tipForm);
+    }
+  };
+
+  if (isCheckingAdmin) {
+    return <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }} />;
+  }
 
   return (
     <div className="min-h-screen flex" style={{ backgroundColor: '#f5f0e8' }}>
@@ -270,7 +378,7 @@ export default function AdminDashboard() {
               <table className="w-full" style={{ backgroundColor: '#f5f0e8' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #d4c9b8' }}>
-                    {['Image', 'Name', 'Category', 'Price', 'Actions'].map((h) => (
+                    {['Image', 'Name', 'Category', 'Featured', 'Actions'].map((h) => (
                       <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: '#8b7d6b' }}>
                         {h}
                       </th>
@@ -289,13 +397,13 @@ export default function AdminDashboard() {
                           {categoryLabels[p.category]}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm font-semibold" style={{ color: '#c75c2e' }}>{p.price}</td>
+                      <td className="px-4 py-3 text-sm" style={{ color: '#3d3d3d' }}>{p.featured ? 'Yes' : 'No'}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <button onClick={() => openProductModal(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${p.name}`}>
                             <Pencil size={16} />
                           </button>
-                          <button className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${p.name}`}>
+                          <button onClick={() => deleteProduct.mutate({ id: p.id })} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${p.name}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -403,7 +511,7 @@ export default function AdminDashboard() {
                           <button onClick={() => openTipModal(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${t.title}`}>
                             <Pencil size={16} />
                           </button>
-                          <button className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${t.title}`}>
+                          <button onClick={() => deleteTip.mutate({ id: t.id })} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${t.title}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -464,14 +572,13 @@ export default function AdminDashboard() {
                 </select>
               </div>
               <div>
-                <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>Price</label>
+                <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>Short Description</label>
                 <input
                   type="text"
-                  value={productForm.price}
-                  onChange={(e) => setProductForm({ ...productForm, price: e.target.value })}
+                  value={productForm.shortDescription}
+                  onChange={(e) => setProductForm({ ...productForm, shortDescription: e.target.value })}
                   className="w-full mt-1 px-3 py-2.5 text-sm outline-none"
                   style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
-                  placeholder="KSh 1,200"
                 />
               </div>
               <div>
@@ -484,6 +591,50 @@ export default function AdminDashboard() {
                   rows={4}
                 />
               </div>
+              {[
+                ['specs', 'Specs'],
+                ['bestSuitedFor', 'Best Suited For'],
+                ['usageTip', 'Usage Tip'],
+                ['safetyNote', 'Safety Note'],
+                ['packSizes', 'Pack Sizes'],
+              ].map(([field, label]) => (
+                <div key={field}>
+                  <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>{label}</label>
+                  <input
+                    type="text"
+                    value={productForm[field as keyof ProductForm] as string}
+                    onChange={(e) => setProductForm({ ...productForm, [field]: e.target.value })}
+                    className="w-full mt-1 px-3 py-2.5 text-sm outline-none"
+                    style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
+                  />
+                </div>
+              ))}
+              {productForm.category === 'crop_protection' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                  {[
+                    ['activeIngredient', 'Active Ingredient'],
+                    ['formulation', 'Formulation'],
+                    ['targetUse', 'Target Pest/Disease/Weed'],
+                    ['registeredCropUse', 'Registered Crop Use'],
+                    ['pcpbStatus', 'PCPB Status'],
+                    ['phi', 'PHI'],
+                    ['rei', 'REI'],
+                    ['ppe', 'PPE Required'],
+                    ['storageWarning', 'Storage Warning'],
+                  ].map(([field, label]) => (
+                    <div key={field}>
+                      <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>{label}</label>
+                      <input
+                        type="text"
+                        value={productForm[field as keyof ProductForm] as string}
+                        onChange={(e) => setProductForm({ ...productForm, [field]: e.target.value })}
+                        className="w-full mt-1 px-3 py-2.5 text-sm outline-none"
+                        style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
               <div>
                 <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>Image URL</label>
                 <input
@@ -515,7 +666,7 @@ export default function AdminDashboard() {
                 <button
                   className="flex-1 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
                   style={{ backgroundColor: '#c75c2e' }}
-                  onClick={() => { toast.success('Product saved (demo mode)'); setShowProductModal(false); }}
+                  onClick={saveProduct}
                 >
                   Save
                 </button>
@@ -595,7 +746,7 @@ export default function AdminDashboard() {
                 <button
                   className="flex-1 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
                   style={{ backgroundColor: '#c75c2e' }}
-                  onClick={() => { toast.success('Tip saved (demo mode)'); setShowTipModal(false); }}
+                  onClick={saveTip}
                 >
                   Save
                 </button>

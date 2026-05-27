@@ -8,22 +8,21 @@ import { trpc } from '@/providers/trpc';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { siteConfig } from '@/config/site';
+import { productCategories, type ProductCategory } from '@contracts/product-catalog';
 
-const categoryImages: Record<string, string> = {
-  pesticides: '/images/cat-pesticides.jpg',
-  manure: '/images/cat-manure.jpg',
-  fertilizers: '/images/cat-fertilizers.jpg',
-  farm_inputs: '/images/cat-farm-inputs.jpg',
+const categoryImages: Record<ProductCategory, string> = {
+  crop_nutrition: '/images/cat-fertilizers.jpg',
+  seeds: '/images/products/certified-maize-seed.png',
   crop_protection: '/images/cat-crop-protection.jpg',
+  soil_health: '/images/cat-manure.jpg',
+  irrigation: '/images/cat-farm-inputs.jpg',
+  tools: '/images/products/knapsack-sprayer.png',
+  nursery: '/images/products/seedling-trays-cocopeat.png',
+  safety: '/images/products/ppe-kit.png',
+  post_harvest: '/images/cat-farm-inputs.jpg',
 };
 
-const categoryLabels: Record<string, string> = {
-  pesticides: 'Pesticides',
-  manure: 'Manure',
-  fertilizers: 'Fertilizers',
-  farm_inputs: 'Farm Inputs',
-  crop_protection: 'Crop Protection',
-};
+const categoryLabels = productCategories;
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -122,13 +121,13 @@ export default function Home() {
             >
               <p className="section-label mb-4">ABOUT US</p>
               <h2 className="text-3xl md:text-[32px] leading-[1.3]" style={{ color: '#1a3a2f' }}>
-                Supporting Kenyan Agriculture
+                Supporting Productive, Responsible Farming
               </h2>
               <p className="mt-4 text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
                 {siteConfig.name} supplies quality agricultural inputs to farmers across Kenya. From smallholders to larger operations, our products help protect crops, enrich soil, and improve yields.
               </p>
               <p className="mt-4 text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
-                Our mission is to make premium farm inputs accessible and affordable, empowering Kenyan farmers to achieve better harvests and sustainable livelihoods.
+                Our message to farmers is simple: better harvests should go hand in hand with responsible product use, soil care, water efficiency, safe handling, and environmental protection.
               </p>
               <Link
                 to="/products"
@@ -172,8 +171,8 @@ export default function Home() {
               What We Offer
             </h2>
           </motion.div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
-            {Object.entries(categoryLabels).map(([key, label], i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+            {(Object.entries(categoryLabels) as [ProductCategory, string][]).map(([key, label], i) => (
               <motion.div
                 key={key}
                 custom={i}
@@ -257,8 +256,8 @@ export default function Home() {
                       <h3 className="font-display text-lg font-medium mt-1" style={{ color: '#1a3a2f' }}>
                         {product.name}
                       </h3>
-                      <p className="text-base font-semibold mt-1" style={{ color: '#c75c2e' }}>
-                        {product.price}
+                      <p className="text-sm mt-2 leading-relaxed" style={{ color: '#3d3d3d' }}>
+                        {product.shortDescription}
                       </p>
                     </div>
                   </div>
@@ -268,6 +267,21 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Environmental Commitment */}
+      <section className="py-16" style={{ backgroundColor: '#e8dfd1' }}>
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="max-w-[760px]">
+            <p className="section-label mb-3">RESPONSIBLE FARMING</p>
+            <h2 className="text-3xl md:text-4xl" style={{ color: '#1a3a2f' }}>
+              Focused on Productivity and Environmental Protection
+            </h2>
+            <p className="mt-4 text-base leading-relaxed" style={{ color: '#3d3d3d' }}>
+              We encourage farmers to use agricultural inputs correctly, choose certified seed, follow official product labels, wear protective gear, care for soil health, and avoid unnecessary over-application. Good farming protects both the harvest and the environment that supports it.
+            </p>
           </div>
         </div>
       </section>

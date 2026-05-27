@@ -16,4 +16,5 @@ export const env = {
   kimiAuthUrl: required("KIMI_AUTH_URL"),
   kimiOpenUrl: required("KIMI_OPEN_URL"),
   ownerUnionId: process.env.OWNER_UNION_ID ?? "",
+  adminPassword: process.env.ADMIN_PASSWORD ?? (process.env.NODE_ENV === "production" ? required("ADMIN_PASSWORD") : "jaosef-preview-admin"),
 };

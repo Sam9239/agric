@@ -2,6 +2,7 @@ import "dotenv/config";
 import { drizzle } from "drizzle-orm/mysql2";
 import { createPool } from "mysql2/promise";
 import { products, farmingTips, enquiries } from "./schema";
+import { starterProducts } from "@contracts/product-catalog";
 
 const dbUrl = process.env.DATABASE_URL || "";
 if (!dbUrl) {
@@ -17,116 +18,31 @@ async function seed() {
   const existingProducts = await db.select().from(products);
   if (existingProducts.length === 0) {
     console.log("Seeding products...");
-    await db.insert(products).values([
-      {
-        name: "DAP Fertilizer 18-46-0",
-        category: "fertilizers",
-        price: "KSh 3,200",
-        description:
-          "Diammonium Phosphate fertilizer with high phosphorous content. Ideal for root development and early growth stages. Apply at planting for maximum effectiveness. Suitable for maize, wheat, and vegetable crops.",
-        imageUrl: "/images/product-dap.jpg",
-        featured: true,
-      },
-      {
-        name: "CAN Fertilizer 26-0-0",
-        category: "fertilizers",
-        price: "KSh 2,800",
-        description:
-          "Calcium Ammonium Nitrate fertilizer for top dressing. Provides nitrogen and calcium for healthy leaf growth and strong plant structure. Best applied during vegetative growth stage.",
-        imageUrl: "/images/cat-fertilizers.jpg",
-        featured: true,
-      },
-      {
-        name: "NPK 23-23-0 Fertilizer",
-        category: "fertilizers",
-        price: "KSh 3,500",
-        description:
-          "Balanced NPK fertilizer with equal nitrogen and phosphorous content. Excellent for basal application at planting. Suitable for a wide range of crops including cereals and horticultural crops.",
-        imageUrl: "/images/cat-fertilizers.jpg",
-        featured: false,
-      },
-      {
-        name: "Roundup Herbicide",
-        category: "pesticides",
-        price: "KSh 1,800",
-        description:
-          "Glyphosate-based broad-spectrum herbicide for controlling annual and perennial weeds. Systemic action kills weeds from roots up. Use as directed on label for pre-planting weed control.",
-        imageUrl: "/images/product-roundup.jpg",
-        featured: true,
-      },
-      {
-        name: "Thunder Insecticide",
-        category: "pesticides",
-        price: "KSh 2,400",
-        description:
-          "Broad-spectrum insecticide effective against aphids, thrips, caterpillars, and other common crop pests. Fast-acting contact and stomach poison. Suitable for vegetables, fruits, and field crops.",
-        imageUrl: "/images/cat-pesticides.jpg",
-        featured: true,
-      },
-      {
-        name: "Redomil Fungicide",
-        category: "crop_protection",
-        price: "KSh 2,100",
-        description:
-          "Metalaxyl-based systemic fungicide for controlling downy mildew, late blight, and other fungal diseases. Provides both preventive and curative action. Essential for tomato, potato, and grape growers.",
-        imageUrl: "/images/cat-crop-protection.jpg",
-        featured: true,
-      },
-      {
-        name: "Organic Compost Manure",
-        category: "manure",
-        price: "KSh 1,500",
-        description:
-          "Premium quality organic compost manure. Rich in organic matter and beneficial microorganisms. Improves soil structure, water retention, and nutrient availability. Perfect for vegetable gardens and organic farming.",
-        imageUrl: "/images/cat-manure.jpg",
-        featured: true,
-      },
-      {
-        name: "Chicken Manure Pellets",
-        category: "manure",
-        price: "KSh 1,200",
-        description:
-          "Dried and pelleted chicken manure. High in nitrogen, phosphorous, and potassium. Convenient to apply and fast-acting. Suitable for all crops including vegetables, fruits, and ornamentals.",
-        imageUrl: "/images/cat-manure.jpg",
-        featured: false,
-      },
-      {
-        name: "Seedling Trays (200 cells)",
-        category: "farm_inputs",
-        price: "KSh 450",
-        description:
-          "Durable plastic seedling trays with 200 cells. Perfect for starting vegetables, flowers, and tree seedlings. Reusable for multiple seasons. Ensures uniform germination and easy transplanting.",
-        imageUrl: "/images/cat-farm-inputs.jpg",
-        featured: true,
-      },
-      {
-        name: "Knapsack Sprayer 16L",
-        category: "farm_inputs",
-        price: "KSh 3,800",
-        description:
-          "16-liter capacity knapsack sprayer with adjustable nozzle. Ergonomic design for comfortable carrying and operation. Essential for pesticide and foliar fertilizer application on small to medium farms.",
-        imageUrl: "/images/cat-farm-inputs.jpg",
-        featured: true,
-      },
-      {
-        name: "Mulching Film (Black)",
-        category: "farm_inputs",
-        price: "KSh 2,600",
-        description:
-          "UV-stabilized black mulching film for weed control and moisture retention. Helps regulate soil temperature and reduce water evaporation. Ideal for vegetable production and horticultural crops.",
-        imageUrl: "/images/cat-farm-inputs.jpg",
-        featured: false,
-      },
-      {
-        name: "Copper Oxychloride Fungicide",
-        category: "crop_protection",
-        price: "KSh 1,600",
-        description:
-          "Copper-based protective fungicide for bacterial and fungal disease control. Effective against blight, leaf spot, and bacterial wilt. Suitable for tomatoes, potatoes, beans, and other susceptible crops.",
-        imageUrl: "/images/cat-crop-protection.jpg",
-        featured: false,
-      },
-    ]);
+    await db.insert(products).values(
+      starterProducts.map((product) => ({
+        name: product.name,
+        category: product.category,
+        shortDescription: product.shortDescription,
+        description: product.description,
+        specs: product.specs,
+        bestSuitedFor: product.bestSuitedFor,
+        usageTip: product.usageTip,
+        safetyNote: product.safetyNote,
+        packSizes: product.packSizes,
+        imageUrl: product.imageUrl,
+        featured: product.featured,
+        activeIngredient: product.activeIngredient,
+        formulation: product.formulation,
+        targetUse: product.targetUse,
+        registeredCropUse: product.registeredCropUse,
+        pcpbStatus: product.pcpbStatus,
+        phi: product.phi,
+        rei: product.rei,
+        ppe: product.ppe,
+        storageWarning: product.storageWarning,
+        price: "",
+      })),
+    );
     console.log("Products seeded.");
   }
 

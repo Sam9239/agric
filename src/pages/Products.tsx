@@ -6,14 +6,11 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import WhatsAppButton from '../sections/WhatsAppButton';
 import { trpc } from '@/providers/trpc';
+import { productCategories } from '@contracts/product-catalog';
 
 const categoryLabels = {
   all: 'All Products',
-  pesticides: 'Pesticides',
-  manure: 'Manure',
-  fertilizers: 'Fertilizers',
-  farm_inputs: 'Farm Inputs',
-  crop_protection: 'Crop Protection',
+  ...productCategories,
 } as const;
 
 type ProductCategoryFilter = keyof typeof categoryLabels;
@@ -59,7 +56,9 @@ export default function Products() {
 
   const filteredProducts = products?.filter((p) =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.description.toLowerCase().includes(searchQuery.toLowerCase())
+    p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.bestSuitedFor.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -76,7 +75,7 @@ export default function Products() {
           >
             <h1 className="text-4xl md:text-5xl text-[#f5f0e8]">Our Products</h1>
             <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: '#8b7d6b' }}>
-              Browse our range of quality agricultural inputs
+              Browse quality agricultural inputs and enquire directly for current availability and product guidance.
             </p>
           </motion.div>
         </div>
@@ -168,8 +167,8 @@ export default function Products() {
                             <h3 className="font-display text-lg font-medium mt-1" style={{ color: '#1a3a2f' }}>
                               {product.name}
                             </h3>
-                            <p className="text-base font-semibold mt-1" style={{ color: '#c75c2e' }}>
-                              {product.price}
+                            <p className="text-sm mt-2 leading-relaxed" style={{ color: '#3d3d3d' }}>
+                              {product.shortDescription}
                             </p>
                           </div>
                         </div>

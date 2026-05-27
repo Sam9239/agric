@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { siteConfig } from '@/config/site';
+import { productCategories } from '@contracts/product-catalog';
 
 const quickLinks = [
   { label: 'Products', href: '/products' },
@@ -11,13 +12,10 @@ const quickLinks = [
   { label: 'Terms & Disclaimer', href: '/terms-disclaimer' },
 ];
 
-const categoryLinks = [
-  { label: 'Pesticides', href: '/products?category=pesticides' },
-  { label: 'Manure', href: '/products?category=manure' },
-  { label: 'Fertilizers', href: '/products?category=fertilizers' },
-  { label: 'Farm Inputs', href: '/products?category=farm_inputs' },
-  { label: 'Crop Protection', href: '/products?category=crop_protection' },
-];
+const categoryLinks = Object.entries(productCategories).map(([key, label]) => ({
+  label,
+  href: `/products?category=${key}`,
+}));
 
 export default function Footer() {
   return (
@@ -30,7 +28,7 @@ export default function Footer() {
               {siteConfig.name.toUpperCase()}
             </span>
             <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
-              Quality agricultural inputs and farm supplies for Kenyan farmers.
+              Quality agricultural inputs and farm supplies for Kenyan farmers, with a focus on responsible use and environmental protection.
             </p>
           </div>
 

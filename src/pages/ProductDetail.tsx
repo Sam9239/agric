@@ -5,14 +5,9 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import WhatsAppButton from '../sections/WhatsAppButton';
 import { trpc } from '@/providers/trpc';
+import { productCategories } from '@contracts/product-catalog';
 
-const categoryLabels: Record<string, string> = {
-  pesticides: 'Pesticides',
-  manure: 'Manure',
-  fertilizers: 'Fertilizers',
-  farm_inputs: 'Farm Inputs',
-  crop_protection: 'Crop Protection',
-};
+const categoryLabels = productCategories;
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -33,7 +28,7 @@ export default function ProductDetail() {
   );
 
   const { data: relatedProducts } = trpc.product.related.useQuery(
-    { id: productId, category: product?.category ?? 'fertilizers' },
+    { id: productId, category: product?.category ?? 'crop_nutrition' },
     { enabled: !!product?.category }
   );
 
@@ -88,14 +83,47 @@ export default function ProductDetail() {
               <h1 className="font-display text-3xl md:text-4xl mt-3" style={{ color: '#1a3a2f' }}>
                 {product.name}
               </h1>
-              <p className="text-xl font-semibold mt-3" style={{ color: '#c75c2e' }}>
-                {product.price}
+              <p className="text-lg font-medium mt-3" style={{ color: '#c75c2e' }}>
+                Enquire for current availability
               </p>
               <p className="mt-5 text-base leading-[1.7]" style={{ color: '#3d3d3d' }}>
                 {product.description}
               </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                {[
+                  ['Specs', product.specs],
+                  ['Best suited for', product.bestSuitedFor],
+                  ['Usage tip', product.usageTip],
+                  ['Pack sizes', product.packSizes],
+                ].filter(([, value]) => value).map(([label, value]) => (
+                  <div key={label} className="p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
+                    <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#8b7d6b' }}>{label}</p>
+                    <p className="text-sm mt-1 leading-relaxed" style={{ color: '#3d3d3d' }}>{value}</p>
+                  </div>
+                ))}
+              </div>
+              {product.category === 'crop_protection' && (
+                <div className="mt-5 p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
+                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#c75c2e' }}>Crop protection safety</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-sm" style={{ color: '#3d3d3d' }}>
+                    {[
+                      ['Active ingredient', product.activeIngredient],
+                      ['Formulation', product.formulation],
+                      ['Target use', product.targetUse],
+                      ['Registered crop use', product.registeredCropUse],
+                      ['PCPB status', product.pcpbStatus],
+                      ['PHI', product.phi],
+                      ['REI', product.rei],
+                      ['PPE', product.ppe],
+                      ['Storage', product.storageWarning],
+                    ].filter(([, value]) => value).map(([label, value]) => (
+                      <p key={label}><span className="font-semibold">{label}:</span> {value}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
               <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
-                Use as directed on the official product label. Product information is for enquiry purposes only and does not replace professional agronomic advice.
+                {product.safetyNote || 'Use as directed on the official product label. Product information is for enquiry purposes only and does not replace professional agronomic advice.'}
               </p>
               <div className="mt-6">
                 <WhatsAppButton productName={product.name} fullWidth className="py-4 text-sm" />
@@ -147,8 +175,8 @@ export default function ProductDetail() {
                         <h3 className="font-display text-base font-medium mt-1" style={{ color: '#1a3a2f' }}>
                           {rp.name}
                         </h3>
-                        <p className="text-sm font-semibold mt-1" style={{ color: '#c75c2e' }}>
-                          {rp.price}
+                        <p className="text-sm mt-2 leading-relaxed" style={{ color: '#3d3d3d' }}>
+                          {rp.shortDescription}
                         </p>
                       </div>
                     </div>
