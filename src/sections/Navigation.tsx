@@ -33,7 +33,10 @@ export default function Navigation() {
       const id = href.replace('/#', '');
       if (location.pathname === '/') {
         const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 76;
+          window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+        }
       } else {
         navigate(href);
       }

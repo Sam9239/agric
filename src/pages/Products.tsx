@@ -5,6 +5,7 @@ import { Search, Sprout } from 'lucide-react';
 import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import WhatsAppButton from '../sections/WhatsAppButton';
+import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import { productCategories } from '@contracts/product-catalog';
 
@@ -66,12 +67,14 @@ export default function Products() {
       <Navigation />
 
       {/* Page Header */}
-      <section style={{ backgroundColor: '#1a3a2f' }} className="pt-32 pb-16 md:pt-40 md:pb-20">
-        <div className="max-w-[1200px] mx-auto px-6 text-center">
+      <section style={{ backgroundColor: '#1a3a2f' }} className="pt-24 pb-14 md:pt-28 md:pb-16">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <PageBackButton light fallback="/" className="mb-8" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            className="text-center"
           >
             <h1 className="text-4xl md:text-5xl text-[#f5f0e8]">Our Products</h1>
             <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: '#8b7d6b' }}>

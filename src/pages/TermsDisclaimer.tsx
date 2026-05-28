@@ -1,5 +1,6 @@
 import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
+import PageBackButton from '@/components/PageBackButton';
 import { siteConfig } from '@/config/site';
 
 export default function TermsDisclaimer() {
@@ -8,6 +9,7 @@ export default function TermsDisclaimer() {
       <Navigation />
       <main className="pt-28 pb-16 md:pt-32 md:pb-20">
         <div className="max-w-[800px] mx-auto px-6">
+          <PageBackButton fallback="/" className="mb-8" />
           <p className="section-label mb-4">TERMS & DISCLAIMER</p>
           <h1 className="font-display text-3xl md:text-4xl" style={{ color: '#1a3a2f' }}>
             Terms & Product Disclaimer

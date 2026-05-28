@@ -5,7 +5,7 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import WhatsAppButton from '../sections/WhatsAppButton';
 import { trpc } from '@/providers/trpc';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { siteConfig } from '@/config/site';
 import { productCategories, type ProductCategory } from '@contracts/product-catalog';
@@ -24,6 +24,29 @@ const categoryImages: Record<ProductCategory, string> = {
 
 const categoryLabels = productCategories;
 
+const heroSlides = [
+  {
+    src: '/images/hero-slide-inputs.png',
+    alt: 'Agricultural supplies arranged on a farm table',
+  },
+  {
+    src: '/images/hero-slide-shop.png',
+    alt: 'Agricultural supplies shop with farm inputs',
+  },
+  {
+    src: '/images/hero-slide-greenhouse.png',
+    alt: 'Farmer checking crops in a greenhouse',
+  },
+  {
+    src: '/images/hero-slide-harvest.png',
+    alt: 'Farmer harvesting tomatoes in a field',
+  },
+  {
+    src: '/images/hero-slide-advice.png',
+    alt: 'Agricultural advisor discussing farm inputs with a farmer',
+  },
+];
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
@@ -34,6 +57,7 @@ const fadeInUp = {
 };
 
 export default function Home() {
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const { data: featuredProducts } = trpc.product.featured.useQuery();
   const { data: recentTips } = trpc.tip.recent.useQuery();
   const createEnquiry = trpc.enquiry.create.useMutation({
@@ -53,6 +77,14 @@ export default function Home() {
     message: '',
   });
 
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveHeroSlide((current) => (current + 1) % heroSlides.length);
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
@@ -67,9 +99,9 @@ export default function Home() {
       <Navigation />
 
       {/* Hero Section */}
-      <section style={{ backgroundColor: '#1a3a2f' }} className="pt-32 pb-20 md:pt-40 md:pb-24">
+      <section style={{ backgroundColor: '#1a3a2f' }} className="pt-24 pb-12 md:pt-28 md:pb-14">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -98,12 +130,36 @@ export default function Home() {
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
               className="relative"
             >
-              <img
-                src="/images/hero.jpg"
-                alt="Farmer in field"
-                className="w-full h-auto object-cover"
-                style={{ aspectRatio: '3/4', border: '1px solid rgba(255,255,255,0.1)' }}
-              />
+              <div
+                className="relative overflow-hidden"
+                style={{ aspectRatio: '16/10', border: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                {heroSlides.map((slide, index) => (
+                  <img
+                    key={slide.src}
+                    src={slide.src}
+                    alt={slide.alt}
+                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
+                    style={{ opacity: activeHeroSlide === index ? 1 : 0 }}
+                  />
+                ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a3a2f]/35 via-transparent to-transparent" />
+              </div>
+              <div className="absolute bottom-4 left-4 flex gap-2">
+                {heroSlides.map((slide, index) => (
+                  <button
+                    key={slide.src}
+                    type="button"
+                    onClick={() => setActiveHeroSlide(index)}
+                    className="h-2.5 w-2.5 rounded-full transition-all"
+                    style={{
+                      backgroundColor: activeHeroSlide === index ? '#f5f0e8' : 'rgba(245, 240, 232, 0.45)',
+                      transform: activeHeroSlide === index ? 'scale(1.25)' : 'scale(1)',
+                    }}
+                    aria-label={`Show homepage image ${index + 1}`}
+                  />
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>

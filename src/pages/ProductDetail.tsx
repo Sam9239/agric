@@ -4,6 +4,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import WhatsAppButton from '../sections/WhatsAppButton';
+import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import { productCategories } from '@contracts/product-catalog';
 
@@ -58,8 +59,9 @@ export default function ProductDetail() {
       <Navigation />
 
       {/* Product Header */}
-      <section className="pt-28 pb-12 md:pt-32 md:pb-16" style={{ backgroundColor: '#e8dfd1' }}>
+      <section className="pt-24 pb-12 md:pt-28 md:pb-16" style={{ backgroundColor: '#e8dfd1' }}>
         <div className="max-w-[1200px] mx-auto px-6">
+          <PageBackButton fallback="/products" className="mb-8" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

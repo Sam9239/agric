@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
+import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 
 export default function TipDetail() {
@@ -50,13 +51,7 @@ export default function TipDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Link
-              to="/farming-tips"
-              className="inline-flex items-center gap-1 text-sm font-medium mb-8 transition-colors hover:opacity-80"
-              style={{ color: '#5c7a4a' }}
-            >
-              <ArrowLeft size={14} /> Back to Farming Tips
-            </Link>
+            <PageBackButton fallback="/farming-tips" className="mb-8" />
 
             <img
               src={tip.imageUrl}
