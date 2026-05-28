@@ -7,5 +7,5 @@ export const siteConfig = {
   phoneHref: "tel:+254746804727",
   whatsappNumber: "254746804727",
   whatsappUrl: "https://wa.me/254746804727",
-  location: "Kenya",
+  location: "Nairobi, Kenya",
 };

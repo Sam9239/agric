@@ -1,13 +1,13 @@
 # Jaosef Agro Supplies
 
-Jaosef Agro Supplies is a React, TypeScript, Vite, Hono, and tRPC website for a Kenyan agricultural input supplier. It includes a public storefront, farming tips, WhatsApp enquiry flows, legal/disclaimer pages, and an admin dashboard scaffold.
+Jaosef Agro Supplies is a React, TypeScript, Vite, Hono, and tRPC website for a Kenyan agricultural input supplier. It includes an enquiry-only public storefront, farming tips, WhatsApp enquiry flows, legal/disclaimer pages, and secure admin management.
 
 ## Features
 
-- Product catalogue with categories, search, product detail pages, and related products.
+- Product catalogue with categories, search, product detail pages, related products, and no public prices.
 - Farming tips listing and article detail pages.
 - Contact and WhatsApp enquiry entry points.
-- Admin dashboard UI for products, enquiries, and farming tips.
+- Admin dashboard for products, enquiries, farming tips, featured products, and image URL updates.
 - MySQL schema and seed data managed with Drizzle.
 
 ## Tech Stack

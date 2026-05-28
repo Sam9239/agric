@@ -145,6 +145,21 @@ export default function AdminDashboard() {
       toast.success('Tip deleted');
     },
   });
+  const updateEnquiryStatus = trpc.enquiry.updateStatus.useMutation({
+    onSuccess: (_, variables) => {
+      productUtils.enquiry.list.invalidate();
+      toast.success(variables.status === 'replied' ? 'Enquiry marked as replied' : 'Enquiry marked as new');
+      setSelectedEnquiry((current) => current && current.id === variables.id ? { ...current, status: variables.status } : current);
+    },
+  });
+  const deleteEnquiry = trpc.enquiry.delete.useMutation({
+    onSuccess: () => {
+      productUtils.enquiry.list.invalidate();
+      toast.success('Enquiry deleted');
+      setShowEnquiryModal(false);
+      setSelectedEnquiry(null);
+    },
+  });
   const adminLogout = trpc.auth.adminLogout.useMutation({
     onSuccess: () => {
       toast.success('Logged out');
@@ -460,6 +475,22 @@ export default function AdminDashboard() {
                             aria-label={`View enquiry from ${e.name}`}
                           >
                             <Eye size={16} />
+                          </button>
+                          <button
+                            onClick={() => updateEnquiryStatus.mutate({ id: e.id, status: e.status === 'new' ? 'replied' : 'new' })}
+                            className="p-1 transition-colors hover:opacity-70"
+                            style={{ color: '#1a3a2f' }}
+                            aria-label={`Mark enquiry from ${e.name} as ${e.status === 'new' ? 'replied' : 'new'}`}
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
+                            onClick={() => deleteEnquiry.mutate({ id: e.id })}
+                            className="p-1 transition-colors hover:opacity-70"
+                            style={{ color: '#c75c2e' }}
+                            aria-label={`Delete enquiry from ${e.name}`}
+                          >
+                            <Trash2 size={16} />
                           </button>
                         </div>
                       </td>
@@ -806,13 +837,29 @@ export default function AdminDashboard() {
                 </span>
               </div>
             </div>
-            <button
-              onClick={() => setShowEnquiryModal(false)}
-              className="w-full mt-6 py-3 text-sm font-semibold transition-all"
-              style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
-            >
-              Close
-            </button>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+              <button
+                onClick={() => updateEnquiryStatus.mutate({ id: selectedEnquiry.id, status: selectedEnquiry.status === 'new' ? 'replied' : 'new' })}
+                className="py-3 text-sm font-semibold transition-all"
+                style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+              >
+                Mark {selectedEnquiry.status === 'new' ? 'replied' : 'new'}
+              </button>
+              <button
+                onClick={() => deleteEnquiry.mutate({ id: selectedEnquiry.id })}
+                className="py-3 text-sm font-semibold text-white transition-all"
+                style={{ backgroundColor: '#c75c2e' }}
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setShowEnquiryModal(false)}
+                className="py-3 text-sm font-semibold transition-all"
+                style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+              >
+                Close
+              </button>
+            </div>
           </motion.div>
         </div>
       )}

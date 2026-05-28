@@ -9,7 +9,7 @@ interface WhatsAppButtonProps {
 
 export default function WhatsAppButton({ productName, className = '', fullWidth = true }: WhatsAppButtonProps) {
   const message = productName
-    ? `Hello, I'm interested in ${productName} from ${siteConfig.name}. Can you share more details and pricing?`
+    ? `Hello, I'm interested in ${productName} from ${siteConfig.name}. Can you share availability and more details?`
     : `Hello, I would like to enquire about your agricultural products. Can you assist me?`;
 
   const handleClick = () => {

@@ -54,7 +54,7 @@ async function seed() {
       {
         title: "Best Practices for Tomato Farming in Kenya",
         content:
-          "Tomato farming can be highly profitable when done right. Start with certified seeds from reputable suppliers. Prepare raised beds with well-drained soil and mix in organic compost. Plant seedlings at 60cm by 45cm spacing. Apply DAP fertilizer at planting and top dress with CAN after 3 weeks. Monitor regularly for pests like Tuta absoluta and apply Thunder insecticide at first sight. Water consistently but avoid wetting foliage. Stake plants early to prevent fruit rot and improve air circulation. Harvest when fruits are firm and fully colored for best market prices.",
+          "Tomato farming can be highly profitable when done right. Start with certified seeds from reputable suppliers. Prepare raised beds with well-drained soil and mix in organic compost. Plant seedlings at 60cm by 45cm spacing. Apply DAP fertilizer at planting and top dress with CAN after 3 weeks. Monitor regularly for pests like Tuta absoluta and apply Thunder insecticide at first sight. Water consistently but avoid wetting foliage. Stake plants early to prevent fruit rot and improve air circulation. Harvest when fruits are firm and fully colored for strong market quality.",
         excerpt:
           "Tomato farming can be highly profitable when done right. Start with certified seeds from reputable suppliers. Prepare raised beds with well-drained soil...",
         imageUrl: "/images/tip-3.jpg",
@@ -119,7 +119,7 @@ async function seed() {
         email: "john.kamau@email.com",
         phone: "+254712345678",
         message:
-          "Hello, I am interested in DAP Fertilizer and CAN Fertilizer for my 2-acre maize farm. Can you share bulk pricing for 10 bags each? I am located in Nakuru.",
+          "Hello, I am interested in DAP Fertilizer and CAN Fertilizer for my 2-acre maize farm. Can you share availability and recommended pack sizes? I am located in Nakuru.",
         status: "new",
       },
       {
