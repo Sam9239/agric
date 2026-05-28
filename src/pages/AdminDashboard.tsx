@@ -16,6 +16,7 @@ import {
   Trash2,
   Eye,
   X,
+  Upload,
 } from 'lucide-react';
 import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
@@ -86,6 +87,7 @@ export default function AdminDashboard() {
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [editingProduct, setEditingProduct] = useState<CatalogueProduct | null>(null);
   const [editingTip, setEditingTip] = useState<FarmingTip | null>(null);
+  const [uploadingImageFor, setUploadingImageFor] = useState<'product' | 'tip' | null>(null);
 
   const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
   const [tipForm, setTipForm] = useState({ title: '', content: '', excerpt: '', imageUrl: '', date: '' });
@@ -175,6 +177,37 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     adminLogout.mutate();
+  };
+
+  const uploadImage = async (file: File, target: 'product' | 'tip') => {
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploadingImageFor(target);
+
+    try {
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+      const payload = await response.json() as { url?: string; error?: string };
+
+      if (!response.ok || !payload.url) {
+        throw new Error(payload.error || 'Image upload failed');
+      }
+
+      if (target === 'product') {
+        setProductForm((current) => ({ ...current, imageUrl: payload.url || current.imageUrl }));
+      } else {
+        setTipForm((current) => ({ ...current, imageUrl: payload.url || current.imageUrl }));
+      }
+
+      toast.success('Image uploaded');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Image upload failed');
+    } finally {
+      setUploadingImageFor(null);
+    }
   };
 
   const openProductModal = (product?: CatalogueProduct) => {
@@ -676,6 +709,34 @@ export default function AdminDashboard() {
                   style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
                   placeholder="/images/product-name.jpg"
                 />
+                <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <label
+                    className="inline-flex cursor-pointer items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
+                    style={{ backgroundColor: '#5c7a4a' }}
+                  >
+                    <Upload size={16} />
+                    {uploadingImageFor === 'product' ? 'Uploading...' : 'Upload image'}
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      className="sr-only"
+                      disabled={uploadingImageFor !== null}
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        if (file) uploadImage(file, 'product');
+                        event.target.value = '';
+                      }}
+                    />
+                  </label>
+                  {productForm.imageUrl && (
+                    <img
+                      src={productForm.imageUrl}
+                      alt="Product preview"
+                      className="h-14 w-14 object-cover"
+                      style={{ border: '1px solid #d4c9b8' }}
+                    />
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <input
@@ -754,6 +815,34 @@ export default function AdminDashboard() {
                   className="w-full mt-1 px-3 py-2.5 text-sm outline-none"
                   style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
                 />
+                <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <label
+                    className="inline-flex cursor-pointer items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
+                    style={{ backgroundColor: '#5c7a4a' }}
+                  >
+                    <Upload size={16} />
+                    {uploadingImageFor === 'tip' ? 'Uploading...' : 'Upload image'}
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      className="sr-only"
+                      disabled={uploadingImageFor !== null}
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        if (file) uploadImage(file, 'tip');
+                        event.target.value = '';
+                      }}
+                    />
+                  </label>
+                  {tipForm.imageUrl && (
+                    <img
+                      src={tipForm.imageUrl}
+                      alt="Tip preview"
+                      className="h-14 w-20 object-cover"
+                      style={{ border: '1px solid #d4c9b8' }}
+                    />
+                  )}
+                </div>
               </div>
               <div>
                 <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>Date</label>
