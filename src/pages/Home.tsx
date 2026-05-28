@@ -16,9 +16,9 @@ const categoryImages: Record<ProductCategory, string> = {
   crop_protection: '/images/cat-crop-protection.jpg',
   soil_health: '/images/cat-manure.jpg',
   irrigation: '/images/cat-farm-inputs.jpg',
-  tools: '/images/products/knapsack-sprayer.png',
-  nursery: '/images/products/seedling-trays-cocopeat.png',
-  safety: '/images/products/ppe-kit.png',
+  tools: '/images/products/knapsack-sprayer.webp',
+  nursery: '/images/products/seedling-trays-cocopeat.webp',
+  safety: '/images/products/ppe-kit.webp',
   post_harvest: '/images/cat-farm-inputs.jpg',
 };
 
