@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { siteConfig } from '@/config/site';
+import { useSiteContent } from '@/hooks/useSiteContent';
+import TopBar from './TopBar';
 
 const navLinks = [
   { label: 'Products', href: '/products' },
@@ -16,6 +17,7 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const content = useSiteContent();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,8 +47,9 @@ export default function Navigation() {
 
   return (
     <>
+      <TopBar />
       <nav
-        className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center transition-all duration-300"
+        className="fixed top-0 md:top-9 left-0 right-0 z-50 h-16 flex items-center transition-all duration-300"
         style={{
           backgroundColor: scrolled ? '#1a3a2f' : '#1a3a2f',
           boxShadow: scrolled ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
@@ -56,10 +59,10 @@ export default function Navigation() {
           {/* Logo */}
           <Link to="/" className="flex flex-col">
             <span className="text-[#f5f0e8] font-bold text-lg leading-tight tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
-              {siteConfig.navName}
+              {content.brand.navName}
             </span>
             <span className="text-[#8b7d6b] text-[10px] tracking-[4px] leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-              {siteConfig.navTagline}
+              {content.brand.navTagline}
             </span>
           </Link>
 

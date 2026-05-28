@@ -98,3 +98,14 @@ export const enquiries = mysqlTable("enquiries", {
 
 export type Enquiry = typeof enquiries.$inferSelect;
 export type InsertEnquiry = typeof enquiries.$inferInsert;
+
+export const siteSettings = mysqlTable("site_settings", {
+  id: serial("id").primaryKey(),
+  data: text("data").notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
+});
+
+export type SiteSettingsRow = typeof siteSettings.$inferSelect;

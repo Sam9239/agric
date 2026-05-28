@@ -1,5 +1,5 @@
 import { MessageCircle } from 'lucide-react';
-import { siteConfig } from '@/config/site';
+import { useSiteContent } from '@/hooks/useSiteContent';
 
 interface WhatsAppButtonProps {
   productName?: string;
@@ -8,12 +8,13 @@ interface WhatsAppButtonProps {
 }
 
 export default function WhatsAppButton({ productName, className = '', fullWidth = true }: WhatsAppButtonProps) {
+  const content = useSiteContent();
   const message = productName
-    ? `Hello, I'm interested in ${productName} from ${siteConfig.name}. Can you share availability and more details?`
+    ? `Hello, I'm interested in ${productName} from ${content.brand.name}. Can you share availability and more details?`
     : `Hello, I would like to enquire about your agricultural products. Can you assist me?`;
 
   const handleClick = () => {
-    const url = `${siteConfig.whatsappUrl}?text=${encodeURIComponent(message)}`;
+    const url = `${content.contact.whatsappUrl}?text=${encodeURIComponent(message)}`;
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) {
       newWindow.opener = null;

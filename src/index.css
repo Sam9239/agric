@@ -45,6 +45,12 @@
     scroll-padding-top: 76px;
   }
 
+  @media (min-width: 768px) {
+    html {
+      scroll-padding-top: 112px;
+    }
+  }
+
   body {
     font-family: 'Inter', sans-serif;
     color: hsl(var(--body-text));

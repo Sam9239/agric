@@ -8,4 +8,9 @@ export const siteConfig = {
   whatsappNumber: "254746804727",
   whatsappUrl: "https://wa.me/254746804727",
   location: "Nairobi, Kenya",
+  socials: {
+    facebook: "#",
+    instagram: "#",
+    tiktok: "#",
+  },
 };

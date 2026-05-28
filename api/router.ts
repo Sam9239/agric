@@ -2,6 +2,7 @@ import { authRouter } from "./auth-router";
 import { productRouter } from "./product-router";
 import { tipRouter } from "./tip-router";
 import { enquiryRouter } from "./enquiry-router";
+import { siteContentRouter } from "./site-content-router";
 import { createRouter, publicQuery } from "./middleware";
 
 export const appRouter = createRouter({
@@ -10,6 +11,7 @@ export const appRouter = createRouter({
   product: productRouter,
   tip: tipRouter,
   enquiry: enquiryRouter,
+  siteContent: siteContentRouter,
 });
 
 export type AppRouter = typeof appRouter;

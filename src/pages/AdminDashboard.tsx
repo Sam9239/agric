@@ -17,14 +17,16 @@ import {
   Eye,
   X,
   Upload,
+  Settings,
 } from 'lucide-react';
 import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
 import { siteConfig } from '@/config/site';
 import { productCategories, type CatalogueProduct, type ProductCategory } from '@contracts/product-catalog';
 import type { Enquiry, FarmingTip } from '@db/schema';
+import SiteContentEditor from '@/components/admin/SiteContentEditor';
 
-type TabType = 'overview' | 'products' | 'enquiries' | 'tips';
+type TabType = 'overview' | 'products' | 'enquiries' | 'tips' | 'siteContent';
 type ProductForm = {
   name: string;
   category: ProductCategory;
@@ -76,6 +78,7 @@ const sidebarItems: { id: TabType; label: string; icon: typeof Package }[] = [
   { id: 'products', label: 'Products', icon: ShoppingBag },
   { id: 'enquiries', label: 'Enquiries', icon: MessageSquare },
   { id: 'tips', label: 'Farming Tips', icon: FileText },
+  { id: 'siteContent', label: 'Site Content', icon: Settings },
 ];
 
 export default function AdminDashboard() {
@@ -338,6 +341,11 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main className="flex-1 ml-[240px] p-10">
+        {activeTab === 'siteContent' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+            <SiteContentEditor />
+          </motion.div>
+        )}
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>

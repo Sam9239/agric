@@ -10,11 +10,13 @@ import NotFound from './pages/NotFound'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsDisclaimer from './pages/TermsDisclaimer'
 import RouteScrollManager from './components/RouteScrollManager'
+import FloatingWhatsApp from './sections/FloatingWhatsApp'
 
 export default function App() {
   return (
     <>
       <RouteScrollManager />
+      <FloatingWhatsApp />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
