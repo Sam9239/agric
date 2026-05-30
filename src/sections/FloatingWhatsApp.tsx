@@ -23,7 +23,7 @@ export default function FloatingWhatsApp() {
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 1.2, type: 'spring', damping: 12 }}
-      className="fixed bottom-5 right-5 z-50 group flex items-center"
+      className="fixed bottom-4 right-4 z-50 group flex items-center sm:bottom-5 sm:right-5"
     >
       <motion.span
         animate={{ opacity: [0, 1, 1, 0] }}
@@ -44,25 +44,25 @@ export default function FloatingWhatsApp() {
 
       <span className="relative flex items-center justify-center">
         <motion.span
-          className="absolute inset-0 rounded-full"
+          className="absolute inset-0 hidden rounded-full sm:block"
           style={{ backgroundColor: '#25d366' }}
-          animate={{ scale: [1, 1.6, 1.6], opacity: [0.5, 0, 0] }}
+          animate={{ scale: [1, 1.45, 1.45], opacity: [0.45, 0, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
         />
         <motion.span
-          className="absolute inset-0 rounded-full"
+          className="absolute inset-0 hidden rounded-full sm:block"
           style={{ backgroundColor: '#25d366' }}
-          animate={{ scale: [1, 1.6, 1.6], opacity: [0.5, 0, 0] }}
+          animate={{ scale: [1, 1.45, 1.45], opacity: [0.45, 0, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 1 }}
         />
         <motion.span
-          className="relative flex items-center justify-center w-14 h-14 rounded-full shadow-xl"
+          className="relative flex h-12 w-12 items-center justify-center rounded-full shadow-xl sm:h-14 sm:w-14"
           style={{ backgroundColor: '#25d366' }}
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           whileHover={{ scale: 1.08 }}
         >
-          <MessageCircle size={28} className="text-white" strokeWidth={2.2} />
+          <MessageCircle size={24} className="text-white sm:h-7 sm:w-7" strokeWidth={2.2} />
         </motion.span>
       </span>
     </motion.a>

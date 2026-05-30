@@ -281,20 +281,75 @@ export default function AdminDashboard() {
 
   const categoryLabels = productCategories;
 
+  const trimProductForm = (): ProductForm => ({
+    ...productForm,
+    name: productForm.name.trim(),
+    shortDescription: productForm.shortDescription.trim(),
+    description: productForm.description.trim(),
+    specs: productForm.specs.trim(),
+    bestSuitedFor: productForm.bestSuitedFor.trim(),
+    usageTip: productForm.usageTip.trim(),
+    safetyNote: productForm.safetyNote.trim(),
+    packSizes: productForm.packSizes.trim(),
+    imageUrl: productForm.imageUrl.trim(),
+    activeIngredient: productForm.activeIngredient.trim(),
+    formulation: productForm.formulation.trim(),
+    targetUse: productForm.targetUse.trim(),
+    registeredCropUse: productForm.registeredCropUse.trim(),
+    pcpbStatus: productForm.pcpbStatus.trim(),
+    phi: productForm.phi.trim(),
+    rei: productForm.rei.trim(),
+    ppe: productForm.ppe.trim(),
+    storageWarning: productForm.storageWarning.trim(),
+  });
+
   const saveProduct = () => {
+    const values = trimProductForm();
+    if (!values.name || !values.shortDescription || !values.description || !values.imageUrl) {
+      toast.error('Please complete product name, short description, description, and image URL');
+      return;
+    }
+
     if (editingProduct) {
-      updateProduct.mutate({ id: editingProduct.id, ...productForm });
+      updateProduct.mutate({ id: editingProduct.id, ...values });
     } else {
-      createProduct.mutate(productForm);
+      createProduct.mutate(values);
     }
   };
 
   const saveTip = () => {
-    if (editingTip) {
-      updateTip.mutate({ id: editingTip.id, ...tipForm });
-    } else {
-      createTip.mutate(tipForm);
+    const values = {
+      title: tipForm.title.trim(),
+      content: tipForm.content.trim(),
+      excerpt: tipForm.excerpt.trim(),
+      imageUrl: tipForm.imageUrl.trim(),
+      date: tipForm.date.trim(),
+    };
+    if (!values.title || !values.content || !values.excerpt || !values.imageUrl || !values.date) {
+      toast.error('Please complete title, content, excerpt, image URL, and date');
+      return;
     }
+
+    if (editingTip) {
+      updateTip.mutate({ id: editingTip.id, ...values });
+    } else {
+      createTip.mutate(values);
+    }
+  };
+
+  const handleDeleteProduct = (product: CatalogueProduct) => {
+    if (!window.confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
+    deleteProduct.mutate({ id: product.id });
+  };
+
+  const handleDeleteTip = (tip: FarmingTip) => {
+    if (!window.confirm(`Delete "${tip.title}"? This cannot be undone.`)) return;
+    deleteTip.mutate({ id: tip.id });
+  };
+
+  const handleDeleteEnquiry = (enquiry: Enquiry) => {
+    if (!window.confirm(`Delete enquiry from "${enquiry.name}"? This cannot be undone.`)) return;
+    deleteEnquiry.mutate({ id: enquiry.id });
   };
 
   if (isCheckingAdmin) {
@@ -302,20 +357,20 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: '#f5f0e8' }}>
+    <div className="min-h-screen flex flex-col md:flex-row" style={{ backgroundColor: '#f5f0e8' }}>
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 bottom-0 w-[240px] flex flex-col" style={{ backgroundColor: '#1a3a2f' }}>
-        <div className="p-6">
+      <aside className="sticky top-0 z-40 w-full md:fixed md:left-0 md:top-0 md:bottom-0 md:w-[240px] flex flex-col" style={{ backgroundColor: '#1a3a2f' }}>
+        <div className="p-4 md:p-6">
           <Link to="/" className="text-[#f5f0e8] font-bold text-sm tracking-[3px]" style={{ fontFamily: 'Inter, sans-serif' }}>
             {siteConfig.name.toUpperCase()}
           </Link>
         </div>
-        <nav className="flex-1 px-4 mt-4">
+        <nav className="flex md:flex-1 gap-2 overflow-x-auto px-4 pb-4 md:mt-4 md:block md:space-y-1 md:overflow-visible md:pb-0">
           {sidebarItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200"
+              className="flex shrink-0 items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all duration-200 md:w-full md:gap-3 md:px-4 md:py-3"
               style={{
                 color: activeTab === item.id ? '#f5f0e8' : 'rgba(245, 240, 232, 0.7)',
                 borderLeft: activeTab === item.id ? '3px solid #c75c2e' : '3px solid transparent',
@@ -323,11 +378,19 @@ export default function AdminDashboard() {
               }}
             >
               <item.icon size={18} />
-              {item.label}
+              <span className="whitespace-nowrap">{item.label}</span>
             </button>
           ))}
+          <button
+            onClick={handleLogout}
+            className="flex shrink-0 items-center gap-2 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-white/5 md:hidden"
+            style={{ color: 'rgba(245, 240, 232, 0.7)' }}
+          >
+            <LogOut size={18} />
+            <span className="whitespace-nowrap">Logout</span>
+          </button>
         </nav>
-        <div className="p-4">
+        <div className="hidden md:block p-4">
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors hover:bg-white/5"
@@ -340,7 +403,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-[240px] p-10">
+      <main className="flex-1 p-4 sm:p-6 md:ml-[240px] md:p-10">
         {activeTab === 'siteContent' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
             <SiteContentEditor />
@@ -459,7 +522,7 @@ export default function AdminDashboard() {
                           <button onClick={() => openProductModal(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${p.name}`}>
                             <Pencil size={16} />
                           </button>
-                          <button onClick={() => deleteProduct.mutate({ id: p.id })} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${p.name}`}>
+                          <button onClick={() => handleDeleteProduct(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${p.name}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -526,7 +589,7 @@ export default function AdminDashboard() {
                             <Pencil size={16} />
                           </button>
                           <button
-                            onClick={() => deleteEnquiry.mutate({ id: e.id })}
+                            onClick={() => handleDeleteEnquiry(e)}
                             className="p-1 transition-colors hover:opacity-70"
                             style={{ color: '#c75c2e' }}
                             aria-label={`Delete enquiry from ${e.name}`}
@@ -583,7 +646,7 @@ export default function AdminDashboard() {
                           <button onClick={() => openTipModal(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${t.title}`}>
                             <Pencil size={16} />
                           </button>
-                          <button onClick={() => deleteTip.mutate({ id: t.id })} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${t.title}`}>
+                          <button onClick={() => handleDeleteTip(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${t.title}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -604,7 +667,7 @@ export default function AdminDashboard() {
 
       {/* Product Modal */}
       {showProductModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -778,7 +841,7 @@ export default function AdminDashboard() {
 
       {/* Tip Modal */}
       {showTipModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -812,6 +875,16 @@ export default function AdminDashboard() {
                   className="w-full mt-1 px-3 py-2.5 text-sm outline-none resize-none"
                   style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
                   rows={6}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>Excerpt</label>
+                <textarea
+                  value={tipForm.excerpt}
+                  onChange={(e) => setTipForm({ ...tipForm, excerpt: e.target.value })}
+                  className="w-full mt-1 px-3 py-2.5 text-sm outline-none resize-none"
+                  style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
+                  rows={3}
                 />
               </div>
               <div>
@@ -886,7 +959,7 @@ export default function AdminDashboard() {
 
       {/* Enquiry Detail Modal */}
       {showEnquiryModal && selectedEnquiry && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -943,7 +1016,7 @@ export default function AdminDashboard() {
                 Mark {selectedEnquiry.status === 'new' ? 'replied' : 'new'}
               </button>
               <button
-                onClick={() => deleteEnquiry.mutate({ id: selectedEnquiry.id })}
+                onClick={() => handleDeleteEnquiry(selectedEnquiry)}
                 className="py-3 text-sm font-semibold text-white transition-all"
                 style={{ backgroundColor: '#c75c2e' }}
               >

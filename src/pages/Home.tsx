@@ -138,8 +138,8 @@ export default function Home() {
                 {headlineWords.map((word, i) => (
                   <motion.span
                     key={`${word}-${i}`}
-                    initial={{ opacity: 0, y: 48, rotate: -4, filter: 'blur(8px)' }}
-                    animate={{ opacity: 1, y: 0, rotate: 0, filter: 'blur(0px)' }}
+                    initial={{ opacity: 0, y: 36, rotate: -2 }}
+                    animate={{ opacity: 1, y: 0, rotate: 0 }}
                     transition={{
                       delay: 0.25 + i * 0.07,
                       type: 'spring',
@@ -210,9 +210,10 @@ export default function Home() {
         </div>
       </section>
 
+      <main className="flex flex-col">
       {/* About Preview */}
-      <section id="about" className="py-20" style={{ backgroundColor: '#f5f0e8' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section id="about" className="py-14 md:py-20" style={{ backgroundColor: '#f5f0e8', order: 6 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -256,14 +257,14 @@ export default function Home() {
       </section>
 
       {/* Services */}
-      <section className="py-20" style={{ backgroundColor: '#f5f0e8' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-14 md:py-20 overflow-hidden" style={{ backgroundColor: '#f5f0e8', order: 4 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-center max-w-[640px] mx-auto mb-12"
+            className="text-center max-w-[720px] mx-auto mb-10 md:mb-14"
           >
             <p className="section-label mb-3">{content.services.eyebrow}</p>
             <h2 className="text-3xl md:text-4xl" style={{ color: '#1a3a2f' }}>
@@ -273,42 +274,54 @@ export default function Home() {
               {content.services.intro}
             </p>
           </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            {content.services.items.map((item, i) => {
-              const Icon = iconMap[item.iconKey] ?? Sprout;
-              return (
-                <motion.div
-                  key={`${item.title}-${i}`}
-                  custom={i}
-                  variants={fadeInUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  className="card-hover p-6 flex flex-col"
-                  style={{ backgroundColor: '#ffffff', border: '1px solid #d4c9b8' }}
-                >
-                  <div
-                    className="flex items-center justify-center w-12 h-12 mb-4"
-                    style={{ backgroundColor: '#e8dfd1', color: '#1a3a2f' }}
+          <div className="relative">
+            <div
+              className="hidden lg:block absolute left-[8%] right-[8%] top-[58px] border-t border-dashed"
+              style={{ borderColor: '#5c7a4a' }}
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-7 lg:gap-5">
+              {content.services.items.map((item, i) => {
+                const Icon = iconMap[item.iconKey] ?? Sprout;
+                const offsetClass = i % 2 === 1 ? 'lg:mt-12' : '';
+                return (
+                  <motion.div
+                    key={`${item.title}-${i}`}
+                    custom={i}
+                    variants={fadeInUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className={`relative flex flex-col items-center text-center ${offsetClass}`}
                   >
-                    <Icon size={22} strokeWidth={1.8} />
-                  </div>
-                  <h3 className="font-display text-lg" style={{ color: '#1a3a2f' }}>
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed flex-1" style={{ color: '#3d3d3d' }}>
-                    {item.description}
-                  </p>
-                </motion.div>
-              );
-            })}
+                    <div
+                      className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border border-dashed md:h-28 md:w-28"
+                      style={{ backgroundColor: '#e8dfd1', borderColor: '#5c7a4a', color: '#1a3a2f' }}
+                    >
+                      <div
+                        className="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold md:h-10 md:w-10 md:text-sm"
+                        style={{ backgroundColor: '#1a3a2f', color: '#f5f0e8' }}
+                      >
+                        {String(i + 1).padStart(2, '0')}
+                      </div>
+                      <Icon size={30} strokeWidth={1.8} />
+                    </div>
+                    <h3 className="mt-6 text-lg font-semibold leading-snug" style={{ color: '#1a3a2f', fontFamily: 'Inter, sans-serif' }}>
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed max-w-[220px]" style={{ color: '#3d3d3d' }}>
+                      {item.description}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Product Categories */}
-      <section className="py-20" style={{ backgroundColor: '#e8dfd1' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-14 md:py-20" style={{ backgroundColor: '#e8dfd1', order: 1 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -352,8 +365,8 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-20" style={{ backgroundColor: '#f5f0e8' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-14 md:py-20" style={{ backgroundColor: '#f5f0e8', order: 2 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -410,7 +423,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: '#1a3a2f' }}>
+      <section className="py-14 md:py-20 relative overflow-hidden" style={{ backgroundColor: '#1a3a2f', order: 5 }}>
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{
@@ -419,7 +432,7 @@ export default function Home() {
             backgroundSize: '60px 60px, 80px 80px',
           }}
         />
-        <div className="max-w-[1200px] mx-auto px-6 relative">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -454,7 +467,6 @@ export default function Home() {
                   style={{
                     backgroundColor: 'rgba(245, 240, 232, 0.04)',
                     border: '1px solid rgba(245, 240, 232, 0.1)',
-                    backdropFilter: 'blur(8px)',
                   }}
                 >
                   <div
@@ -462,14 +474,10 @@ export default function Home() {
                     style={{ backgroundColor: accent }}
                   />
                   <div
-                    className="relative flex items-center justify-center w-14 h-14 mb-5 rounded-full transition-transform duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: 'rgba(245, 240, 232, 0.08)' }}
+                    className="flex items-center justify-center w-14 h-14 mb-5 rounded-full transition-transform duration-300 group-hover:scale-105"
+                    style={{ backgroundColor: 'rgba(245, 240, 232, 0.08)', border: `1px solid ${accent}` }}
                   >
-                    <div
-                      className="absolute inset-0 rounded-full blur-md opacity-50"
-                      style={{ backgroundColor: accent }}
-                    />
-                    <Icon size={26} strokeWidth={1.8} className="relative" style={{ color: accent }} />
+                    <Icon size={26} strokeWidth={1.8} style={{ color: accent }} />
                   </div>
                   <h3 className="font-display text-xl text-[#f5f0e8]">
                     {item.title}
@@ -485,8 +493,8 @@ export default function Home() {
       </section>
 
       {/* Environmental Commitment */}
-      <section className="py-16" style={{ backgroundColor: '#e8dfd1' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-12 md:py-16" style={{ backgroundColor: '#e8dfd1', order: 7 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <div className="max-w-[760px]">
             <p className="section-label mb-3">RESPONSIBLE FARMING</p>
             <h2 className="text-3xl md:text-4xl" style={{ color: '#1a3a2f' }}>
@@ -500,8 +508,8 @@ export default function Home() {
       </section>
 
       {/* How Enquiries Work */}
-      <section className="py-20" style={{ backgroundColor: '#f5f0e8' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-14 md:py-20" style={{ backgroundColor: '#f5f0e8', order: 3 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -556,8 +564,8 @@ export default function Home() {
       </section>
 
       {/* Farming Tips Preview */}
-      <section className="py-20" style={{ backgroundColor: '#1a3a2f' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-14 md:py-20" style={{ backgroundColor: '#1a3a2f', order: 8 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -600,8 +608,8 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20" style={{ backgroundColor: '#f5f0e8' }}>
-        <div className="max-w-[820px] mx-auto px-6">
+      <section className="py-14 md:py-20" style={{ backgroundColor: '#f5f0e8', order: 9 }}>
+        <div className="max-w-[820px] mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -638,7 +646,7 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#c75c2e' }}>
+      <section className="relative py-14 md:py-20 overflow-hidden" style={{ backgroundColor: '#c75c2e', order: 11 }}>
         <div
           className="absolute inset-0 opacity-20 pointer-events-none"
           style={{
@@ -647,7 +655,7 @@ export default function Home() {
             backgroundSize: '40px 40px, 70px 70px',
           }}
         />
-        <div className="max-w-[1000px] mx-auto px-6 relative text-center">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 relative text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -696,8 +704,8 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20" style={{ backgroundColor: '#f5f0e8' }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section id="contact" className="py-14 md:py-20" style={{ backgroundColor: '#f5f0e8', order: 10 }}>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -791,6 +799,7 @@ export default function Home() {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

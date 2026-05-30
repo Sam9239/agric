@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
 import { defaultSiteContent, type SiteContent } from '@contracts/site-content';
@@ -61,17 +61,24 @@ const iconOptions = [
 ];
 
 export default function SiteContentEditor() {
-  const utils = trpc.useUtils();
-  const { data: serverContent } = trpc.siteContent.get.useQuery();
-  const [draft, setDraft] = useState<SiteContent>(defaultSiteContent);
-  const [hydrated, setHydrated] = useState(false);
+  const { data: serverContent, isLoading } = trpc.siteContent.get.useQuery();
 
-  useEffect(() => {
-    if (serverContent && !hydrated) {
-      setDraft(clone(serverContent));
-      setHydrated(true);
-    }
-  }, [serverContent, hydrated]);
+  if (isLoading && !serverContent) {
+    return (
+      <div className="p-6" style={{ backgroundColor: '#f5f0e8', border: '1px solid #d4c9b8' }}>
+        <p className="text-sm" style={{ color: '#8b7d6b' }}>
+          Loading site content...
+        </p>
+      </div>
+    );
+  }
+
+  return <SiteContentForm initialContent={serverContent ?? defaultSiteContent} />;
+}
+
+function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
+  const utils = trpc.useUtils();
+  const [draft, setDraft] = useState<SiteContent>(() => clone(initialContent));
 
   const updateMutation = trpc.siteContent.update.useMutation({
     onSuccess: (data) => {

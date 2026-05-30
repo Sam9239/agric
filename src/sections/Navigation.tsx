@@ -83,7 +83,8 @@ export default function Navigation() {
           {/* CTA + Mobile toggle */}
           <div className="flex items-center gap-4">
             <Link
-              to="/products"
+              to="/#contact"
+              onClick={(e) => handleAnchorClick(e, '/#contact')}
               className="hidden md:inline-flex items-center px-5 py-2 text-xs font-semibold text-white rounded-sm transition-all duration-200 hover:scale-[1.02]"
               style={{ backgroundColor: '#c75c2e' }}
             >
@@ -139,7 +140,8 @@ export default function Navigation() {
                   </Link>
                 ))}
                 <Link
-                  to="/products"
+                  to="/#contact"
+                  onClick={(e) => handleAnchorClick(e, '/#contact')}
                   className="mt-4 inline-flex items-center justify-center px-5 py-3 text-xs font-semibold text-white rounded-sm"
                   style={{ backgroundColor: '#c75c2e' }}
                 >
