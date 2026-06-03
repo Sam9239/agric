@@ -92,6 +92,7 @@ export const enquiries = mysqlTable("enquiries", {
   email: varchar("email", { length: 320 }).notNull(),
   phone: varchar("phone", { length: 50 }),
   message: text("message").notNull(),
+  imageUrls: text("imageUrls"),
   status: mysqlEnum("status", ["new", "replied"]).default("new").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });

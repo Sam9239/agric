@@ -13,6 +13,7 @@ export const siteContentSchema = z.object({
     whatsappNumber: z.string(),
     whatsappUrl: z.string(),
     location: z.string(),
+    hours: z.string(),
   }),
   socials: z.object({
     facebook: z.string(),
@@ -25,13 +26,39 @@ export const siteContentSchema = z.object({
     subtext: z.string(),
     ctaLabel: z.string(),
   }),
+  homeMission: z.object({
+    eyebrow: z.string(),
+    statement: z.string(),
+  }),
   about: z.object({
     eyebrow: z.string(),
     heading: z.string(),
-    paragraph1: z.string(),
-    paragraph2: z.string(),
-    ctaLabel: z.string(),
+    intro: z.string(),
     imageUrl: z.string(),
+    story: z.object({
+      heading: z.string(),
+      paragraphs: z.array(z.string()),
+    }),
+    mission: z.object({
+      heading: z.string(),
+      body: z.string(),
+    }),
+    vision: z.object({
+      heading: z.string(),
+      body: z.string(),
+    }),
+    sustainability: z.object({
+      eyebrow: z.string(),
+      heading: z.string(),
+      intro: z.string(),
+      pillars: z.array(
+        z.object({
+          iconKey: z.string(),
+          title: z.string(),
+          description: z.string(),
+        }),
+      ),
+    }),
   }),
   services: z.object({
     eyebrow: z.string(),
@@ -98,6 +125,13 @@ export const siteContentSchema = z.object({
 
 export type SiteContent = z.infer<typeof siteContentSchema>;
 
+export const enquiryImageLimits = {
+  maxFiles: 5,
+  maxFileSizeBytes: 5 * 1024 * 1024,
+  acceptedMimeTypes: ["image/jpeg", "image/png", "image/webp"] as const,
+  acceptedExtensions: [".jpg", ".jpeg", ".png", ".webp"] as const,
+};
+
 export const defaultSiteContent: SiteContent = {
   brand: {
     name: "Jaosef Agro Supplies",
@@ -111,6 +145,7 @@ export const defaultSiteContent: SiteContent = {
     whatsappNumber: "254746804727",
     whatsappUrl: "https://wa.me/254746804727",
     location: "Nairobi, Kenya",
+    hours: "Monday – Saturday: 8:00 AM – 6:00 PM\nSunday: Closed",
   },
   socials: {
     facebook: "#",
@@ -118,21 +153,71 @@ export const defaultSiteContent: SiteContent = {
     tiktok: "#",
   },
   hero: {
-    eyebrow: "TRUSTED AGRICULTURAL SUPPLIES IN KENYA",
-    headline: "Quality Farm Inputs for Better Harvests",
+    eyebrow: "QUALITY INPUTS FOR A FOOD-SECURE KENYA",
+    headline: "Growing Better Harvests, Together",
     subtext:
-      "We supply pesticides, fertilizers, manure, farm inputs, and crop protection products for Kenyan farmers.",
+      "Quality seeds, fertilisers, crop protection, and irrigation supplies for Kenyan farms — paired with practical guidance for safe, sustainable use.",
     ctaLabel: "BROWSE PRODUCTS",
   },
+  homeMission: {
+    eyebrow: "OUR PROMISE",
+    statement:
+      "We supply trusted farm inputs and share the know-how to use them well — supporting food security, healthier soil, and climate-resilient farming across Kenya.",
+  },
   about: {
-    eyebrow: "ABOUT US",
-    heading: "Supporting Productive, Responsible Farming",
-    paragraph1:
-      "We supply quality agricultural inputs to farmers across Kenya. From smallholders to larger operations, our products help protect crops, enrich soil, and improve yields.",
-    paragraph2:
-      "Our message to farmers is simple: better harvests should go hand in hand with responsible product use, soil care, water efficiency, safe handling, and environmental protection.",
-    ctaLabel: "Explore Products",
+    eyebrow: "ABOUT JAOSEF",
+    heading: "Supporting Productive, Responsible Farming in Kenya",
+    intro:
+      "We exist to help Kenyan farmers grow more, waste less, and farm in a way that protects soil, water, and the people who work the land.",
     imageUrl: "/images/about.webp",
+    story: {
+      heading: "Our Story",
+      paragraphs: [
+        "Jaosef Agro Supplies was built around a simple belief: farmers do better when they have both quality inputs and someone they can ask the hard questions.",
+        "We work with smallholders and larger commercial farms across Kenya — supplying fertilisers, certified seed, crop protection products, irrigation equipment, and post-harvest essentials. Every product we stock is chosen with the Kenyan farmer in mind: matched to local crops, common pests, regional rainfall patterns, and the realities of working in the field.",
+        "Beyond the catalogue, we focus on guidance. The right fertiliser at the wrong stage is wasted money. A pesticide used without proper protective gear is a health risk. We talk farmers through the choices so the inputs do what they're meant to do.",
+      ],
+    },
+    mission: {
+      heading: "Our Mission",
+      body: "Enable productive, responsible farming by supplying quality agricultural inputs and the practical knowledge to use them safely and effectively.",
+    },
+    vision: {
+      heading: "Our Vision",
+      body: "Thriving Kenyan farms that contribute to national food security while protecting the soil, water, and ecosystems future generations depend on.",
+    },
+    sustainability: {
+      eyebrow: "WHY IT MATTERS",
+      heading: "Farming for Food Security and a Living Planet",
+      intro:
+        "Our work sits at the intersection of farm profitability and Kenya's long-term food future. These are the principles that guide what we stock and how we advise.",
+      pillars: [
+        {
+          iconKey: "wheat",
+          title: "Food Security",
+          description:
+            "Reliable access to quality fertilisers, certified seed, and crop protection so Kenyan farms produce consistent, healthy harvests — for households, markets, and the country's food supply.",
+        },
+        {
+          iconKey: "users",
+          title: "Sustainable Food Systems",
+          description:
+            "Supporting smallholders and commercial growers with practical inputs and guidance — strengthening the whole value chain from seed to storage.",
+        },
+        {
+          iconKey: "leaf",
+          title: "Climate-Aligned Farming",
+          description:
+            "Drought-tolerant seed options, drip irrigation, water-saving tools, and soil health products — helping farms cope with shifting rainfall and rising temperatures.",
+        },
+        {
+          iconKey: "shield",
+          title: "Responsible Product Use",
+          description:
+            "Label-based use of crop protection products, proper PPE, and care for soil and water sources — so today's harvest doesn't cost tomorrow's environment.",
+        },
+      ],
+    },
   },
   services: {
     eyebrow: "WHAT WE DO",
@@ -174,33 +259,33 @@ export const defaultSiteContent: SiteContent = {
   },
   whyChooseUs: {
     eyebrow: "WHY FARMERS CHOOSE US",
-    heading: "Built on Trust, Backed by Knowledge",
+    heading: "Trusted Inputs, Practical Guidance",
     subtext:
-      "We're not just selling products — we're helping you grow a better harvest, safely and responsibly.",
+      "We're not just selling products — we help you grow a better harvest, safely and sustainably.",
     items: [
       {
         iconKey: "badge",
         title: "Genuine Products",
         description:
-          "Quality agricultural inputs sourced from reliable, recognised suppliers.",
+          "Quality agricultural inputs sourced from reliable, recognised suppliers — no shortcuts on quality.",
       },
       {
         iconKey: "users",
         title: "Farmer-Focused Support",
         description:
-          "Ask questions before you buy — we explain what works for your crop and conditions.",
+          "Ask questions before you buy — we explain what works for your crop, soil, and conditions.",
       },
       {
         iconKey: "shield",
         title: "Safe Product Use",
         description:
-          "We encourage label-based use, proper PPE, and responsible handling for every product.",
+          "We encourage label-based use, proper PPE, and responsible handling for every product we stock.",
       },
       {
         iconKey: "messageCircle",
         title: "Easy WhatsApp Enquiries",
         description:
-          "Quick answers on stock, prices, and usage guidance — straight to your phone.",
+          "Quick answers on stock, prices, and usage — straight to your phone, no checkout required.",
       },
     ],
   },
@@ -263,8 +348,8 @@ export const defaultSiteContent: SiteContent = {
     ],
   },
   ctaBanner: {
-    heading: "Need farm inputs or product advice?",
-    body: "Talk to us today about seeds, fertilisers, manure, crop protection products, and farm tools.",
+    heading: "Need farm inputs or honest advice?",
+    body: "Talk to us about seeds, fertilisers, crop protection, irrigation, and post-harvest supplies — and how to use them well.",
     primaryLabel: "Chat on WhatsApp",
     secondaryLabel: "Browse Products",
   },

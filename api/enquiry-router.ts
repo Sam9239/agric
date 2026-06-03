@@ -4,8 +4,24 @@ import { getDb } from "./queries/connection";
 import { enquiries } from "@db/schema";
 import { eq, desc } from "drizzle-orm";
 import { demoEnquiries, hasDatabase } from "./demo-data";
+import { enquiryImageLimits } from "@contracts/site-content";
 
 let nextDemoEnquiryId = demoEnquiries.length + 1;
+
+function serialiseUrls(urls: string[] | undefined): string | null {
+  if (!urls || urls.length === 0) return null;
+  return JSON.stringify(urls);
+}
+
+export function parseImageUrls(raw: string | null | undefined): string[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((u) => typeof u === "string") : [];
+  } catch {
+    return [];
+  }
+}
 
 export const enquiryRouter = createRouter({
   create: publicQuery
@@ -15,9 +31,14 @@ export const enquiryRouter = createRouter({
         email: z.string().email("Valid email is required"),
         phone: z.string().optional(),
         message: z.string().min(1, "Message is required"),
-      })
+        imageUrls: z
+          .array(z.string().min(1))
+          .max(enquiryImageLimits.maxFiles)
+          .optional(),
+      }),
     )
     .mutation(async ({ input }) => {
+      const urls = input.imageUrls ?? [];
       if (!hasDatabase()) {
         const enquiry = {
           id: nextDemoEnquiryId++,
@@ -25,6 +46,7 @@ export const enquiryRouter = createRouter({
           email: input.email,
           phone: input.phone || null,
           message: input.message,
+          imageUrls: serialiseUrls(urls),
           status: "new" as const,
           createdAt: new Date(),
         };
@@ -38,6 +60,7 @@ export const enquiryRouter = createRouter({
         email: input.email,
         phone: input.phone || null,
         message: input.message,
+        imageUrls: serialiseUrls(urls),
       });
       return { success: true, id: Number(result[0].insertId) };
     }),
@@ -48,10 +71,7 @@ export const enquiryRouter = createRouter({
     }
 
     const db = getDb();
-    return db
-      .select()
-      .from(enquiries)
-      .orderBy(desc(enquiries.createdAt));
+    return db.select().from(enquiries).orderBy(desc(enquiries.createdAt));
   }),
 
   demoList: publicQuery.query(() => {
@@ -63,7 +83,7 @@ export const enquiryRouter = createRouter({
       z.object({
         id: z.number(),
         status: z.enum(["new", "replied"]),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       if (!hasDatabase()) {

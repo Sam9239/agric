@@ -14,7 +14,6 @@ import {
   Plus,
   Pencil,
   Trash2,
-  Eye,
   X,
   Upload,
   Settings,
@@ -24,8 +23,9 @@ import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
 import { siteConfig } from '@/config/site';
 import { productCategories, type CatalogueProduct, type ProductCategory } from '@contracts/product-catalog';
-import type { Enquiry, FarmingTip } from '@db/schema';
+import type { FarmingTip } from '@db/schema';
 import SiteContentEditor from '@/components/admin/SiteContentEditor';
+import EnquiriesView from '@/components/admin/EnquiriesView';
 
 type TabType = 'overview' | 'products' | 'enquiries' | 'tips' | 'siteContent' | 'security';
 type ProductForm = {
@@ -88,8 +88,6 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [showProductModal, setShowProductModal] = useState(false);
   const [showTipModal, setShowTipModal] = useState(false);
-  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
-  const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [editingProduct, setEditingProduct] = useState<CatalogueProduct | null>(null);
   const [editingTip, setEditingTip] = useState<FarmingTip | null>(null);
   const [uploadingImageFor, setUploadingImageFor] = useState<'product' | 'tip' | null>(null);
@@ -156,21 +154,6 @@ export default function AdminDashboard() {
       productUtils.tip.list.invalidate();
       productUtils.tip.recent.invalidate();
       toast.success('Tip deleted');
-    },
-  });
-  const updateEnquiryStatus = trpc.enquiry.updateStatus.useMutation({
-    onSuccess: (_, variables) => {
-      productUtils.enquiry.list.invalidate();
-      toast.success(variables.status === 'replied' ? 'Enquiry marked as replied' : 'Enquiry marked as new');
-      setSelectedEnquiry((current) => current && current.id === variables.id ? { ...current, status: variables.status } : current);
-    },
-  });
-  const deleteEnquiry = trpc.enquiry.delete.useMutation({
-    onSuccess: () => {
-      productUtils.enquiry.list.invalidate();
-      toast.success('Enquiry deleted');
-      setShowEnquiryModal(false);
-      setSelectedEnquiry(null);
     },
   });
   const adminLogout = trpc.auth.adminLogout.useMutation({
@@ -386,11 +369,6 @@ export default function AdminDashboard() {
   const handleDeleteTip = (tip: FarmingTip) => {
     if (!window.confirm(`Delete "${tip.title}"? This cannot be undone.`)) return;
     deleteTip.mutate({ id: tip.id });
-  };
-
-  const handleDeleteEnquiry = (enquiry: Enquiry) => {
-    if (!window.confirm(`Delete enquiry from "${enquiry.name}"? This cannot be undone.`)) return;
-    deleteEnquiry.mutate({ id: enquiry.id });
   };
 
   if (isCheckingAdmin) {
@@ -726,71 +704,7 @@ export default function AdminDashboard() {
         {/* Enquiries Tab */}
         {activeTab === 'enquiries' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-            <h1 className="font-display text-3xl" style={{ color: '#1a3a2f' }}>Enquiries</h1>
-            <div className="overflow-x-auto mt-6" style={{ border: '1px solid #d4c9b8' }}>
-              <table className="w-full" style={{ backgroundColor: '#f5f0e8' }}>
-                <thead>
-                  <tr style={{ borderBottom: '1px solid #d4c9b8' }}>
-                    {['Name', 'Email', 'Phone', 'Message', 'Date', 'Status', 'Actions'].map((h) => (
-                      <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: '#8b7d6b' }}>
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {enquiries?.map((e) => (
-                    <tr key={e.id} className="transition-colors hover:bg-[#e8dfd1]" style={{ borderBottom: '1px solid #d4c9b8' }}>
-                      <td className="px-4 py-3 text-sm" style={{ color: '#1a3a2f' }}>{e.name}</td>
-                      <td className="px-4 py-3 text-sm" style={{ color: '#3d3d3d' }}>{e.email}</td>
-                      <td className="px-4 py-3 text-sm" style={{ color: '#3d3d3d' }}>{e.phone || '-'}</td>
-                      <td className="px-4 py-3 text-sm max-w-[200px] truncate" style={{ color: '#3d3d3d' }}>{e.message}</td>
-                      <td className="px-4 py-3 text-sm whitespace-nowrap" style={{ color: '#8b7d6b' }}>
-                        {new Date(e.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className="text-xs px-2 py-0.5 text-white" style={{ backgroundColor: e.status === 'new' ? '#c75c2e' : '#5c7a4a' }}>
-                          {e.status === 'new' ? 'New' : 'Replied'}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => { setSelectedEnquiry(e); setShowEnquiryModal(true); }}
-                            className="p-1 transition-colors hover:opacity-70"
-                            style={{ color: '#5c7a4a' }}
-                            aria-label={`View enquiry from ${e.name}`}
-                          >
-                            <Eye size={16} />
-                          </button>
-                          <button
-                            onClick={() => updateEnquiryStatus.mutate({ id: e.id, status: e.status === 'new' ? 'replied' : 'new' })}
-                            className="p-1 transition-colors hover:opacity-70"
-                            style={{ color: '#1a3a2f' }}
-                            aria-label={`Mark enquiry from ${e.name} as ${e.status === 'new' ? 'replied' : 'new'}`}
-                          >
-                            <Pencil size={16} />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteEnquiry(e)}
-                            className="p-1 transition-colors hover:opacity-70"
-                            style={{ color: '#c75c2e' }}
-                            aria-label={`Delete enquiry from ${e.name}`}
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {(!enquiries || enquiries.length === 0) && (
-                    <tr>
-                      <td colSpan={7} className="px-4 py-8 text-center text-sm" style={{ color: '#8b7d6b' }}>No enquiries</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <EnquiriesView />
           </motion.div>
         )}
 
@@ -1140,82 +1054,6 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Enquiry Detail Modal */}
-      {showEnquiryModal && selectedEnquiry && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-[500px] p-8"
-            style={{ backgroundColor: '#f5f0e8' }}
-          >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl" style={{ color: '#1a3a2f' }}>Enquiry Details</h2>
-              <button onClick={() => setShowEnquiryModal(false)} style={{ color: '#8b7d6b' }} aria-label="Close enquiry details">
-                <X size={20} />
-              </button>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: '#8b7d6b' }}>Name</p>
-                <p className="text-sm mt-0.5" style={{ color: '#1a3a2f' }}>{selectedEnquiry.name}</p>
-              </div>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: '#8b7d6b' }}>Email</p>
-                <p className="text-sm mt-0.5" style={{ color: '#1a3a2f' }}>{selectedEnquiry.email}</p>
-              </div>
-              {selectedEnquiry.phone && (
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide" style={{ color: '#8b7d6b' }}>Phone</p>
-                  <p className="text-sm mt-0.5" style={{ color: '#1a3a2f' }}>{selectedEnquiry.phone}</p>
-                </div>
-              )}
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: '#8b7d6b' }}>Message</p>
-                <p className="text-sm mt-0.5 leading-relaxed" style={{ color: '#3d3d3d' }}>{selectedEnquiry.message}</p>
-              </div>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: '#8b7d6b' }}>Date</p>
-                <p className="text-sm mt-0.5" style={{ color: '#3d3d3d' }}>
-                  {new Date(selectedEnquiry.createdAt).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: '#8b7d6b' }}>Status</p>
-                <span
-                  className="inline-block mt-0.5 text-xs px-2 py-0.5 text-white"
-                  style={{ backgroundColor: selectedEnquiry.status === 'new' ? '#c75c2e' : '#5c7a4a' }}
-                >
-                  {selectedEnquiry.status === 'new' ? 'New' : 'Replied'}
-                </span>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
-              <button
-                onClick={() => updateEnquiryStatus.mutate({ id: selectedEnquiry.id, status: selectedEnquiry.status === 'new' ? 'replied' : 'new' })}
-                className="py-3 text-sm font-semibold transition-all"
-                style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
-              >
-                Mark {selectedEnquiry.status === 'new' ? 'replied' : 'new'}
-              </button>
-              <button
-                onClick={() => handleDeleteEnquiry(selectedEnquiry)}
-                className="py-3 text-sm font-semibold text-white transition-all"
-                style={{ backgroundColor: '#c75c2e' }}
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setShowEnquiryModal(false)}
-                className="py-3 text-sm font-semibold transition-all"
-                style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
-              >
-                Close
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </div>
   );
 }

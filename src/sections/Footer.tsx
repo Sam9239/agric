@@ -12,10 +12,10 @@ function TikTokIcon({ size = 16 }: { size?: number }) {
 }
 
 const quickLinks = [
+  { label: 'About', href: '/about' },
   { label: 'Products', href: '/products' },
   { label: 'Farming Tips', href: '/farming-tips' },
-  { label: 'About', href: '/#about' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Contact', href: '/contact' },
   { label: 'Privacy Policy', href: '/privacy-policy' },
   { label: 'Terms & Disclaimer', href: '/terms-disclaimer' },
 ];

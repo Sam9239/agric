@@ -216,6 +216,15 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
               onChange={(e) => setField('contact', { ...draft.contact, location: e.target.value })}
             />
           </Field>
+          <Field label="Opening Hours" hint="Line breaks are preserved.">
+            <textarea
+              className={`${inputClass} resize-none`}
+              style={inputStyle}
+              rows={3}
+              value={draft.contact.hours}
+              onChange={(e) => setField('contact', { ...draft.contact, hours: e.target.value })}
+            />
+          </Field>
           <Field label="WhatsApp Number" hint="Digits only, with country code (e.g. 254746804727)">
             <input
               type="text"
@@ -311,7 +320,28 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
         </Field>
       </Section>
 
-      <Section title="About Section">
+      <Section title="Homepage Mission Strip">
+        <Field label="Eyebrow">
+          <input
+            type="text"
+            className={inputClass}
+            style={inputStyle}
+            value={draft.homeMission.eyebrow}
+            onChange={(e) => setField('homeMission', { ...draft.homeMission, eyebrow: e.target.value })}
+          />
+        </Field>
+        <Field label="Mission Statement" hint="One sentence shown below the hero on the homepage.">
+          <textarea
+            className={`${inputClass} resize-none`}
+            style={inputStyle}
+            rows={3}
+            value={draft.homeMission.statement}
+            onChange={(e) => setField('homeMission', { ...draft.homeMission, statement: e.target.value })}
+          />
+        </Field>
+      </Section>
+
+      <Section title="About Page — Hero">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field label="Eyebrow">
             <input
@@ -322,45 +352,7 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
               onChange={(e) => setField('about', { ...draft.about, eyebrow: e.target.value })}
             />
           </Field>
-          <Field label="Heading">
-            <input
-              type="text"
-              className={inputClass}
-              style={inputStyle}
-              value={draft.about.heading}
-              onChange={(e) => setField('about', { ...draft.about, heading: e.target.value })}
-            />
-          </Field>
-        </div>
-        <Field label="Paragraph 1">
-          <textarea
-            className={`${inputClass} resize-none`}
-            style={inputStyle}
-            rows={3}
-            value={draft.about.paragraph1}
-            onChange={(e) => setField('about', { ...draft.about, paragraph1: e.target.value })}
-          />
-        </Field>
-        <Field label="Paragraph 2">
-          <textarea
-            className={`${inputClass} resize-none`}
-            style={inputStyle}
-            rows={3}
-            value={draft.about.paragraph2}
-            onChange={(e) => setField('about', { ...draft.about, paragraph2: e.target.value })}
-          />
-        </Field>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Field label="CTA Label">
-            <input
-              type="text"
-              className={inputClass}
-              style={inputStyle}
-              value={draft.about.ctaLabel}
-              onChange={(e) => setField('about', { ...draft.about, ctaLabel: e.target.value })}
-            />
-          </Field>
-          <Field label="Image URL">
+          <Field label="Image URL" hint="Used in the Our Story section.">
             <input
               type="text"
               className={inputClass}
@@ -369,6 +361,211 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
               onChange={(e) => setField('about', { ...draft.about, imageUrl: e.target.value })}
             />
           </Field>
+        </div>
+        <Field label="Heading">
+          <input
+            type="text"
+            className={inputClass}
+            style={inputStyle}
+            value={draft.about.heading}
+            onChange={(e) => setField('about', { ...draft.about, heading: e.target.value })}
+          />
+        </Field>
+        <Field label="Intro">
+          <textarea
+            className={`${inputClass} resize-none`}
+            style={inputStyle}
+            rows={3}
+            value={draft.about.intro}
+            onChange={(e) => setField('about', { ...draft.about, intro: e.target.value })}
+          />
+        </Field>
+      </Section>
+
+      <Section title="About Page — Our Story">
+        <Field label="Story Heading">
+          <input
+            type="text"
+            className={inputClass}
+            style={inputStyle}
+            value={draft.about.story.heading}
+            onChange={(e) => setField('about', { ...draft.about, story: { ...draft.about.story, heading: e.target.value } })}
+          />
+        </Field>
+        <div className="space-y-3 mt-2">
+          {draft.about.story.paragraphs.map((para, idx) => (
+            <div key={idx} className="p-3" style={{ border: '1px dashed #d4c9b8' }}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8b7d6b' }}>
+                  Paragraph {idx + 1}
+                </span>
+                {draft.about.story.paragraphs.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const paragraphs = draft.about.story.paragraphs.filter((_, i) => i !== idx);
+                      setField('about', { ...draft.about, story: { ...draft.about.story, paragraphs } });
+                    }}
+                    className="text-xs"
+                    style={{ color: '#c75c2e' }}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              <textarea
+                className={`${inputClass} resize-none`}
+                style={inputStyle}
+                rows={3}
+                value={para}
+                onChange={(e) => {
+                  const paragraphs = [...draft.about.story.paragraphs];
+                  paragraphs[idx] = e.target.value;
+                  setField('about', { ...draft.about, story: { ...draft.about.story, paragraphs } });
+                }}
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              const paragraphs = [...draft.about.story.paragraphs, ''];
+              setField('about', { ...draft.about, story: { ...draft.about.story, paragraphs } });
+            }}
+            className="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold"
+            style={{ backgroundColor: '#e8dfd1', color: '#1a3a2f', border: '1px solid #d4c9b8' }}
+          >
+            + Add Paragraph
+          </button>
+        </div>
+      </Section>
+
+      <Section title="About Page — Mission & Vision">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="space-y-3" style={{ borderRight: '1px dashed #d4c9b8', paddingRight: '1rem' }}>
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#c75c2e' }}>Mission</p>
+            <Field label="Heading">
+              <input
+                type="text"
+                className={inputClass}
+                style={inputStyle}
+                value={draft.about.mission.heading}
+                onChange={(e) => setField('about', { ...draft.about, mission: { ...draft.about.mission, heading: e.target.value } })}
+              />
+            </Field>
+            <Field label="Body">
+              <textarea
+                className={`${inputClass} resize-none`}
+                style={inputStyle}
+                rows={3}
+                value={draft.about.mission.body}
+                onChange={(e) => setField('about', { ...draft.about, mission: { ...draft.about.mission, body: e.target.value } })}
+              />
+            </Field>
+          </div>
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#5c7a4a' }}>Vision</p>
+            <Field label="Heading">
+              <input
+                type="text"
+                className={inputClass}
+                style={inputStyle}
+                value={draft.about.vision.heading}
+                onChange={(e) => setField('about', { ...draft.about, vision: { ...draft.about.vision, heading: e.target.value } })}
+              />
+            </Field>
+            <Field label="Body">
+              <textarea
+                className={`${inputClass} resize-none`}
+                style={inputStyle}
+                rows={3}
+                value={draft.about.vision.body}
+                onChange={(e) => setField('about', { ...draft.about, vision: { ...draft.about.vision, body: e.target.value } })}
+              />
+            </Field>
+          </div>
+        </div>
+      </Section>
+
+      <Section title="About Page — Sustainability Pillars">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Field label="Eyebrow">
+            <input
+              type="text"
+              className={inputClass}
+              style={inputStyle}
+              value={draft.about.sustainability.eyebrow}
+              onChange={(e) => setField('about', { ...draft.about, sustainability: { ...draft.about.sustainability, eyebrow: e.target.value } })}
+            />
+          </Field>
+          <Field label="Heading">
+            <input
+              type="text"
+              className={inputClass}
+              style={inputStyle}
+              value={draft.about.sustainability.heading}
+              onChange={(e) => setField('about', { ...draft.about, sustainability: { ...draft.about.sustainability, heading: e.target.value } })}
+            />
+          </Field>
+        </div>
+        <Field label="Intro">
+          <textarea
+            className={`${inputClass} resize-none`}
+            style={inputStyle}
+            rows={2}
+            value={draft.about.sustainability.intro}
+            onChange={(e) => setField('about', { ...draft.about, sustainability: { ...draft.about.sustainability, intro: e.target.value } })}
+          />
+        </Field>
+        <div className="space-y-4 mt-2">
+          {draft.about.sustainability.pillars.map((pillar, idx) => (
+            <div key={idx} className="p-4 grid grid-cols-1 md:grid-cols-[160px_1fr] gap-3" style={{ border: '1px dashed #d4c9b8' }}>
+              <Field label={`Pillar ${idx + 1} Icon`}>
+                <select
+                  className={inputClass}
+                  style={inputStyle}
+                  value={pillar.iconKey}
+                  onChange={(e) => {
+                    const pillars = [...draft.about.sustainability.pillars];
+                    pillars[idx] = { ...pillars[idx], iconKey: e.target.value };
+                    setField('about', { ...draft.about, sustainability: { ...draft.about.sustainability, pillars } });
+                  }}
+                >
+                  {iconOptions.map((o) => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+              </Field>
+              <div className="space-y-3">
+                <Field label="Title">
+                  <input
+                    type="text"
+                    className={inputClass}
+                    style={inputStyle}
+                    value={pillar.title}
+                    onChange={(e) => {
+                      const pillars = [...draft.about.sustainability.pillars];
+                      pillars[idx] = { ...pillars[idx], title: e.target.value };
+                      setField('about', { ...draft.about, sustainability: { ...draft.about.sustainability, pillars } });
+                    }}
+                  />
+                </Field>
+                <Field label="Description">
+                  <textarea
+                    className={`${inputClass} resize-none`}
+                    style={inputStyle}
+                    rows={2}
+                    value={pillar.description}
+                    onChange={(e) => {
+                      const pillars = [...draft.about.sustainability.pillars];
+                      pillars[idx] = { ...pillars[idx], description: e.target.value };
+                      setField('about', { ...draft.about, sustainability: { ...draft.about.sustainability, pillars } });
+                    }}
+                  />
+                </Field>
+              </div>
+            </div>
+          ))}
         </div>
       </Section>
 

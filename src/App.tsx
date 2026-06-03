@@ -4,6 +4,8 @@ import RouteScrollManager from './components/RouteScrollManager'
 import FloatingWhatsApp from './sections/FloatingWhatsApp'
 
 const Home = lazy(() => import('./pages/Home'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
 const Products = lazy(() => import('./pages/Products'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const FarmingTips = lazy(() => import('./pages/FarmingTips'))
@@ -30,6 +32,8 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/farming-tips" element={<FarmingTips />} />

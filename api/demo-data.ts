@@ -52,6 +52,7 @@ export const demoEnquiries: Enquiry[] = [
     phone: "+254712345678",
     message:
       "I am interested in DAP Fertilizer and CAN Fertilizer for my 2-acre maize farm. Can you share availability and recommended pack sizes?",
+    imageUrls: null,
     status: "new",
     createdAt: new Date("2025-05-21T09:00:00.000Z"),
   },

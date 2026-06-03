@@ -6,10 +6,10 @@ import { useSiteContent } from '@/hooks/useSiteContent';
 import TopBar from './TopBar';
 
 const navLinks = [
+  { label: 'About', href: '/about' },
   { label: 'Products', href: '/products' },
   { label: 'Farming Tips', href: '/farming-tips' },
-  { label: 'About', href: '/#about' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export default function Navigation() {
