@@ -34,9 +34,12 @@ export default function Footer() {
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
-            <span className="text-[#f5f0e8] font-bold text-base tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
-              {brand.name.toUpperCase()}
-            </span>
+            <div className="flex items-center gap-2 mb-2">
+              <img src="/logo-mark.svg" alt="" width={28} height={28} />
+              <span className="text-[#f5f0e8] font-bold text-base tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
+                {brand.name.toUpperCase()}
+              </span>
+            </div>
             <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
               Quality agricultural inputs and farm supplies for Kenyan farmers, with a focus on responsible use and environmental protection.
             </p>

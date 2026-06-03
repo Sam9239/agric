@@ -132,7 +132,7 @@ export const defaultSiteContent: SiteContent = {
     paragraph2:
       "Our message to farmers is simple: better harvests should go hand in hand with responsible product use, soil care, water efficiency, safe handling, and environmental protection.",
     ctaLabel: "Explore Products",
-    imageUrl: "/images/about.jpg",
+    imageUrl: "/images/about.webp",
   },
   services: {
     eyebrow: "WHAT WE DO",

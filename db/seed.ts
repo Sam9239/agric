@@ -57,7 +57,7 @@ async function seed() {
           "Tomato farming can be highly profitable when done right. Start with certified seeds from reputable suppliers. Prepare raised beds with well-drained soil and mix in organic compost. Plant seedlings at 60cm by 45cm spacing. Apply DAP fertilizer at planting and top dress with CAN after 3 weeks. Monitor regularly for pests like Tuta absoluta and apply Thunder insecticide at first sight. Water consistently but avoid wetting foliage. Stake plants early to prevent fruit rot and improve air circulation. Harvest when fruits are firm and fully colored for strong market quality.",
         excerpt:
           "Tomato farming can be highly profitable when done right. Start with certified seeds from reputable suppliers. Prepare raised beds with well-drained soil...",
-        imageUrl: "/images/tip-3.jpg",
+        imageUrl: "/images/tip-3.webp",
         date: "May 15, 2025",
       },
       {
@@ -66,7 +66,7 @@ async function seed() {
           "Water is the most critical input after seeds. Implement drip irrigation for water efficiency — it can reduce water use by 40% while increasing yields by 20-30%. Water early morning or late evening to minimize evaporation. Monitor soil moisture regularly; most crops need consistent moisture during flowering and fruiting stages. Consider collecting rainwater during wet seasons for dry season farming. Mulching helps retain soil moisture and reduces irrigation frequency. Never let soil completely dry out during critical growth stages.",
         excerpt:
           "Water is the most critical input after seeds. Implement drip irrigation for water efficiency — it can reduce water use by 40% while increasing yields...",
-        imageUrl: "/images/tip-2.jpg",
+        imageUrl: "/images/tip-2.webp",
         date: "May 10, 2025",
       },
       {
@@ -75,7 +75,7 @@ async function seed() {
           "Healthy soil is the foundation of productive farming. Test your soil annually to understand pH and nutrient levels. Most Kenyan soils are acidic — apply agricultural lime if pH is below 5.5. Incorporate organic matter through compost or green manure to improve soil structure and microbial activity. Practice crop rotation to break pest cycles and maintain soil fertility. Legumes like beans and peas fix nitrogen naturally — include them in your rotation. Avoid over-tilling as it destroys soil structure and beneficial organisms. Cover crops during off-seasons prevent erosion and add organic matter.",
         excerpt:
           "Healthy soil is the foundation of productive farming. Test your soil annually to understand pH and nutrient levels. Most Kenyan soils are acidic...",
-        imageUrl: "/images/tip-1.jpg",
+        imageUrl: "/images/tip-1.webp",
         date: "May 5, 2025",
       },
       {
@@ -84,7 +84,7 @@ async function seed() {
           "Effective pest management starts with prevention. Use certified seeds and resistant varieties where available. Practice crop rotation and intercropping to disrupt pest life cycles. Maintain field hygiene by removing crop residues after harvest. Scout fields weekly for early pest detection. Use biological controls like beneficial insects and neem-based products before resorting to chemical pesticides. When using pesticides, rotate between different chemical groups to prevent resistance development. Always follow label instructions and observe pre-harvest intervals for food safety.",
         excerpt:
           "Effective pest management starts with prevention. Use certified seeds and resistant varieties where available. Practice crop rotation and intercropping...",
-        imageUrl: "/images/cat-pesticides.jpg",
+        imageUrl: "/images/cat-pesticides.webp",
         date: "April 28, 2025",
       },
       {
@@ -93,7 +93,7 @@ async function seed() {
           "Maize remains Kenya's staple crop. For best results, plant at the onset of rains. Space plants 75cm between rows and 25cm within rows. Apply DAP fertilizer at planting rate of 50kg per acre. Top dress with CAN or urea when plants are knee-high. Control weeds early — the first 6 weeks are critical. Watch for fall armyworm and stalk borers; scout weekly and treat promptly. Harvest when husks turn brown and grains are hard. Proper drying to 13% moisture prevents aflatoxin contamination. Store in hermetic bags like PICS bags for long-term storage without chemicals.",
         excerpt:
           "Maize remains Kenya's staple crop. For best results, plant at the onset of rains. Space plants 75cm between rows and 25cm within rows...",
-        imageUrl: "/images/hero.jpg",
+        imageUrl: "/images/hero.webp",
         date: "April 20, 2025",
       },
       {
@@ -102,7 +102,7 @@ async function seed() {
           "Selecting the correct fertilizer maximizes your investment. For cereals like maize and wheat, use DAP at planting for strong root development, then top dress with urea or CAN for vegetative growth. For vegetables, a balanced NPK fertilizer works well at planting, followed by calcium nitrate during fruiting. Legumes need less nitrogen but benefit from phosphorous-rich fertilizers. Always apply based on soil test recommendations. Apply fertilizers when soil is moist but not waterlogged. Band placement near roots is more efficient than broadcasting. Split applications reduce nutrient losses and improve uptake.",
         excerpt:
           "Selecting the correct fertilizer maximizes your investment. For cereals like maize and wheat, use DAP at planting for strong root development...",
-        imageUrl: "/images/cat-fertilizers.jpg",
+        imageUrl: "/images/cat-fertilizers.webp",
         date: "April 15, 2025",
       },
     ]);

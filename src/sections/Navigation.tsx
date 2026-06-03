@@ -57,12 +57,15 @@ export default function Navigation() {
       >
         <div className="w-full max-w-[1200px] mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex flex-col">
-            <span className="text-[#f5f0e8] font-bold text-lg leading-tight tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
-              {content.brand.navName}
-            </span>
-            <span className="text-[#8b7d6b] text-[10px] tracking-[4px] leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-              {content.brand.navTagline}
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src="/logo-mark.svg" alt="" width={36} height={36} className="flex-shrink-0" />
+            <span className="flex flex-col">
+              <span className="text-[#f5f0e8] font-bold text-lg leading-tight tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
+                {content.brand.navName}
+              </span>
+              <span className="text-[#8b7d6b] text-[10px] tracking-[4px] leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
+                {content.brand.navTagline}
+              </span>
             </span>
           </Link>
 

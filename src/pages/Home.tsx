@@ -35,15 +35,15 @@ import {
 } from '@/components/ui/accordion';
 
 const categoryImages: Record<ProductCategory, string> = {
-  crop_nutrition: '/images/cat-fertilizers.jpg',
-  seeds: '/images/products/certified-maize-seed.png',
-  crop_protection: '/images/cat-crop-protection.jpg',
-  soil_health: '/images/cat-manure.jpg',
-  irrigation: '/images/cat-farm-inputs.jpg',
+  crop_nutrition: '/images/cat-fertilizers.webp',
+  seeds: '/images/products/certified-maize-seed.webp',
+  crop_protection: '/images/cat-crop-protection.webp',
+  soil_health: '/images/cat-manure.webp',
+  irrigation: '/images/cat-farm-inputs.webp',
   tools: '/images/products/knapsack-sprayer.webp',
   nursery: '/images/products/seedling-trays-cocopeat.webp',
   safety: '/images/products/ppe-kit.webp',
-  post_harvest: '/images/cat-farm-inputs.jpg',
+  post_harvest: '/images/cat-farm-inputs.webp',
 };
 
 const categoryLabels = productCategories;
@@ -63,11 +63,11 @@ const iconMap: Record<string, LucideIcon> = {
 const stepIcons: LucideIcon[] = [MousePointerClick, MessageSquare, CheckCircle2, Truck];
 
 const heroSlides = [
-  { src: '/images/hero-slide-inputs.png', alt: 'Agricultural supplies arranged on a farm table' },
-  { src: '/images/hero-slide-shop.png', alt: 'Agricultural supplies shop with farm inputs' },
-  { src: '/images/hero-slide-greenhouse.png', alt: 'Farmer checking crops in a greenhouse' },
-  { src: '/images/hero-slide-harvest.png', alt: 'Farmer harvesting tomatoes in a field' },
-  { src: '/images/hero-slide-advice.png', alt: 'Agricultural advisor discussing farm inputs with a farmer' },
+  { src: '/images/hero-slide-inputs.webp', alt: 'Agricultural supplies arranged on a farm table' },
+  { src: '/images/hero-slide-shop.webp', alt: 'Agricultural supplies shop with farm inputs' },
+  { src: '/images/hero-slide-greenhouse.webp', alt: 'Farmer checking crops in a greenhouse' },
+  { src: '/images/hero-slide-harvest.webp', alt: 'Farmer harvesting tomatoes in a field' },
+  { src: '/images/hero-slide-advice.webp', alt: 'Agricultural advisor discussing farm inputs with a farmer' },
 ];
 
 const fadeInUp = {
