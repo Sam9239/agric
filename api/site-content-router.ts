@@ -11,12 +11,30 @@ import {
 
 let demoSiteContent: SiteContent = defaultSiteContent;
 
-function mergeWithDefaults(partial: unknown): SiteContent {
-  const parsed = siteContentSchema.safeParse(partial);
-  if (parsed.success) {
-    return parsed.data;
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function deepMerge<T>(base: T, override: unknown): T {
+  if (!isPlainObject(override)) return base;
+  if (!isPlainObject(base)) return base;
+  const result: Record<string, unknown> = { ...base };
+  for (const key of Object.keys(override)) {
+    const baseValue = (base as Record<string, unknown>)[key];
+    const overrideValue = override[key];
+    if (isPlainObject(baseValue) && isPlainObject(overrideValue)) {
+      result[key] = deepMerge(baseValue, overrideValue);
+    } else if (overrideValue !== undefined && overrideValue !== null) {
+      result[key] = overrideValue;
+    }
   }
-  return defaultSiteContent;
+  return result as T;
+}
+
+function mergeWithDefaults(partial: unknown): SiteContent {
+  const merged = deepMerge(defaultSiteContent, partial);
+  const parsed = siteContentSchema.safeParse(merged);
+  return parsed.success ? parsed.data : defaultSiteContent;
 }
 
 export const siteContentRouter = createRouter({
