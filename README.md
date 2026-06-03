@@ -81,7 +81,7 @@ npm run db:push
 npm run db:seed
 ```
 
-4. Use `server.mjs` as the cPanel Node.js startup file, or use `npm run start` if cPanel asks for a command.
+4. Use `server.cjs` as the cPanel Node.js startup file, or use `npm run start` if cPanel asks for a command.
 
 Uploaded images are stored in `uploads/images` in production so they are not erased by rebuilding `dist/public`.
 
