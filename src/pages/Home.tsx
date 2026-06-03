@@ -49,11 +49,11 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const heroSlides = [
-  { src: '/images/hero-slide-inputs.webp', alt: 'Agricultural supplies arranged on a farm table' },
-  { src: '/images/hero-slide-shop.webp', alt: 'Agricultural supplies shop with farm inputs' },
-  { src: '/images/hero-slide-greenhouse.webp', alt: 'Farmer checking crops in a greenhouse' },
-  { src: '/images/hero-slide-harvest.webp', alt: 'Farmer harvesting tomatoes in a field' },
-  { src: '/images/hero-slide-advice.webp', alt: 'Agricultural advisor discussing farm inputs with a farmer' },
+  { src: '/images/hero-slide-inputs.webp', alt: 'Agricultural supplies arranged on a farm table', objectPosition: 'center 40%' },
+  { src: '/images/hero-slide-shop.webp', alt: 'Agricultural supplies shop with farm inputs', objectPosition: 'center 45%' },
+  { src: '/images/hero-slide-greenhouse.webp', alt: 'Farmer checking crops in a greenhouse', objectPosition: 'center 18%' },
+  { src: '/images/hero-slide-harvest.webp', alt: 'Farmer harvesting tomatoes in a field', objectPosition: 'center 15%' },
+  { src: '/images/hero-slide-advice.webp', alt: 'Agricultural advisor discussing farm inputs with a farmer', objectPosition: 'center 20%' },
 ];
 
 const fadeInUp = {
@@ -102,7 +102,7 @@ export default function Home() {
               className="absolute inset-0 h-full w-full object-cover"
               style={{
                 opacity: activeHeroSlide === index ? 1 : 0,
-                objectPosition: 'center 30%',
+                objectPosition: slide.objectPosition,
                 transition: 'opacity 1200ms ease-in-out',
               }}
               loading={index === 0 ? 'eager' : 'lazy'}
