@@ -99,8 +99,12 @@ export default function Home() {
               key={slide.src}
               src={slide.src}
               alt={slide.alt}
-              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms]"
-              style={{ opacity: activeHeroSlide === index ? 1 : 0 }}
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{
+                opacity: activeHeroSlide === index ? 1 : 0,
+                objectPosition: 'center 30%',
+                transition: 'opacity 1200ms ease-in-out',
+              }}
               loading={index === 0 ? 'eager' : 'lazy'}
               fetchPriority={index === 0 ? 'high' : 'low'}
               decoding="async"
