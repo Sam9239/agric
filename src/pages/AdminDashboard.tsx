@@ -18,6 +18,7 @@ import {
   X,
   Upload,
   Settings,
+  ShieldCheck,
 } from 'lucide-react';
 import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
@@ -26,7 +27,7 @@ import { productCategories, type CatalogueProduct, type ProductCategory } from '
 import type { Enquiry, FarmingTip } from '@db/schema';
 import SiteContentEditor from '@/components/admin/SiteContentEditor';
 
-type TabType = 'overview' | 'products' | 'enquiries' | 'tips' | 'siteContent';
+type TabType = 'overview' | 'products' | 'enquiries' | 'tips' | 'siteContent' | 'security';
 type ProductForm = {
   name: string;
   category: ProductCategory;
@@ -79,6 +80,7 @@ const sidebarItems: { id: TabType; label: string; icon: typeof Package }[] = [
   { id: 'enquiries', label: 'Enquiries', icon: MessageSquare },
   { id: 'tips', label: 'Farming Tips', icon: FileText },
   { id: 'siteContent', label: 'Site Content', icon: Settings },
+  { id: 'security', label: 'Security', icon: ShieldCheck },
 ];
 
 export default function AdminDashboard() {
@@ -91,6 +93,9 @@ export default function AdminDashboard() {
   const [editingProduct, setEditingProduct] = useState<CatalogueProduct | null>(null);
   const [editingTip, setEditingTip] = useState<FarmingTip | null>(null);
   const [uploadingImageFor, setUploadingImageFor] = useState<'product' | 'tip' | null>(null);
+  const [totpSetup, setTotpSetup] = useState<{ secret: string; uri: string } | null>(null);
+  const [totpEnableCode, setTotpEnableCode] = useState('');
+  const [totpDisableCode, setTotpDisableCode] = useState('');
 
   const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
   const [tipForm, setTipForm] = useState({ title: '', content: '', excerpt: '', imageUrl: '', date: '' });
@@ -104,6 +109,9 @@ export default function AdminDashboard() {
     enabled: adminSession?.authenticated === true,
   });
   const { data: tips } = trpc.tip.list.useQuery();
+  const { data: totpStatus } = trpc.adminSecurity.status.useQuery(undefined, {
+    enabled: adminSession?.authenticated === true,
+  });
   const createProduct = trpc.product.create.useMutation({
     onSuccess: () => {
       productUtils.product.list.invalidate();
@@ -169,6 +177,39 @@ export default function AdminDashboard() {
     onSuccess: () => {
       toast.success('Logged out');
       navigate('/admin');
+    },
+  });
+  const setupTotp = trpc.adminSecurity.setupTotp.useMutation({
+    onSuccess: (data) => {
+      setTotpSetup(data);
+      setTotpEnableCode('');
+    },
+  });
+  const enableTotp = trpc.adminSecurity.enableTotp.useMutation({
+    onSuccess: (result) => {
+      if (!result.success) {
+        toast.error('Invalid authenticator code');
+        return;
+      }
+      productUtils.adminSecurity.status.invalidate();
+      setTotpSetup(null);
+      setTotpEnableCode('');
+      toast.success('Authenticator enabled');
+    },
+  });
+  const disableTotp = trpc.adminSecurity.disableTotp.useMutation({
+    onSuccess: (result) => {
+      if (result.managedByEnv) {
+        toast.error('Authenticator is controlled by the server environment');
+        return;
+      }
+      if (!result.success) {
+        toast.error('Invalid authenticator code');
+        return;
+      }
+      productUtils.adminSecurity.status.invalidate();
+      setTotpDisableCode('');
+      toast.success('Authenticator disabled');
     },
   });
 
@@ -407,6 +448,148 @@ export default function AdminDashboard() {
         {activeTab === 'siteContent' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
             <SiteContentEditor />
+          </motion.div>
+        )}
+        {activeTab === 'security' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+            <h1 className="font-display text-3xl" style={{ color: '#1a3a2f' }}>Security</h1>
+
+            <div className="mt-8 max-w-[760px] p-6" style={{ backgroundColor: '#f5f0e8', border: '1px solid #d4c9b8' }}>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8b7d6b' }}>
+                    Authenticator App
+                  </p>
+                  <h2 className="mt-2 font-display text-2xl" style={{ color: '#1a3a2f' }}>
+                    Two-factor authentication
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>
+                    When enabled, admin login requires the password and a 6-digit code from an authenticator app.
+                  </p>
+                </div>
+                <span
+                  className="inline-flex w-fit px-3 py-1 text-xs font-semibold text-white"
+                  style={{ backgroundColor: totpStatus?.enabled ? '#5c7a4a' : '#8b7d6b' }}
+                >
+                  {totpStatus?.enabled ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+
+              {totpStatus?.managedByEnv && (
+                <p className="mt-5 p-3 text-sm" style={{ backgroundColor: '#e8dfd1', color: '#3d3d3d' }}>
+                  Authenticator login is currently controlled by <code>ADMIN_TOTP_SECRET</code> in the server environment. Remove that env var to manage it here.
+                </p>
+              )}
+
+              {!totpStatus?.enabled && !totpSetup && (
+                <button
+                  type="button"
+                  onClick={() => setupTotp.mutate()}
+                  disabled={setupTotp.isPending}
+                  className="mt-6 inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-all disabled:opacity-50"
+                  style={{ backgroundColor: '#c75c2e' }}
+                >
+                  {setupTotp.isPending ? 'Preparing...' : 'Enable authenticator'}
+                </button>
+              )}
+
+              {!totpStatus?.enabled && totpSetup && (
+                <div className="mt-6 space-y-5">
+                  <div className="grid gap-4">
+                    {[
+                      'Open Google Authenticator, Microsoft Authenticator, 1Password, or another authenticator app.',
+                      'Choose to add a new login and use the setup key below.',
+                      'Enter the 6-digit code from the app to finish enabling authenticator login.',
+                    ].map((step, index) => (
+                      <div key={step} className="flex gap-3">
+                        <span
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
+                          style={{ backgroundColor: '#1a3a2f', color: '#f5f0e8' }}
+                        >
+                          {index + 1}
+                        </span>
+                        <p className="text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>{step}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="p-4" style={{ backgroundColor: '#e8dfd1', border: '1px solid #d4c9b8' }}>
+                    <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8b7d6b' }}>Setup key</p>
+                    <p className="mt-2 break-all font-mono text-sm" style={{ color: '#1a3a2f' }}>{totpSetup.secret}</p>
+                  </div>
+
+                  <details className="text-sm" style={{ color: '#3d3d3d' }}>
+                    <summary className="cursor-pointer font-semibold" style={{ color: '#1a3a2f' }}>Advanced setup URI</summary>
+                    <p className="mt-2 break-all font-mono text-xs">{totpSetup.uri}</p>
+                  </details>
+
+                  <div>
+                    <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>Verification code</label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={totpEnableCode}
+                      onChange={(e) => setTotpEnableCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      className="w-full max-w-[260px] mt-1 px-3 py-2.5 text-sm outline-none"
+                      style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
+                      placeholder="123456"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <button
+                      type="button"
+                      onClick={() => enableTotp.mutate({ secret: totpSetup.secret, code: totpEnableCode })}
+                      disabled={enableTotp.isPending || totpEnableCode.length !== 6}
+                      className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-all disabled:opacity-50"
+                      style={{ backgroundColor: '#c75c2e' }}
+                    >
+                      {enableTotp.isPending ? 'Verifying...' : 'Verify and enable'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTotpSetup(null);
+                        setTotpEnableCode('');
+                      }}
+                      className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold transition-all"
+                      style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {totpStatus?.enabled && !totpStatus.managedByEnv && (
+                <div className="mt-6 space-y-4">
+                  <p className="text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>
+                    To disable authenticator login, enter a current 6-digit code first.
+                  </p>
+                  <div>
+                    <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>Current authenticator code</label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={totpDisableCode}
+                      onChange={(e) => setTotpDisableCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      className="w-full max-w-[260px] mt-1 px-3 py-2.5 text-sm outline-none"
+                      style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
+                      placeholder="123456"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => disableTotp.mutate({ code: totpDisableCode })}
+                    disabled={disableTotp.isPending || totpDisableCode.length !== 6}
+                    className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-all disabled:opacity-50"
+                    style={{ backgroundColor: '#c75c2e' }}
+                  >
+                    {disableTotp.isPending ? 'Disabling...' : 'Disable authenticator'}
+                  </button>
+                </div>
+              )}
+            </div>
           </motion.div>
         )}
         {/* Overview Tab */}

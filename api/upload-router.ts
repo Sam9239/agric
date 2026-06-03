@@ -15,8 +15,14 @@ const maxUploadSize = 8 * 1024 * 1024;
 
 function uploadDirectory() {
   return env.isProduction
-    ? path.resolve(process.cwd(), "dist/public/images/uploads")
+    ? path.resolve(process.cwd(), "uploads/images")
     : path.resolve(process.cwd(), "public/images/uploads");
+}
+
+function uploadUrl(filename: string) {
+  return env.isProduction
+    ? `/uploads/images/${filename}`
+    : `/images/uploads/${filename}`;
 }
 
 export async function handleImageUpload(request: Request) {
@@ -51,6 +57,6 @@ export async function handleImageUpload(request: Request) {
   await fs.writeFile(filepath, bytes);
 
   return Response.json({
-    url: `/images/uploads/${filename}`,
+    url: uploadUrl(filename),
   });
 }

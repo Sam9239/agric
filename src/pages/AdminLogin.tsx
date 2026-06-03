@@ -8,6 +8,7 @@ import { trpc } from '@/providers/trpc';
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
+  const [totpCode, setTotpCode] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -17,8 +18,11 @@ export default function AdminLogin() {
         toast.success('Login successful');
         navigate('/admin/dashboard');
       } else {
-        setError('Invalid password');
-        toast.error('Invalid password');
+        const message = result.requiresTotp
+          ? 'Invalid authenticator code'
+          : 'Invalid login details';
+        setError(message);
+        toast.error(message);
       }
     },
     onError: () => {
@@ -30,7 +34,7 @@ export default function AdminLogin() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    adminLogin.mutate({ password });
+    adminLogin.mutate({ password, totpCode: totpCode.trim() || undefined });
   };
 
   return (
@@ -71,6 +75,20 @@ export default function AdminLogin() {
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
+          </div>
+
+          <div className="mt-5">
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="Authenticator code (if enabled)"
+              aria-label="Authenticator code"
+              value={totpCode}
+              onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              className="input-underline"
+              autoComplete="one-time-code"
+            />
           </div>
 
           {error && (

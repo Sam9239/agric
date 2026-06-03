@@ -50,10 +50,42 @@ npm run check
 npm run lint
 npm run build
 npm run test
+npm run admin:hash
+npm run admin:totp
 npm run db:generate
 npm run db:migrate
 npm run db:push
+npm run db:seed
 ```
+
+## Truehost / cPanel Deployment Notes
+
+For production on cPanel Node.js hosting:
+
+1. Create a MySQL database and user in cPanel.
+2. Set the Node.js app environment variables:
+
+```bash
+NODE_ENV=production
+DATABASE_URL=mysql://USER:PASSWORD@localhost:3306/DATABASE
+APP_SECRET=<long-random-secret>
+ADMIN_PASSWORD_HASH=<generated-with-npm-run-admin:hash>
+```
+
+3. Build and prepare the database:
+
+```bash
+npm install
+npm run build
+npm run db:push
+npm run db:seed
+```
+
+4. Use `server.mjs` as the cPanel Node.js startup file, or use `npm run start` if cPanel asks for a command.
+
+Uploaded images are stored in `uploads/images` in production so they are not erased by rebuilding `dist/public`.
+
+Authenticator-app 2FA can be enabled or disabled from the admin dashboard Security tab. The optional `ADMIN_TOTP_SECRET` env var is only a server-managed fallback; leave it unset if the client should manage 2FA in the dashboard.
 
 ## Design Notes
 

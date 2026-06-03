@@ -109,3 +109,14 @@ export const siteSettings = mysqlTable("site_settings", {
 });
 
 export type SiteSettingsRow = typeof siteSettings.$inferSelect;
+
+export const adminSecurity = mysqlTable("admin_security", {
+  id: serial("id").primaryKey(),
+  totpSecret: text("totpSecret"),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
+});
+
+export type AdminSecurityRow = typeof adminSecurity.$inferSelect;

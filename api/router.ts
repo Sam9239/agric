@@ -3,6 +3,7 @@ import { productRouter } from "./product-router";
 import { tipRouter } from "./tip-router";
 import { enquiryRouter } from "./enquiry-router";
 import { siteContentRouter } from "./site-content-router";
+import { adminSecurityRouter } from "./admin-security-router";
 import { createRouter, publicQuery } from "./middleware";
 
 export const appRouter = createRouter({
@@ -12,6 +13,7 @@ export const appRouter = createRouter({
   tip: tipRouter,
   enquiry: enquiryRouter,
   siteContent: siteContentRouter,
+  adminSecurity: adminSecurityRouter,
 });
 
 export type AppRouter = typeof appRouter;

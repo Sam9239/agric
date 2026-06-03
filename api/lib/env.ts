@@ -8,6 +8,14 @@ function required(name: string): string {
   return value ?? "";
 }
 
+function requiredAdminPasswordHash() {
+  const value = process.env.ADMIN_PASSWORD_HASH;
+  if (!value && process.env.NODE_ENV === "production") {
+    throw new Error("Missing required environment variable: ADMIN_PASSWORD_HASH");
+  }
+  return value ?? "";
+}
+
 export const env = {
   appId: process.env.APP_ID ?? "",
   appSecret: required("APP_SECRET"),
@@ -16,5 +24,7 @@ export const env = {
   kimiAuthUrl: process.env.KIMI_AUTH_URL ?? "",
   kimiOpenUrl: process.env.KIMI_OPEN_URL ?? "",
   ownerUnionId: process.env.OWNER_UNION_ID ?? "",
-  adminPassword: process.env.ADMIN_PASSWORD ?? (process.env.NODE_ENV === "production" ? required("ADMIN_PASSWORD") : "jaosef-preview-admin"),
+  adminPassword: process.env.ADMIN_PASSWORD ?? "jaosef-preview-admin",
+  adminPasswordHash: requiredAdminPasswordHash(),
+  adminTotpSecret: process.env.ADMIN_TOTP_SECRET ?? "",
 };
