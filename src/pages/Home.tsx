@@ -49,11 +49,11 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const heroSlides = [
-  { src: '/images/hero-slide-inputs.webp', alt: 'Agricultural supplies arranged on a farm table', objectPosition: 'center 40%' },
-  { src: '/images/hero-slide-shop.webp', alt: 'Agricultural supplies shop with farm inputs', objectPosition: 'center 45%' },
-  { src: '/images/hero-slide-greenhouse.webp', alt: 'Farmer checking crops in a greenhouse', objectPosition: 'center 18%' },
-  { src: '/images/hero-slide-harvest.webp', alt: 'Farmer harvesting tomatoes in a field', objectPosition: 'center 15%' },
-  { src: '/images/hero-slide-advice.webp', alt: 'Agricultural advisor discussing farm inputs with a farmer', objectPosition: 'center 20%' },
+  { src: '/images/hero-slide-inputs.webp', alt: 'Agricultural supplies arranged on a farm table', objectPosition: '50% 50%' },
+  { src: '/images/hero-slide-shop.webp', alt: 'Agricultural supplies shop with farm inputs', objectPosition: '50% 50%' },
+  { src: '/images/hero-slide-greenhouse.webp', alt: 'Farmer checking crops in a greenhouse', objectPosition: '60% 30%' },
+  { src: '/images/hero-slide-harvest.webp', alt: 'Farmer harvesting tomatoes in a field', objectPosition: '65% 30%' },
+  { src: '/images/hero-slide-advice.webp', alt: 'Agricultural advisor discussing farm inputs with a farmer', objectPosition: '55% 30%' },
 ];
 
 const fadeInUp = {
@@ -110,11 +110,20 @@ export default function Home() {
               decoding="async"
             />
           ))}
+          {/* Vertical gradient (darkens top + bottom for legibility) */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(180deg, rgba(15,30,24,0.55) 0%, rgba(15,30,24,0.45) 45%, rgba(15,30,24,0.85) 100%)',
+                'linear-gradient(180deg, rgba(15,30,24,0.7) 0%, rgba(15,30,24,0.45) 35%, rgba(15,30,24,0.65) 70%, rgba(15,30,24,0.92) 100%)',
+            }}
+          />
+          {/* Left-side horizontal gradient — extra contrast for text on portrait phones */}
+          <div
+            className="absolute inset-0 md:hidden"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(15,30,24,0.55) 0%, rgba(15,30,24,0.25) 55%, transparent 100%)',
             }}
           />
         </div>
