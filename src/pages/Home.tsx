@@ -186,6 +186,9 @@ export default function Home() {
                     alt={slide.alt}
                     className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
                     style={{ opacity: activeHeroSlide === index ? 1 : 0 }}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchPriority={index === 0 ? 'high' : 'low'}
+                    decoding="async"
                   />
                 ))}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1a3a2f]/35 via-transparent to-transparent" />
@@ -250,6 +253,8 @@ export default function Home() {
                 alt="Agricultural supply store"
                 className="w-full object-cover"
                 style={{ aspectRatio: '4/3', border: '1px solid #d4c9b8' }}
+                loading="lazy"
+                decoding="async"
               />
             </motion.div>
           </div>
@@ -346,6 +351,8 @@ export default function Home() {
                         src={categoryImages[key]}
                         alt={label}
                         className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                     <div className="p-4 text-center flex-1 flex flex-col">
@@ -398,6 +405,8 @@ export default function Home() {
                         src={product.imageUrl}
                         alt={product.name}
                         className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                     <div className="p-4">
@@ -587,6 +596,8 @@ export default function Home() {
                     alt={tip.title}
                     className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                     style={{ aspectRatio: '16/10' }}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="pt-5">
                     <p className="text-xs" style={{ color: '#8b7d6b' }}>{tip.date}</p>

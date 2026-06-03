@@ -73,6 +73,8 @@ export default function FarmingTips() {
                         alt={tip.title}
                         className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                         style={{ aspectRatio: '16/10' }}
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                     <div className="pt-5">

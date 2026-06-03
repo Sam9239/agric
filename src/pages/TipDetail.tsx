@@ -58,6 +58,8 @@ export default function TipDetail() {
               alt={tip.title}
               className="w-full object-cover mb-8"
               style={{ aspectRatio: '16/9', border: '1px solid #d4c9b8' }}
+              fetchPriority="high"
+              decoding="async"
             />
 
             <p className="text-xs font-medium tracking-[2px] uppercase" style={{ color: '#5c7a4a' }}>
@@ -97,6 +99,8 @@ export default function TipDetail() {
                     alt={rt.title}
                     className="w-24 h-16 object-cover flex-shrink-0"
                     style={{ border: '1px solid #d4c9b8' }}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div>
                     <p className="text-xs" style={{ color: '#8b7d6b' }}>{rt.date}</p>

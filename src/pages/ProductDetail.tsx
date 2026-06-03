@@ -74,6 +74,8 @@ export default function ProductDetail() {
                 src={product.imageUrl}
                 alt={product.name}
                 className="max-w-full max-h-full object-contain"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
 
@@ -168,6 +170,8 @@ export default function ProductDetail() {
                           src={rp.imageUrl}
                           alt={rp.name}
                           className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                       <div className="p-4">
