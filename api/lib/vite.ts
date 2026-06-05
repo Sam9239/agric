@@ -1,4 +1,4 @@
-import type { Hono } from "hono";
+import type { Context, Hono } from "hono";
 import type { HttpBindings } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import fs from "fs";
@@ -8,8 +8,26 @@ type App = Hono<{ Bindings: HttpBindings }>;
 
 export function serveStaticFiles(app: App) {
   const distPath = path.resolve(import.meta.dirname, "../dist/public");
+  const serveIndex = (c: Context<{ Bindings: HttpBindings }>) => {
+    const indexPath = path.resolve(distPath, "index.html");
+    const content = fs.readFileSync(indexPath, "utf-8");
+    return c.html(content);
+  };
 
   app.use("/uploads/*", serveStatic({ root: "." }));
+
+  for (const route of [
+    "/about",
+    "/products",
+    "/farming-tips",
+    "/contact",
+    "/privacy-policy",
+    "/terms-disclaimer",
+  ]) {
+    app.get(route, serveIndex);
+    app.on(["HEAD"], route, serveIndex);
+  }
+
   app.use("*", serveStatic({ root: "./dist/public" }));
 
   app.notFound((c) => {
@@ -27,8 +45,6 @@ export function serveStaticFiles(app: App) {
       return c.json({ error: "Not Found" }, 404);
     }
 
-    const indexPath = path.resolve(distPath, "index.html");
-    const content = fs.readFileSync(indexPath, "utf-8");
-    return c.html(content);
+    return serveIndex(c);
   });
 }
