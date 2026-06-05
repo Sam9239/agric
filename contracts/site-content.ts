@@ -171,19 +171,19 @@ export const defaultSiteContent: SiteContent = {
     eyebrow: "ABOUT JAOSEF",
     heading: "Supporting Productive, Responsible Farming in Kenya",
     intro:
-      "We exist to help Kenyan farmers grow more, waste less, and farm in a way that protects soil, water, and the people who work the land.",
+      "We exist to help Kenyan farmers — crop growers and livestock keepers alike — grow more, waste less, and farm in a way that protects soil, water, animals, and the people who work the land.",
     imageUrl: "/images/about.webp",
     story: {
       heading: "Our Story",
       paragraphs: [
         "Jaosef Agro Supplies was built around a simple belief: farmers do better when they have both quality inputs and someone they can ask the hard questions.",
-        "We work with smallholders and larger commercial farms across Kenya — supplying fertilisers, certified seed, crop protection products, irrigation equipment, and post-harvest essentials. Every product we stock is chosen with the Kenyan farmer in mind: matched to local crops, common pests, regional rainfall patterns, and the realities of working in the field.",
-        "Beyond the catalogue, we focus on guidance. The right fertiliser at the wrong stage is wasted money. A pesticide used without proper protective gear is a health risk. We talk farmers through the choices so the inputs do what they're meant to do.",
+        "We work with smallholders and larger commercial farms across Kenya — supplying fertilisers, certified seed, crop protection products, irrigation equipment, post-harvest essentials, plus livestock feeds, animal-health supplies, and poultry and dairy equipment. Every product we stock is chosen with the Kenyan farmer in mind: matched to local crops and livestock, common pests and diseases, regional conditions, and the realities of working in the field.",
+        "Beyond the catalogue, we focus on guidance. The right fertiliser at the wrong stage is wasted money. A pesticide or acaricide used without proper protective gear is a health risk. The wrong feed mix can flatten milk production or stunt a chick flock. We talk farmers through the choices so the inputs do what they're meant to do.",
       ],
     },
     mission: {
       heading: "Our Mission",
-      body: "Enable productive, responsible farming by supplying quality agricultural inputs and the practical knowledge to use them safely and effectively.",
+      body: "Enable productive, responsible crop and livestock farming by supplying quality agricultural inputs and the practical knowledge to use them safely and effectively.",
     },
     vision: {
       heading: "Our Vision",

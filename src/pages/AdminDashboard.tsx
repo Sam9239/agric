@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { motion } from 'framer-motion';
 import {
@@ -18,6 +18,8 @@ import {
   Upload,
   Settings,
   ShieldCheck,
+  Search,
+  Star,
 } from 'lucide-react';
 import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
@@ -97,6 +99,10 @@ export default function AdminDashboard() {
 
   const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
   const [tipForm, setTipForm] = useState({ title: '', content: '', excerpt: '', imageUrl: '', date: '' });
+  const [productSearch, setProductSearch] = useState('');
+  const [productCategoryFilter, setProductCategoryFilter] = useState<'all' | ProductCategory>('all');
+  const [productFeaturedFilter, setProductFeaturedFilter] = useState<'all' | 'featured' | 'standard'>('all');
+  const [tipSearch, setTipSearch] = useState('');
 
   const { data: adminSession, isLoading: isCheckingAdmin } = trpc.auth.adminMe.useQuery();
 
@@ -107,6 +113,36 @@ export default function AdminDashboard() {
     enabled: adminSession?.authenticated === true,
   });
   const { data: tips } = trpc.tip.list.useQuery();
+
+  const filteredProducts = useMemo(() => {
+    const all = products ?? [];
+    const q = productSearch.trim().toLowerCase();
+    return all.filter((p) => {
+      if (productCategoryFilter !== 'all' && p.category !== productCategoryFilter) return false;
+      if (productFeaturedFilter === 'featured' && !p.featured) return false;
+      if (productFeaturedFilter === 'standard' && p.featured) return false;
+      if (!q) return true;
+      return (
+        p.name.toLowerCase().includes(q) ||
+        productCategories[p.category].toLowerCase().includes(q) ||
+        (p.shortDescription ?? '').toLowerCase().includes(q) ||
+        (p.bestSuitedFor ?? '').toLowerCase().includes(q)
+      );
+    });
+  }, [products, productSearch, productCategoryFilter, productFeaturedFilter]);
+
+  const filteredTips = useMemo(() => {
+    const all = tips ?? [];
+    const q = tipSearch.trim().toLowerCase();
+    if (!q) return all;
+    return all.filter(
+      (t) =>
+        t.title.toLowerCase().includes(q) ||
+        t.excerpt.toLowerCase().includes(q) ||
+        t.content.toLowerCase().includes(q) ||
+        t.date.toLowerCase().includes(q),
+    );
+  }, [tips, tipSearch]);
   const { data: totpStatus } = trpc.adminSecurity.status.useQuery(undefined, {
     enabled: adminSession?.authenticated === true,
   });
@@ -647,8 +683,13 @@ export default function AdminDashboard() {
         {/* Products Tab */}
         {activeTab === 'products' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="font-display text-3xl" style={{ color: '#1a3a2f' }}>Products</h1>
+            <div className="flex items-end justify-between mb-6 gap-4 flex-wrap">
+              <div>
+                <h1 className="font-display text-3xl" style={{ color: '#1a3a2f' }}>Products</h1>
+                <p className="mt-1 text-sm" style={{ color: '#8b7d6b' }}>
+                  {filteredProducts.length} of {products?.length ?? 0} · {(products ?? []).filter((p) => p.featured).length} featured
+                </p>
+              </div>
               <button
                 onClick={() => openProductModal()}
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
@@ -657,6 +698,45 @@ export default function AdminDashboard() {
                 <Plus size={16} /> Add Product
               </button>
             </div>
+
+            {/* Toolbar */}
+            <div className="mb-4 flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8b7d6b' }} />
+                <input
+                  type="text"
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  placeholder="Search name, category, description…"
+                  className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#c75c2e]"
+                  style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+                />
+              </div>
+              <div className="flex gap-2">
+                <select
+                  value={productCategoryFilter}
+                  onChange={(e) => setProductCategoryFilter(e.target.value as 'all' | ProductCategory)}
+                  className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#c75c2e]"
+                  style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+                >
+                  <option value="all">All categories</option>
+                  {(Object.entries(productCategories) as [ProductCategory, string][]).map(([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+                <select
+                  value={productFeaturedFilter}
+                  onChange={(e) => setProductFeaturedFilter(e.target.value as 'all' | 'featured' | 'standard')}
+                  className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#c75c2e]"
+                  style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+                >
+                  <option value="all">All</option>
+                  <option value="featured">Featured only</option>
+                  <option value="standard">Not featured</option>
+                </select>
+              </div>
+            </div>
+
             <div className="overflow-x-auto" style={{ border: '1px solid #d4c9b8' }}>
               <table className="w-full" style={{ backgroundColor: '#f5f0e8' }}>
                 <thead>
@@ -669,10 +749,10 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products?.map((p) => (
+                  {filteredProducts.map((p) => (
                     <tr key={p.id} className="transition-colors hover:bg-[#e8dfd1]" style={{ borderBottom: '1px solid #d4c9b8' }}>
                       <td className="px-4 py-3">
-                        <img src={p.imageUrl} alt={p.name} className="w-10 h-10 object-cover" />
+                        <img src={p.imageUrl} alt={p.name} className="w-10 h-10 object-contain bg-[#e8dfd1]" />
                       </td>
                       <td className="px-4 py-3 text-sm font-medium" style={{ color: '#1a3a2f' }}>{p.name}</td>
                       <td className="px-4 py-3">
@@ -680,7 +760,15 @@ export default function AdminDashboard() {
                           {categoryLabels[p.category]}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm" style={{ color: '#3d3d3d' }}>{p.featured ? 'Yes' : 'No'}</td>
+                      <td className="px-4 py-3 text-sm" style={{ color: '#3d3d3d' }}>
+                        {p.featured ? (
+                          <span className="inline-flex items-center gap-1" style={{ color: '#c75c2e' }}>
+                            <Star size={13} fill="#c75c2e" /> Featured
+                          </span>
+                        ) : (
+                          <span style={{ color: '#8b7d6b' }}>—</span>
+                        )}
+                      </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <button onClick={() => openProductModal(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${p.name}`}>
@@ -693,9 +781,13 @@ export default function AdminDashboard() {
                       </td>
                     </tr>
                   ))}
-                  {(!products || products.length === 0) && (
+                  {filteredProducts.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="px-4 py-8 text-center text-sm" style={{ color: '#8b7d6b' }}>No products</td>
+                      <td colSpan={5} className="px-4 py-8 text-center text-sm" style={{ color: '#8b7d6b' }}>
+                        {productSearch || productCategoryFilter !== 'all' || productFeaturedFilter !== 'all'
+                          ? 'No matching products.'
+                          : 'No products yet.'}
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -714,8 +806,13 @@ export default function AdminDashboard() {
         {/* Tips Tab */}
         {activeTab === 'tips' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="font-display text-3xl" style={{ color: '#1a3a2f' }}>Farming Tips</h1>
+            <div className="flex items-end justify-between mb-6 gap-4 flex-wrap">
+              <div>
+                <h1 className="font-display text-3xl" style={{ color: '#1a3a2f' }}>Farming Tips</h1>
+                <p className="mt-1 text-sm" style={{ color: '#8b7d6b' }}>
+                  {filteredTips.length} of {tips?.length ?? 0}
+                </p>
+              </div>
               <button
                 onClick={() => openTipModal()}
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
@@ -724,11 +821,25 @@ export default function AdminDashboard() {
                 <Plus size={16} /> Add Tip
               </button>
             </div>
+
+            {/* Toolbar */}
+            <div className="mb-4 relative">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8b7d6b' }} />
+              <input
+                type="text"
+                value={tipSearch}
+                onChange={(e) => setTipSearch(e.target.value)}
+                placeholder="Search title, content, date…"
+                className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#c75c2e]"
+                style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+              />
+            </div>
+
             <div className="overflow-x-auto" style={{ border: '1px solid #d4c9b8' }}>
               <table className="w-full" style={{ backgroundColor: '#f5f0e8' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #d4c9b8' }}>
-                    {['Title', 'Date', 'Excerpt', 'Actions'].map((h) => (
+                    {['Image', 'Title', 'Date', 'Excerpt', 'Actions'].map((h) => (
                       <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: '#8b7d6b' }}>
                         {h}
                       </th>
@@ -736,10 +847,13 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {tips?.map((t) => (
+                  {filteredTips.map((t) => (
                     <tr key={t.id} className="transition-colors hover:bg-[#e8dfd1]" style={{ borderBottom: '1px solid #d4c9b8' }}>
-                      <td className="px-4 py-3 text-sm font-medium" style={{ color: '#1a3a2f' }}>{t.title}</td>
-                      <td className="px-4 py-3 text-sm" style={{ color: '#8b7d6b' }}>{t.date}</td>
+                      <td className="px-4 py-3">
+                        <img src={t.imageUrl} alt={t.title} className="w-12 h-9 object-cover" />
+                      </td>
+                      <td className="px-4 py-3 text-sm font-medium max-w-[260px]" style={{ color: '#1a3a2f' }}>{t.title}</td>
+                      <td className="px-4 py-3 text-sm whitespace-nowrap" style={{ color: '#8b7d6b' }}>{t.date}</td>
                       <td className="px-4 py-3 text-sm max-w-[300px] truncate" style={{ color: '#3d3d3d' }}>{t.excerpt}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
@@ -753,9 +867,11 @@ export default function AdminDashboard() {
                       </td>
                     </tr>
                   ))}
-                  {(!tips || tips.length === 0) && (
+                  {filteredTips.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="px-4 py-8 text-center text-sm" style={{ color: '#8b7d6b' }}>No tips</td>
+                      <td colSpan={5} className="px-4 py-8 text-center text-sm" style={{ color: '#8b7d6b' }}>
+                        {tipSearch ? 'No matching tips.' : 'No tips yet.'}
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -844,30 +960,39 @@ export default function AdminDashboard() {
                   />
                 </div>
               ))}
-              {productForm.category === 'crop_protection' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                  {[
-                    ['activeIngredient', 'Active Ingredient'],
-                    ['formulation', 'Formulation'],
-                    ['targetUse', 'Target Pest/Disease/Weed'],
-                    ['registeredCropUse', 'Registered Crop Use'],
-                    ['pcpbStatus', 'PCPB Status'],
-                    ['phi', 'PHI'],
-                    ['rei', 'REI'],
-                    ['ppe', 'PPE Required'],
-                    ['storageWarning', 'Storage Warning'],
-                  ].map(([field, label]) => (
-                    <div key={field}>
-                      <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>{label}</label>
-                      <input
-                        type="text"
-                        value={productForm[field as keyof ProductForm] as string}
-                        onChange={(e) => setProductForm({ ...productForm, [field]: e.target.value })}
-                        className="w-full mt-1 px-3 py-2.5 text-sm outline-none"
-                        style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
-                      />
-                    </div>
-                  ))}
+              {(productForm.category === 'crop_protection' || productForm.category === 'animal_health') && (
+                <div className="pt-2">
+                  <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#c75c2e' }}>
+                    {productForm.category === 'animal_health' ? 'Animal health safety details' : 'Crop protection safety details'}
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      ['activeIngredient', 'Active Ingredient'],
+                      ['formulation', 'Formulation'],
+                      ['targetUse',
+                        productForm.category === 'animal_health' ? 'Target Parasite/Condition' : 'Target Pest/Disease/Weed'],
+                      ['registeredCropUse',
+                        productForm.category === 'animal_health' ? 'Labelled Animal Species' : 'Registered Crop Use'],
+                      ['pcpbStatus',
+                        productForm.category === 'animal_health' ? 'VMD Registration Status' : 'PCPB Status'],
+                      ['phi',
+                        productForm.category === 'animal_health' ? 'Withdrawal Period' : 'PHI'],
+                      ['rei', 'REI'],
+                      ['ppe', 'PPE Required'],
+                      ['storageWarning', 'Storage Warning'],
+                    ].map(([field, label]) => (
+                      <div key={field}>
+                        <label className="text-sm font-medium" style={{ color: '#1a3a2f' }}>{label}</label>
+                        <input
+                          type="text"
+                          value={productForm[field as keyof ProductForm] as string}
+                          onChange={(e) => setProductForm({ ...productForm, [field]: e.target.value })}
+                          className="w-full mt-1 px-3 py-2.5 text-sm outline-none"
+                          style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
               <div>

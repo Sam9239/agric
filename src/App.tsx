@@ -11,6 +11,7 @@ const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const FarmingTips = lazy(() => import('./pages/FarmingTips'))
 const TipDetail = lazy(() => import('./pages/TipDetail'))
 const AdminLogin = lazy(() => import('./pages/AdminLogin'))
+const AdminLostDevice = lazy(() => import('./pages/AdminLostDevice'))
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/farming-tips" element={<FarmingTips />} />
           <Route path="/farming-tips/:id" element={<TipDetail />} />
           <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/lost-device" element={<AdminLostDevice />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-disclaimer" element={<TermsDisclaimer />} />

@@ -88,22 +88,63 @@ export default function Products() {
       <section className="py-10">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-7 xl:gap-8">
-            {/* Sidebar */}
+            {/* Mobile category dropdown + search (visible below lg) */}
+            <div className="lg:hidden flex flex-col gap-3 mb-2">
+              <label className="block">
+                <span className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#8b7d6b' }}>
+                  Category
+                </span>
+                <select
+                  value={activeCategory}
+                  onChange={(e) => handleCategoryChange(e.target.value as ProductCategoryFilter)}
+                  className="w-full px-3 py-2.5 text-sm outline-none"
+                  style={{
+                    border: '1px solid #d4c9b8',
+                    backgroundColor: '#f5f0e8',
+                    color: '#1a3a2f',
+                  }}
+                >
+                  {(Object.entries(categoryLabels) as [ProductCategoryFilter, string][]).map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8b7d6b' }} />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  aria-label="Search products"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2.5 text-sm outline-none transition-colors duration-200"
+                  style={{
+                    border: '1px solid #d4c9b8',
+                    backgroundColor: '#f5f0e8',
+                    color: '#1a3a2f',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Desktop sidebar (lg+) — sticky vertical list */}
             <motion.aside
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="lg:sticky lg:top-32 lg:max-h-[calc(100vh-9rem)] lg:w-[220px] xl:w-[240px] lg:overflow-y-auto lg:pr-1 flex-shrink-0 self-start"
+              className="hidden lg:block sticky top-32 max-h-[calc(100vh-9rem)] w-[220px] xl:w-[240px] overflow-y-auto pr-1 flex-shrink-0 self-start"
             >
               <h3 className="text-sm font-semibold mb-4" style={{ color: '#1a3a2f' }}>
                 Categories
               </h3>
-              <div className="flex lg:flex-col gap-1.5 overflow-x-auto pb-2 lg:pb-0">
+              <div className="flex flex-col gap-1.5">
                 {(Object.entries(categoryLabels) as [ProductCategoryFilter, string][]).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => handleCategoryChange(key)}
-                    className="text-sm px-3 py-1.5 text-left whitespace-nowrap transition-all duration-200 flex-shrink-0 lg:flex-shrink"
+                    className="text-sm px-3 py-1.5 text-left transition-all duration-200"
                     style={{
                       backgroundColor: activeCategory === key ? '#1a3a2f' : 'transparent',
                       color: activeCategory === key ? '#f5f0e8' : '#3d3d3d',
