@@ -1,4 +1,4 @@
-import type { Context, Hono } from "hono";
+import type { Hono } from "hono";
 import type { HttpBindings } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import fs from "fs";
@@ -8,43 +8,30 @@ type App = Hono<{ Bindings: HttpBindings }>;
 
 export function serveStaticFiles(app: App) {
   const distPath = path.resolve(import.meta.dirname, "../dist/public");
-  const serveIndex = (c: Context<{ Bindings: HttpBindings }>) => {
-    const indexPath = path.resolve(distPath, "index.html");
-    const content = fs.readFileSync(indexPath, "utf-8");
-    return c.html(content);
-  };
+  const indexPath = path.resolve(distPath, "index.html");
+  const indexHtml = fs.readFileSync(indexPath, "utf-8");
 
+  // User-uploaded files (live outside dist/)
   app.use("/uploads/*", serveStatic({ root: "." }));
 
-  for (const route of [
-    "/about",
-    "/products",
-    "/farming-tips",
-    "/contact",
-    "/privacy-policy",
-    "/terms-disclaimer",
+  // Built static assets and image directories
+  app.use("/assets/*", serveStatic({ root: "./dist/public" }));
+  app.use("/images/*", serveStatic({ root: "./dist/public" }));
+
+  // Root-level files that ship with the build
+  for (const file of [
+    "/favicon.svg",
+    "/favicon.ico",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/logo-mark.svg",
+    "/logo.svg",
+    "/manifest.json",
   ]) {
-    app.get(route, serveIndex);
-    app.on(["HEAD"], route, serveIndex);
+    app.on(["GET", "HEAD"], file, serveStatic({ root: "./dist/public" }));
   }
 
-  app.use("*", serveStatic({ root: "./dist/public" }));
-
-  app.notFound((c) => {
-    const method = c.req.raw.method;
-    const requestPath = c.req.path;
-    const accept = c.req.header("accept") ?? "";
-
-    const isPageRequest =
-      (method === "GET" || method === "HEAD") &&
-      !requestPath.startsWith("/api/") &&
-      !requestPath.startsWith("/uploads/") &&
-      path.extname(requestPath) === "";
-
-    if (!isPageRequest && !accept.includes("text/html")) {
-      return c.json({ error: "Not Found" }, 404);
-    }
-
-    return serveIndex(c);
-  });
+  // SPA fallback: every other GET/HEAD request returns the React app shell.
+  // React Router takes over and renders /about, /products, /products/:id, etc.
+  app.on(["GET", "HEAD"], "*", (c) => c.html(indexHtml));
 }
