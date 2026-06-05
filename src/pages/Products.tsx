@@ -8,6 +8,7 @@ import WhatsAppButton from '../sections/WhatsAppButton';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import { productCategories } from '@contracts/product-catalog';
+import SEO from '@/components/SEO';
 
 const categoryLabels = {
   all: 'All Products',
@@ -64,6 +65,12 @@ export default function Products() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title="Farm Inputs & Agro Products in Kenya | Jaosef Agro Supplies"
+        description="Browse farm inputs and agro products from Jaosef Agro Supplies, including fertilisers, certified seeds, crop protection, irrigation supplies, livestock feeds, animal health products, and farm tools."
+        path="/products"
+        image="/images/brand/jaosef-logo-light.webp"
+      />
       <Navigation />
 
       {/* Page Header */}
@@ -200,7 +207,7 @@ export default function Products() {
                           <div className="p-3 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '4/3' }}>
                             <img
                               src={product.imageUrl}
-                              alt={product.name}
+                              alt={`${product.name} available from Jaosef Agro Supplies`}
                               className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                               loading="lazy"
                               decoding="async"

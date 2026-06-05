@@ -19,6 +19,7 @@ import {
 import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import { useSiteContent } from '@/hooks/useSiteContent';
+import SEO from '@/components/SEO';
 
 const iconMap: Record<string, LucideIcon> = {
   sprout: Sprout,
@@ -40,6 +41,12 @@ export default function About() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title="About Jaosef Agro Supplies | Agricultural Supply Shop in Kenya"
+        description="Learn about Jaosef Agro Supplies, a Kenyan agricultural supply business supporting productive farming with quality crop inputs, livestock supplies, and practical guidance."
+        path="/about"
+        image="/images/brand/jaosef-logo-light.webp"
+      />
       <Navigation />
 
       {/* About Hero */}
@@ -107,7 +114,7 @@ export default function About() {
             >
               <img
                 src={about.imageUrl}
-                alt="Agricultural supply store"
+                alt="Jaosef Agro Supplies agricultural supply shop in Kenya"
                 className="w-full object-cover"
                 style={{ aspectRatio: '4/3', border: '1px solid #d4c9b8' }}
                 loading="lazy"

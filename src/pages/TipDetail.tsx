@@ -5,6 +5,7 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
+import SEO from '@/components/SEO';
 
 export default function TipDetail() {
   const { id } = useParams<{ id: string }>();
@@ -42,6 +43,13 @@ export default function TipDetail() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title={`${tip.title} | Jaosef Agro Supplies`}
+        description={`${tip.excerpt} Read practical farming guidance for Kenyan farmers from Jaosef Agro Supplies.`}
+        path={`/farming-tips/${tip.id}`}
+        image={tip.imageUrl}
+        type="article"
+      />
       <Navigation />
 
       <article className="pt-28 pb-16 md:pt-32 md:pb-20">
@@ -55,7 +63,7 @@ export default function TipDetail() {
 
             <img
               src={tip.imageUrl}
-              alt={tip.title}
+              alt={`${tip.title} farming tip from Jaosef Agro Supplies`}
               className="w-full object-cover mb-8"
               style={{ aspectRatio: '16/9', border: '1px solid #d4c9b8' }}
               fetchPriority="high"
@@ -96,7 +104,7 @@ export default function TipDetail() {
                 >
                   <img
                     src={rt.imageUrl}
-                    alt={rt.title}
+                    alt={`${rt.title} farming tip from Jaosef Agro Supplies`}
                     className="w-24 h-16 object-cover flex-shrink-0"
                     style={{ border: '1px solid #d4c9b8' }}
                     loading="lazy"

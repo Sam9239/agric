@@ -7,6 +7,7 @@ import { trpc } from '@/providers/trpc';
 import { toast } from 'sonner';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { enquiryImageLimits } from '@contracts/site-content';
+import SEO from '@/components/SEO';
 import {
   Accordion,
   AccordionContent,
@@ -158,6 +159,12 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title="Contact Jaosef Agro Supplies | Farm Inputs in Kenya"
+        description="Contact Jaosef Agro Supplies for farm inputs in Kenya, product availability, crop and livestock supply enquiries, WhatsApp assistance, and agricultural guidance."
+        path="/contact"
+        image="/images/brand/jaosef-logo-light.webp"
+      />
       <Navigation />
 
       {/* Contact Hero */}
@@ -278,7 +285,7 @@ export default function Contact() {
                         >
                           <img
                             src={img.previewUrl}
-                            alt=""
+                            alt="Customer enquiry attachment preview"
                             className="w-full h-full object-cover"
                           />
                           {img.status === 'uploading' && (

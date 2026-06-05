@@ -36,7 +36,7 @@ export default function Footer() {
           <div>
             <img
               src="/images/brand/jaosef-wordmark.svg"
-              alt={brand.name}
+              alt="Jaosef Agro Supplies logo"
               className="h-10 w-auto mb-3"
             />
             <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>

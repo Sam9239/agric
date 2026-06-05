@@ -65,7 +65,7 @@ export default function Navigation() {
           >
             <img
               src="/images/brand/jaosef-wordmark.svg"
-              alt={content.brand.name}
+              alt="Jaosef Agro Supplies logo"
               className="h-9 sm:h-10 md:h-11 w-auto"
             />
           </Link>

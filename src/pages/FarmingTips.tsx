@@ -5,6 +5,7 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
+import SEO from '@/components/SEO';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -20,6 +21,12 @@ export default function FarmingTips() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title="Farming Tips for Kenyan Farmers | Jaosef Agro Supplies"
+        description="Read practical farming tips from Jaosef Agro Supplies for Kenyan crop and livestock farmers, including soil health, crop protection, poultry, dairy, and safe input use."
+        path="/farming-tips"
+        image="/images/hero/hero-02-maize-consultation-desktop.webp"
+      />
       <Navigation />
 
       {/* Page Header */}
@@ -70,7 +77,7 @@ export default function FarmingTips() {
                     <div className="overflow-hidden">
                       <img
                         src={tip.imageUrl}
-                        alt={tip.title}
+                        alt={`${tip.title} farming tip from Jaosef Agro Supplies`}
                         className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                         style={{ aspectRatio: '16/10' }}
                         loading="lazy"

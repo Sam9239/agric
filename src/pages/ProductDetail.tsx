@@ -7,6 +7,7 @@ import WhatsAppButton from '../sections/WhatsAppButton';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import { productCategories } from '@contracts/product-catalog';
+import SEO from '@/components/SEO';
 
 const categoryLabels = productCategories;
 
@@ -56,6 +57,13 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title={`${product.name} | Jaosef Agro Supplies`}
+        description={`${product.shortDescription || product.description} Enquire from Jaosef Agro Supplies for current availability and product guidance in Kenya.`}
+        path={`/products/${product.id}`}
+        image={product.imageUrl}
+        type="product"
+      />
       <Navigation />
 
       {/* Product Header */}
@@ -72,7 +80,7 @@ export default function ProductDetail() {
             <div className="p-6 md:p-8 flex items-center justify-center" style={{ backgroundColor: '#f5f0e8', border: '1px solid #d4c9b8', aspectRatio: '1/1' }}>
               <img
                 src={product.imageUrl}
-                alt={product.name}
+                alt={`${product.name} available from Jaosef Agro Supplies`}
                 className="max-w-full max-h-full object-contain"
                 fetchPriority="high"
                 decoding="async"
@@ -198,7 +206,7 @@ export default function ProductDetail() {
                       <div className="p-4 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '1/1' }}>
                         <img
                           src={rp.imageUrl}
-                          alt={rp.name}
+                          alt={`${rp.name} available from Jaosef Agro Supplies`}
                           className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                           loading="lazy"
                           decoding="async"

@@ -21,6 +21,7 @@ import { trpc } from '@/providers/trpc';
 import { useEffect, useState } from 'react';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { productCategories, type ProductCategory } from '@contracts/product-catalog';
+import SEO from '@/components/SEO';
 
 const categoryImages: Record<ProductCategory, string> = {
   crop_nutrition: '/images/cat-fertilizers.webp',
@@ -138,6 +139,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title="Jaosef Agro Supplies | Farm Inputs, Animal Feeds & Agro Products in Kenya"
+        description="Jaosef Agro Supplies provides quality farm inputs in Kenya, including seeds, fertilisers, crop protection products, irrigation supplies, animal feeds, poultry supplies, dairy equipment, and farm tools."
+        path="/"
+        image="/images/brand/jaosef-logo-light.webp"
+      />
       <Navigation />
 
       {/* Hero Section — sits below navbar so image isn't overlapped */}
@@ -152,7 +159,11 @@ export default function Home() {
               <source media="(max-width: 767px)" srcSet={slide.mobileSrc} />
               <img
                 src={slide.desktopSrc}
-                alt={slide.alt}
+                alt={
+                  index === 0
+                    ? 'Jaosef Agro Supplies agricultural products and farm inputs in Kenya'
+                    : slide.alt
+                }
                 className="absolute inset-0 h-full w-full object-cover"
                 style={{
                   opacity: activeHeroSlide === index ? 1 : 0,
@@ -297,6 +308,16 @@ export default function Home() {
             className="font-display text-xl sm:text-2xl md:text-[28px] leading-[1.35]"
             style={{ color: '#1a3a2f' }}
           >
+            Jaosef Agro Supplies is a Kenyan agricultural supply business providing crop and livestock inputs, including seeds, fertilisers, crop protection products, irrigation supplies, animal feeds, poultry supplies, dairy equipment, and farm tools.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.16 }}
+            className="mt-4 text-base sm:text-lg leading-relaxed"
+            style={{ color: '#3d3d3d' }}
+          >
             {content.homeMission.statement}
           </motion.p>
           <motion.div
@@ -346,7 +367,7 @@ export default function Home() {
                     >
                       <img
                         src={categoryImages[key]}
-                        alt={label}
+                        alt={`${label} farm inputs in Kenya from Jaosef Agro Supplies`}
                         className="max-w-full max-h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                         loading="lazy"
                         decoding="async"
@@ -400,7 +421,7 @@ export default function Home() {
                     <div className="p-4 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '1/1' }}>
                       <img
                         src={product.imageUrl}
-                        alt={product.name}
+                        alt={`${product.name} available from Jaosef Agro Supplies`}
                         className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                         loading="lazy"
                         decoding="async"
@@ -541,7 +562,7 @@ export default function Home() {
                 <Link to={`/farming-tips/${tip.id}`} className="block group">
                   <img
                     src={tip.imageUrl}
-                    alt={tip.title}
+                    alt={`${tip.title} farming tip from Jaosef Agro Supplies`}
                     className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                     style={{ aspectRatio: '16/10' }}
                     loading="lazy"
