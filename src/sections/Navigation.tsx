@@ -6,6 +6,7 @@ import { useSiteContent } from '@/hooks/useSiteContent';
 import TopBar from './TopBar';
 
 const navLinks = [
+  { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Products', href: '/products' },
   { label: 'Farming Tips', href: '/farming-tips' },
@@ -49,24 +50,24 @@ export default function Navigation() {
     <>
       <TopBar />
       <nav
-        className="fixed top-0 md:top-9 left-0 right-0 z-50 h-16 flex items-center transition-all duration-300"
+        className="fixed top-0 md:top-9 left-0 right-0 z-50 h-[60px] md:h-[68px] flex items-center transition-all duration-300"
         style={{
-          backgroundColor: scrolled ? '#1a3a2f' : '#1a3a2f',
+          backgroundColor: '#1a3a2f',
           boxShadow: scrolled ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
         }}
       >
-        <div className="w-full max-w-[1200px] mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5">
-            <img src="/logo-mark.svg" alt="" width={36} height={36} className="flex-shrink-0" />
-            <span className="flex flex-col">
-              <span className="text-[#f5f0e8] font-bold text-lg leading-tight tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
-                {content.brand.navName}
-              </span>
-              <span className="text-[#8b7d6b] text-[10px] tracking-[4px] leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-                {content.brand.navTagline}
-              </span>
-            </span>
+        <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-5 md:px-6 flex items-center justify-between gap-3">
+          {/* Brand lockup */}
+          <Link
+            to="/"
+            aria-label={`${content.brand.name} home`}
+            className="flex items-center shrink-0"
+          >
+            <img
+              src="/images/brand/jaosef-wordmark.svg"
+              alt={content.brand.name}
+              className="h-9 sm:h-10 md:h-11 w-auto"
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -86,8 +87,7 @@ export default function Navigation() {
           {/* CTA + Mobile toggle */}
           <div className="flex items-center gap-4">
             <Link
-              to="/#contact"
-              onClick={(e) => handleAnchorClick(e, '/#contact')}
+              to="/contact"
               className="hidden md:inline-flex items-center px-5 py-2 text-xs font-semibold text-white rounded-sm transition-all duration-200 hover:scale-[1.02]"
               style={{ backgroundColor: '#c75c2e' }}
             >

@@ -1,13 +1,16 @@
 export const productCategories = {
   crop_nutrition: "Fertilisers & Crop Nutrition",
-  seeds: "Seeds",
-  crop_protection: "Pesticides & Crop Protection",
-  soil_health: "Organic Manure & Soil Health",
+  seeds: "Seeds & Planting Material",
+  crop_protection: "Crop Protection",
+  soil_health: "Soil Health & Organic Inputs",
   irrigation: "Irrigation & Watering",
   tools: "Farm Tools & Equipment",
-  nursery: "Nursery Supplies",
-  safety: "Safety Gear",
-  post_harvest: "Post-Harvest Supplies",
+  nursery: "Nursery & Greenhouse Supplies",
+  safety: "Farm Safety & PPE",
+  post_harvest: "Post-Harvest & Storage",
+  livestock_feeds: "Livestock & Poultry Feeds",
+  animal_health: "Animal Health & Veterinary Supplies",
+  livestock_equipment: "Dairy, Poultry & Livestock Equipment",
 } as const;
 
 export type ProductCategory = keyof typeof productCategories;
@@ -582,5 +585,231 @@ export const starterProducts: CatalogueProduct[] = [
     packSizes: "Standard, large, and extra-large sizes depending on stock",
     imageUrl: "/images/products/storage-crates.webp",
     featured: true,
+  }),
+  product(39, {
+    name: "Dairy Meal",
+    category: "livestock_feeds",
+    shortDescription: "Supplementary concentrate feed for lactating dairy cows.",
+    description:
+      "Dairy meal supports dairy cattle nutrition when used together with good forage, clean water, and proper herd management.",
+    specs: "Concentrate dairy feed; formulation varies by manufacturer",
+    bestSuitedFor: "Lactating dairy cows and dairy farming units",
+    usageTip:
+      "Use alongside quality forage and clean water. Follow the manufacturer's feeding guide and adjust based on milk production, body condition, and nutritionist advice.",
+    safetyNote:
+      "Store feed in a dry, clean place away from moisture, pests, chemicals, and contamination. Avoid mouldy feed.",
+    packSizes: "5kg, 10kg, 25kg, 50kg, 70kg depending on stock",
+    imageUrl: "/images/products/dairy-meal.webp",
+    featured: true,
+  }),
+  product(40, {
+    name: "Calf Starter Pellets",
+    category: "livestock_feeds",
+    shortDescription: "Young-stock pelleted feed for calves during growth and weaning.",
+    description:
+      "Calf starter pellets support healthy calf growth during the early weeks and through the weaning transition.",
+    specs: "Pelleted calf feed; nutrient profile varies by manufacturer",
+    bestSuitedFor: "Dairy and beef calves during growth and weaning",
+    usageTip:
+      "Follow the manufacturer's age and feeding instructions. Provide clean drinking water at all times.",
+    safetyNote:
+      "Store in a dry, clean place. Avoid feeding mouldy or contaminated feed.",
+    packSizes: "5kg, 10kg, 25kg, 50kg depending on stock",
+    imageUrl: "/images/products/calf-starter-pellets.webp",
+    featured: false,
+  }),
+  product(41, {
+    name: "Mineral Lick / Salt Block",
+    category: "livestock_feeds",
+    shortDescription: "Mineral and salt supplement for grazing cattle, goats, and sheep.",
+    description:
+      "Mineral licks help supplement essential minerals for grazing livestock, especially where pasture alone may not meet mineral needs.",
+    specs: "Salt and mineral supplement block; composition varies by brand",
+    bestSuitedFor: "Dairy cattle, beef cattle, goats, and sheep",
+    usageTip:
+      "Place where animals can access it freely, but protect it from rain and mud.",
+    safetyNote:
+      "Do not use as the only source of nutrition. Provide clean water and balanced feed alongside.",
+    packSizes: "1kg, 2kg, 5kg, 10kg blocks depending on stock",
+    imageUrl: "/images/products/mineral-lick.webp",
+    featured: true,
+  }),
+  product(42, {
+    name: "Layers Mash",
+    category: "livestock_feeds",
+    shortDescription: "Poultry feed for laying birds.",
+    description:
+      "Layers mash is formulated for birds in the laying stage and should be used with clean water and good poultry house management.",
+    specs: "Layer-stage poultry feed; nutrient profile varies by manufacturer",
+    bestSuitedFor: "Laying hens and egg-production poultry farms",
+    usageTip:
+      "Use when birds reach laying stage. Keep feed dry and provide constant clean drinking water.",
+    safetyNote:
+      "Avoid mouldy feed. Store in a dry, ventilated place and follow manufacturer instructions.",
+    packSizes: "5kg, 10kg, 25kg, 50kg, 70kg depending on stock",
+    imageUrl: "/images/products/layers-mash.webp",
+    featured: true,
+  }),
+  product(43, {
+    name: "Chick Mash",
+    category: "livestock_feeds",
+    shortDescription: "Starter feed for chicks during early growth.",
+    description:
+      "Chick mash supports young chicks during the early growing stage when nutrient density and feed hygiene matter most.",
+    specs: "Starter-stage poultry feed; nutrient profile varies by manufacturer",
+    bestSuitedFor: "Day-old to early-stage chicks",
+    usageTip:
+      "Keep feed dry and clean to reduce disease risk. Provide constant clean water.",
+    safetyNote:
+      "Discard wet or mouldy feed. Hygiene around brooders is critical at this stage.",
+    packSizes: "2kg, 5kg, 10kg, 25kg, 50kg depending on stock",
+    imageUrl: "/images/products/chick-mash.webp",
+    featured: false,
+  }),
+  product(44, {
+    name: "Broiler Feed (Starter / Grower / Finisher)",
+    category: "livestock_feeds",
+    shortDescription: "Stage-based feed for meat birds.",
+    description:
+      "Broiler feeds are formulated for fast-growing meat birds and are usually offered as starter, grower, and finisher stages.",
+    specs: "Stage-specific poultry feed; nutrient profile varies by manufacturer",
+    bestSuitedFor: "Broiler chickens at the relevant growth stage",
+    usageTip:
+      "Match feed stage to bird age and production programme. Keep feed dry and clean.",
+    safetyNote:
+      "Use only properly labelled feed from reliable suppliers.",
+    packSizes: "5kg, 10kg, 25kg, 50kg, 70kg depending on stock",
+    imageUrl: "/images/products/broiler-feed.webp",
+    featured: true,
+  }),
+  product(45, {
+    name: "Poultry Vitamins & Electrolytes",
+    category: "animal_health",
+    shortDescription: "Water-soluble poultry support supplement.",
+    description:
+      "Poultry vitamins and electrolytes may support birds during stress periods such as transport, heat stress, vaccination programmes, or recovery support.",
+    specs: "Water-soluble vitamin and electrolyte supplement; composition varies by brand",
+    bestSuitedFor:
+      "Chicks, growers, layers, broilers, and improved kienyeji poultry depending on label",
+    usageTip:
+      "Use according to the product label. Ensure birds always have clean drinking water.",
+    safetyNote:
+      "This is not a disease treatment. Sick birds should be examined by a qualified animal-health professional.",
+    packSizes: "Sachets, 100g, 250g, 500g, 1kg depending on stock",
+    imageUrl: "/images/products/poultry-vitamins-electrolytes.webp",
+    featured: true,
+  }),
+  product(46, {
+    name: "Poultry Disinfectant",
+    category: "animal_health",
+    shortDescription: "Farm hygiene and disinfection product for poultry units.",
+    description:
+      "Used for poultry house, equipment, footbath, and general biosecurity hygiene according to the official product label.",
+    specs: "Veterinary disinfectant; active ingredient varies by brand",
+    bestSuitedFor:
+      "Poultry houses, brooders, footbaths, equipment, and general farm biosecurity",
+    usageTip:
+      "Follow the label dilution and contact time exactly. Apply with appropriate PPE.",
+    safetyNote:
+      "Keep away from food, feed, drinking water, children, and animals during application. Store securely.",
+    packSizes: "500ml, 1L, 5L, 20L depending on product",
+    imageUrl: "/images/products/poultry-disinfectant.webp",
+    featured: false,
+    activeIngredient: "Varies by registered product",
+    formulation: "Liquid concentrate",
+    targetUse: "Surface, equipment, and footbath disinfection per label",
+    registeredCropUse: "Labelled animal premises only",
+    pcpbStatus: "Confirm VMD/approved registration before listing exact product",
+    phi: "Follow official label",
+    rei: "Follow official label re-entry guidance",
+    ppe: "Gloves, boots, eye protection; respirator where label requires",
+    storageWarning: "Store locked away from children, animals, food, feed, and water sources",
+  }),
+  product(47, {
+    name: "Tick & Fly Control Acaricide",
+    category: "animal_health",
+    shortDescription: "Veterinary pest-control product for livestock external parasites.",
+    description:
+      "Acaricides are used for tick, mite, and external parasite control where the product is registered and labelled for the target livestock species.",
+    specs: "Veterinary pest-control product; active ingredient and formulation vary by brand",
+    bestSuitedFor: "Cattle, goats, sheep, and livestock housing depending on label",
+    usageTip:
+      "Use only according to label dilution and application instructions. Avoid overuse and rotate products responsibly where advised.",
+    safetyNote:
+      "Observe animal species restrictions, PPE, withdrawal periods, and environmental safety instructions.",
+    packSizes: "100ml, 250ml, 500ml, 1L, 5L depending on product",
+    imageUrl: "/images/products/tick-fly-control-acaricide.webp",
+    featured: true,
+    activeIngredient: "Varies by registered product",
+    formulation: "Dip wash, spray, pour-on, or other label formulation",
+    targetUse: "Labelled ticks, flies, mites, lice, or external parasites only",
+    registeredCropUse: "Labelled animal species only",
+    pcpbStatus: "Confirm VMD/approved registration before listing exact product",
+    phi: "Follow official label / withdrawal period",
+    rei: "Follow official label",
+    ppe: "Gloves, boots, protective clothing, and mask/eye protection where required",
+    storageWarning:
+      "Store locked away from children, animals, food, feed, and water sources",
+  }),
+  product(48, {
+    name: "Poultry Feeder",
+    category: "livestock_equipment",
+    shortDescription: "Plastic or metal feeder for poultry units.",
+    description:
+      "Poultry feeders help present feed cleanly and reduce wastage in poultry houses.",
+    specs: "Bell, hanging, or tray feeder depending on bird age and stock",
+    bestSuitedFor: "Chick brooders, growers, layers, and broiler houses",
+    usageTip:
+      "Choose size based on bird numbers and age. Raise slightly to reduce feed wastage and litter contamination.",
+    safetyNote: "Clean regularly and inspect for damage.",
+    packSizes: "Small, medium, and large units depending on stock",
+    imageUrl: "/images/products/poultry-feeder.webp",
+    featured: true,
+  }),
+  product(49, {
+    name: "Poultry Drinker",
+    category: "livestock_equipment",
+    shortDescription: "Bell, chick, or automatic drinker for clean poultry water.",
+    description:
+      "Poultry drinkers provide clean water for poultry while reducing litter wetness and disease risk.",
+    specs: "Bell drinker, chick drinker, or automatic drinker depending on stock",
+    bestSuitedFor: "Chicks, growers, layers, and broilers",
+    usageTip:
+      "Clean daily and position to reduce litter wetness. Match drinker size to bird age and stocking density.",
+    safetyNote: "Inspect seals regularly and replace damaged parts.",
+    packSizes: "Small, medium, and large units depending on stock",
+    imageUrl: "/images/products/poultry-drinker.webp",
+    featured: false,
+  }),
+  product(50, {
+    name: "Milk Can",
+    category: "livestock_equipment",
+    shortDescription: "Aluminium or stainless-steel can for hygienic milk handling.",
+    description:
+      "Milk cans support clean milk handling, storage, and transport — a basic essential for dairy units.",
+    specs: "Aluminium or stainless-steel milk can with lid",
+    bestSuitedFor:
+      "Smallholder dairy farms, dairy cooperatives, and milk transport",
+    usageTip:
+      "Clean and sanitise after every use. Keep covered to prevent contamination.",
+    safetyNote: "Use food-grade containers only. Avoid plastic for milk collection where hygiene matters.",
+    packSizes: "10L, 20L, 30L, 40L, 50L depending on stock",
+    imageUrl: "/images/products/milk-can.webp",
+    featured: true,
+  }),
+  product(51, {
+    name: "Feed Trough",
+    category: "livestock_equipment",
+    shortDescription: "Metal or plastic trough for livestock feed.",
+    description:
+      "Feed troughs reduce wastage and help keep feed clean for cattle, goats, sheep, and pigs.",
+    specs: "Galvanised metal, plastic, or concrete trough depending on use",
+    bestSuitedFor: "Cattle, goats, sheep, and pig units",
+    usageTip:
+      "Position on level ground. Clean regularly to reduce mould and contamination risk.",
+    safetyNote: "Inspect for sharp edges or damage that could injure animals.",
+    packSizes: "Small, medium, and large lengths depending on stock",
+    imageUrl: "/images/products/feed-trough.webp",
+    featured: false,
   }),
 ];

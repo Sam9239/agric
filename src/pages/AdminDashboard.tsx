@@ -301,6 +301,9 @@ export default function AdminDashboard() {
     nursery: '#6f8d45',
     safety: '#c75c2e',
     post_harvest: '#78624d',
+    livestock_feeds: '#7a5c2e',
+    animal_health: '#8b3a2f',
+    livestock_equipment: '#2f5f5f',
   };
 
   const categoryLabels = productCategories;

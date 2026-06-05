@@ -31,7 +31,10 @@ const categoryImages: Record<ProductCategory, string> = {
   tools: '/images/products/knapsack-sprayer.webp',
   nursery: '/images/products/seedling-trays-cocopeat.webp',
   safety: '/images/products/ppe-kit.webp',
-  post_harvest: '/images/cat-farm-inputs.webp',
+  post_harvest: '/images/products/storage-crates.webp',
+  livestock_feeds: '/images/categories/livestock-feeds.webp',
+  animal_health: '/images/categories/animal-health.webp',
+  livestock_equipment: '/images/categories/livestock-equipment.webp',
 };
 
 const categoryLabels = productCategories;
@@ -49,11 +52,61 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const heroSlides = [
-  { src: '/images/hero-slide-inputs.webp', alt: 'Agricultural supplies arranged on a farm table', objectPosition: '50% 50%' },
-  { src: '/images/hero-slide-shop.webp', alt: 'Agricultural supplies shop with farm inputs', objectPosition: '50% 50%' },
-  { src: '/images/hero-slide-greenhouse.webp', alt: 'Farmer checking crops in a greenhouse', objectPosition: '60% 30%' },
-  { src: '/images/hero-slide-harvest.webp', alt: 'Farmer harvesting tomatoes in a field', objectPosition: '65% 30%' },
-  { src: '/images/hero-slide-advice.webp', alt: 'Agricultural advisor discussing farm inputs with a farmer', objectPosition: '55% 30%' },
+  {
+    desktopSrc: '/images/hero/hero-01-agro-shop-desktop.webp',
+    mobileSrc: '/images/hero/hero-01-agro-shop-mobile.webp',
+    alt: 'Agro supply shop with farm inputs, sprayers, seeds, and fertilisers',
+  },
+  {
+    desktopSrc: '/images/hero/hero-09-shop-counter-desktop.webp',
+    mobileSrc: '/images/hero/hero-09-shop-counter-mobile.webp',
+    alt: 'Friendly shop owner ready to help farmers with farm inputs',
+  },
+  {
+    desktopSrc: '/images/hero/hero-02-maize-consultation-desktop.webp',
+    mobileSrc: '/images/hero/hero-02-maize-consultation-mobile.webp',
+    alt: 'Agricultural advisor and farmer inspecting maize in a field',
+  },
+  {
+    desktopSrc: '/images/hero/hero-10-maize-couple-desktop.webp',
+    mobileSrc: '/images/hero/hero-02-maize-consultation-mobile.webp',
+    alt: 'Two farmers reviewing maize crop notes together',
+  },
+  {
+    desktopSrc: '/images/hero/hero-03-greenhouse-vegetables-desktop.webp',
+    mobileSrc: '/images/hero/hero-03-greenhouse-vegetables-mobile.webp',
+    alt: 'Greenhouse vegetable farmer in a productive growing tunnel',
+  },
+  {
+    desktopSrc: '/images/hero/hero-04-nursery-seedlings-desktop.webp',
+    mobileSrc: '/images/hero/hero-04-nursery-seedlings-mobile.webp',
+    alt: 'Farmer caring for vegetable seedlings in a nursery tunnel',
+  },
+  {
+    desktopSrc: '/images/hero/hero-05-tomato-harvest-desktop.webp',
+    mobileSrc: '/images/hero/hero-05-tomato-harvest-mobile.webp',
+    alt: 'Farmer harvesting fresh tomatoes into a crate',
+  },
+  {
+    desktopSrc: '/images/hero/hero-11-tomato-vines-desktop.webp',
+    mobileSrc: '/images/hero/hero-11-tomato-vines-mobile.webp',
+    alt: 'Farmer tending ripe tomato vines in a greenhouse',
+  },
+  {
+    desktopSrc: '/images/hero/hero-06-poultry-farm-desktop.webp',
+    mobileSrc: '/images/hero/hero-06-poultry-farm-mobile.webp',
+    alt: 'Poultry farmer holding a bucket of feed in a clean chicken house',
+  },
+  {
+    desktopSrc: '/images/hero/hero-07-dairy-farm-desktop.webp',
+    mobileSrc: '/images/hero/hero-07-dairy-farm-mobile.webp',
+    alt: 'Dairy farmer standing near cows at a well-kept dairy unit',
+  },
+  {
+    desktopSrc: '/images/hero/hero-08-livestock-grazing-desktop.webp',
+    mobileSrc: '/images/hero/hero-08-livestock-grazing-mobile.webp',
+    alt: 'Livestock herder with cattle and sheep grazing at sunset',
+  },
 ];
 
 const fadeInUp = {
@@ -87,28 +140,30 @@ export default function Home() {
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <Navigation />
 
-      {/* Hero Section — full-screen */}
+      {/* Hero Section — sits below navbar so image isn't overlapped */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{ backgroundColor: '#1a3a2f', minHeight: '100svh' }}
+        className="relative w-full overflow-hidden mt-[60px] md:mt-[104px] min-h-[calc(100svh-60px)] md:min-h-[calc(100svh-104px)]"
+        style={{ backgroundColor: '#1a3a2f' }}
       >
         {/* Background slideshow */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
-            <img
-              key={slide.src}
-              src={slide.src}
-              alt={slide.alt}
-              className="absolute inset-0 h-full w-full object-cover"
-              style={{
-                opacity: activeHeroSlide === index ? 1 : 0,
-                objectPosition: slide.objectPosition,
-                transition: 'opacity 1200ms ease-in-out',
-              }}
-              loading={index === 0 ? 'eager' : 'lazy'}
-              fetchPriority={index === 0 ? 'high' : 'low'}
-              decoding="async"
-            />
+            <picture key={slide.desktopSrc}>
+              <source media="(max-width: 767px)" srcSet={slide.mobileSrc} />
+              <img
+                src={slide.desktopSrc}
+                alt={slide.alt}
+                className="absolute inset-0 h-full w-full object-cover"
+                style={{
+                  opacity: activeHeroSlide === index ? 1 : 0,
+                  objectPosition: 'center center',
+                  transition: 'opacity 1200ms ease-in-out',
+                }}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'low'}
+                decoding="async"
+              />
+            </picture>
           ))}
           {/* Vertical gradient (darkens top + bottom for legibility) */}
           <div
@@ -129,7 +184,7 @@ export default function Home() {
         </div>
 
         {/* Content */}
-        <div className="relative h-[100svh] min-h-[640px] flex flex-col justify-center px-5 sm:px-6 pt-28 md:pt-36 pb-20">
+        <div className="relative min-h-[calc(100svh-60px)] md:min-h-[calc(100svh-104px)] flex flex-col justify-center px-5 sm:px-6 pt-12 md:pt-16 pb-20">
           <div className="max-w-[1200px] w-full mx-auto">
             <motion.p
               initial={{ opacity: 0, y: -10 }}
@@ -192,18 +247,13 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Slide indicators */}
-        <div className="absolute bottom-20 sm:bottom-16 left-5 sm:left-6 flex gap-2 z-10">
+        {/* Slide indicators — visually hidden but still focusable for accessibility */}
+        <div className="sr-only">
           {heroSlides.map((slide, index) => (
             <button
-              key={slide.src}
+              key={slide.desktopSrc}
               type="button"
               onClick={() => setActiveHeroSlide(index)}
-              className="h-2.5 w-2.5 rounded-full transition-all"
-              style={{
-                backgroundColor: activeHeroSlide === index ? '#f5f0e8' : 'rgba(245, 240, 232, 0.4)',
-                transform: activeHeroSlide === index ? 'scale(1.3)' : 'scale(1)',
-              }}
               aria-label={`Show homepage image ${index + 1}`}
             />
           ))}
@@ -290,11 +340,14 @@ export default function Home() {
               <motion.div key={key} custom={i} variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
                 <Link to={`/products?category=${key}`} className="block group">
                   <div className="overflow-hidden h-full flex flex-col" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
-                    <div className="overflow-hidden">
+                    <div
+                      className="p-3 flex items-center justify-center aspect-[4/3]"
+                      style={{ backgroundColor: '#e8dfd1' }}
+                    >
                       <img
                         src={categoryImages[key]}
                         alt={label}
-                        className="w-full h-32 sm:h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="max-w-full max-h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                         loading="lazy"
                         decoding="async"
                       />

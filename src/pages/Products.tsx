@@ -87,23 +87,23 @@ export default function Products() {
       {/* Product Grid with Sidebar */}
       <section className="py-10">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="flex flex-col lg:flex-row gap-10">
+          <div className="flex flex-col lg:flex-row gap-7 xl:gap-8">
             {/* Sidebar */}
             <motion.aside
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="lg:w-[250px] flex-shrink-0"
+              className="lg:sticky lg:top-32 lg:max-h-[calc(100vh-9rem)] lg:w-[220px] xl:w-[240px] lg:overflow-y-auto lg:pr-1 flex-shrink-0 self-start"
             >
               <h3 className="text-sm font-semibold mb-4" style={{ color: '#1a3a2f' }}>
                 Categories
               </h3>
-              <div className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
+              <div className="flex lg:flex-col gap-1.5 overflow-x-auto pb-2 lg:pb-0">
                 {(Object.entries(categoryLabels) as [ProductCategoryFilter, string][]).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => handleCategoryChange(key)}
-                    className="text-sm px-3 py-2 text-left whitespace-nowrap transition-all duration-200 flex-shrink-0 lg:flex-shrink"
+                    className="text-sm px-3 py-1.5 text-left whitespace-nowrap transition-all duration-200 flex-shrink-0 lg:flex-shrink"
                     style={{
                       backgroundColor: activeCategory === key ? '#1a3a2f' : 'transparent',
                       color: activeCategory === key ? '#f5f0e8' : '#3d3d3d',
@@ -115,7 +115,7 @@ export default function Products() {
               </div>
 
               {/* Search */}
-              <div className="mt-6 relative">
+              <div className="mt-5 relative">
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8b7d6b' }} />
                 <input
                   type="text"
@@ -123,7 +123,7 @@ export default function Products() {
                   aria-label="Search products"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 text-sm outline-none transition-colors duration-200"
+                  className="w-full pl-9 pr-3 py-2 text-sm outline-none transition-colors duration-200"
                   style={{
                     border: '1px solid #d4c9b8',
                     backgroundColor: '#f5f0e8',
@@ -136,13 +136,13 @@ export default function Products() {
             {/* Product Grid */}
             <div className="flex-1">
               {isLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <div key={i} className="animate-pulse" style={{ backgroundColor: '#e8dfd1', aspectRatio: '1/1.2' }} />
+                    <div key={i} className="animate-pulse" style={{ backgroundColor: '#e8dfd1', aspectRatio: '1/1.08' }} />
                   ))}
                 </div>
               ) : filteredProducts && filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
                   {filteredProducts.map((product, i) => (
                     <motion.div
                       key={product.id}
@@ -156,7 +156,7 @@ export default function Products() {
                           className="card-hover overflow-hidden"
                           style={{ border: '1px solid #d4c9b8' }}
                         >
-                          <div className="p-4 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '1/1' }}>
+                          <div className="p-3 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '4/3' }}>
                             <img
                               src={product.imageUrl}
                               alt={product.name}
@@ -165,20 +165,20 @@ export default function Products() {
                               decoding="async"
                             />
                           </div>
-                          <div className="p-4">
+                          <div className="p-3.5">
                             <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
                               {categoryLabels[product.category]}
                             </p>
-                            <h3 className="font-display text-lg font-medium mt-1" style={{ color: '#1a3a2f' }}>
+                            <h3 className="font-display text-base sm:text-lg font-medium mt-1" style={{ color: '#1a3a2f' }}>
                               {product.name}
                             </h3>
-                            <p className="text-sm mt-2 leading-relaxed" style={{ color: '#3d3d3d' }}>
+                            <p className="text-sm mt-1.5 leading-relaxed" style={{ color: '#3d3d3d' }}>
                               {product.shortDescription}
                             </p>
                           </div>
                         </div>
                       </Link>
-                      <div className="px-4 pb-4" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px' }}>
+                      <div className="px-3.5 pb-3.5" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px' }}>
                         <WhatsAppButton productName={product.name} fullWidth />
                       </div>
                     </motion.div>

@@ -120,6 +120,9 @@ export const siteContentSchema = z.object({
     nursery: z.string(),
     safety: z.string(),
     post_harvest: z.string(),
+    livestock_feeds: z.string(),
+    animal_health: z.string(),
+    livestock_equipment: z.string(),
   }),
 });
 
@@ -156,13 +159,13 @@ export const defaultSiteContent: SiteContent = {
     eyebrow: "QUALITY INPUTS FOR A FOOD-SECURE KENYA",
     headline: "Growing Better Harvests, Together",
     subtext:
-      "Quality seeds, fertilisers, crop protection, and irrigation supplies for Kenyan farms — paired with practical guidance for safe, sustainable use.",
+      "Quality crop and livestock supplies for Kenyan farms — from seeds, fertilisers, crop protection, and irrigation to poultry, dairy, animal feeds, and farm equipment.",
     ctaLabel: "BROWSE PRODUCTS",
   },
   homeMission: {
     eyebrow: "OUR PROMISE",
     statement:
-      "We supply trusted farm inputs and share the know-how to use them well — supporting food security, healthier soil, and climate-resilient farming across Kenya.",
+      "We supply trusted crop and livestock inputs, plus practical guidance to help Kenyan farmers improve productivity, animal care, soil health, and farm resilience.",
   },
   about: {
     eyebrow: "ABOUT JAOSEF",
@@ -223,37 +226,43 @@ export const defaultSiteContent: SiteContent = {
     eyebrow: "WHAT WE DO",
     heading: "More Than Just a Shop",
     intro:
-      "We help farmers choose the right inputs, use them safely, and get better results from every season.",
+      "We help farmers choose the right inputs for crops and livestock, use them safely, and get better results from every season.",
     items: [
       {
         iconKey: "sprout",
-        title: "Product Guidance",
+        title: "Crop Input Guidance",
         description:
-          "We help farmers choose suitable farm inputs based on crop type, season, and farm conditions.",
+          "Suitable seeds, fertilisers, and crop protection matched to your crop, region, and growing season.",
+      },
+      {
+        iconKey: "package",
+        title: "Livestock & Poultry Supplies",
+        description:
+          "Feeds, mineral licks, poultry supplies, dairy equipment, and animal-care essentials for mixed farms.",
       },
       {
         iconKey: "shield",
-        title: "Crop Protection Advice",
+        title: "Safe Product Use",
         description:
-          "Guidance on safe, label-based use of pesticides, fungicides, and herbicides for healthier crops.",
+          "Practical, label-based advice on crop protection, acaricides, disinfectants, and PPE — for safer farms.",
       },
       {
         iconKey: "leaf",
         title: "Soil & Fertiliser Support",
         description:
-          "Advice on fertilisers, manure, lime, and soil nutrition options matched to your farm needs.",
+          "Fertilisers, manure, lime, and soil nutrition options matched to your soil type and crop programme.",
       },
       {
         iconKey: "wheat",
-        title: "Seed Selection",
+        title: "Seed & Stocking Advice",
         description:
-          "Help choosing certified seed suited to your region, rainfall, altitude, and growing season.",
+          "Certified seed and stocking guidance for crop farms, dairy units, poultry houses, and mixed farms.",
       },
       {
         iconKey: "truck",
-        title: "Farm Input Sourcing",
+        title: "Reliable Sourcing",
         description:
-          "Reliable supply of quality farm inputs for smallholder and commercial farmers alike.",
+          "Trusted supply of quality farm inputs for smallholder, commercial, and livestock farmers alike.",
       },
     ],
   },
@@ -349,7 +358,7 @@ export const defaultSiteContent: SiteContent = {
   },
   ctaBanner: {
     heading: "Need farm inputs or honest advice?",
-    body: "Talk to us about seeds, fertilisers, crop protection, irrigation, and post-harvest supplies — and how to use them well.",
+    body: "Talk to us about crop inputs, animal feeds, poultry and dairy supplies, irrigation, farm tools, and safe product use.",
     primaryLabel: "Chat on WhatsApp",
     secondaryLabel: "Browse Products",
   },
@@ -365,5 +374,11 @@ export const defaultSiteContent: SiteContent = {
     nursery: "Seedling trays, cocopeat, and nursery supplies.",
     safety: "Gloves, masks, goggles, gumboots, and protective gear.",
     post_harvest: "Storage bags, drying sheets, and post-harvest essentials.",
+    livestock_feeds:
+      "Dairy meal, calf feeds, poultry feeds, mineral licks, and livestock nutrition products.",
+    animal_health:
+      "Dewormers, tick control, poultry vitamins, disinfectants, and animal-care supplies.",
+    livestock_equipment:
+      "Feeders, drinkers, milk cans, poultry equipment, dairy tools, and livestock handling supplies.",
   },
 };

@@ -37,6 +37,7 @@ db/migrations/*.sql
 # Build outputs
 dist/
 build/
+public/images/_staging/
 # Test coverage
 coverage/
 .nyc_output/

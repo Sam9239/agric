@@ -105,6 +105,42 @@ async function seed() {
         imageUrl: "/images/cat-fertilizers.webp",
         date: "April 15, 2025",
       },
+      {
+        title: "Brooding Tips for Healthy Chicks",
+        content:
+          "The first three weeks of a chick's life decide whether the flock thrives. Pre-heat the brooder for at least 24 hours before chicks arrive — the temperature should be around 32-35°C in the first week, dropping by about 3°C per week. Use clean, dry litter (wood shavings work well) and replace it whenever it gets wet. Provide constant access to clean water, with a water-soluble vitamin and electrolyte mix during the first few days to help recovery from transport stress. Use chick mash designed for the starter stage and keep the feed area clean to reduce contamination. Watch for huddling (too cold), panting (too hot), or scattered birds (drafts), and adjust the brooder accordingly. Strict biosecurity — clean footwear, limited visitors, and proper disinfection — prevents the most common early losses.",
+        excerpt:
+          "The first three weeks of a chick's life decide whether the flock thrives. Pre-heat the brooder, use clean litter, and watch the chicks closely for temperature signs...",
+        imageUrl: "/images/hero/hero-06-poultry-farm-desktop.webp",
+        date: "April 10, 2025",
+      },
+      {
+        title: "Vaccination Calendar for Smallholder Poultry",
+        content:
+          "Vaccination is one of the cheapest ways to protect a flock from devastating diseases like Newcastle, Gumboro, and Fowl Pox. For improved kienyeji and layer flocks, common vaccinations include Marek's at day-old (usually at the hatchery), Newcastle + Infectious Bronchitis (NCD+IB) at around days 7-10, Gumboro at days 14 and 21, Fowl Pox at around week 6, and Newcastle booster at week 8. Always confirm the exact schedule with a qualified animal-health professional, because timing can vary based on local disease pressure, vaccine type, and bird purpose. Store vaccines in a cold chain (2-8°C) and use within the recommended window after opening. Vaccinate only healthy birds — sick or stressed flocks may not develop full immunity. Record every vaccination so you can match flock performance with the programme over time.",
+        excerpt:
+          "Vaccination protects flocks from Newcastle, Gumboro, and other major poultry diseases. Confirm your exact schedule with a qualified animal-health professional...",
+        imageUrl: "/images/products/poultry-vitamins-electrolytes.webp",
+        date: "April 5, 2025",
+      },
+      {
+        title: "Feeding the High-Producing Dairy Cow",
+        content:
+          "Milk production responds quickly to feed quality, especially in the first 100 days of lactation. Build the ration around high-quality forage — clean, leafy Napier grass, well-cured hay, or quality silage — because forage is the foundation of rumen health and milk fat. Supplement with dairy meal at a rate that matches milk production; a common guide is around 1kg of concentrate for every 1.5-2 litres of milk above maintenance, but consult a nutritionist for your specific herd. Provide clean drinking water at all times — a single litre of milk requires about 4-5 litres of water. Free-access mineral licks support trace mineral needs that pasture alone often can't supply. Avoid sudden feed changes; introduce new feeds gradually over 7-10 days to protect the rumen. Watch body condition: cows that are too thin will struggle to peak, while overly fat cows risk metabolic issues at calving.",
+        excerpt:
+          "Milk production responds quickly to feed quality. Build the ration around quality forage, supplement dairy meal to match production, and never skimp on clean water...",
+        imageUrl: "/images/hero/hero-07-dairy-farm-desktop.webp",
+        date: "April 1, 2025",
+      },
+      {
+        title: "Tick Control: Protecting Your Cattle the Right Way",
+        content:
+          "Ticks transmit several costly diseases in Kenyan livestock — East Coast Fever (theileriosis), anaplasmosis, babesiosis, and heartwater — so consistent control matters. Use only properly registered acaricides for the species you intend to treat, and follow label instructions exactly: correct dilution, correct application method (dip, spray, or pour-on), and correct frequency. Common practice is weekly spraying or dipping during high-tick seasons, dropping to fortnightly in cooler periods, but adjust based on local advice and tick pressure. Rotate between acaricide families on the timeline recommended by your vet to slow resistance build-up. Wear PPE (gloves, boots, overalls, eye protection where required) and never spray near food, water sources, or grazing children. After treatment, observe the withdrawal period before slaughtering animals or selling milk. Combine acaricide use with brush management around the homestead — ticks need vegetation to complete their lifecycle.",
+        excerpt:
+          "Ticks transmit major Kenyan cattle diseases. Use registered acaricides exactly as labelled, rotate chemical families to slow resistance, and combine with good pasture management...",
+        imageUrl: "/images/products/tick-fly-control-acaricide.webp",
+        date: "March 25, 2025",
+      },
     ]);
     console.log("Farming tips seeded.");
   }

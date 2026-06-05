@@ -126,6 +126,36 @@ export default function ProductDetail() {
                   </div>
                 </div>
               )}
+              {product.category === 'animal_health' && (
+                <div className="mt-5 p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
+                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#c75c2e' }}>Animal health safety</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-sm" style={{ color: '#3d3d3d' }}>
+                    {[
+                      ['Active ingredient', product.activeIngredient],
+                      ['Formulation', product.formulation],
+                      ['Target use', product.targetUse],
+                      ['Labelled animal use', product.registeredCropUse],
+                      ['Registration status', product.pcpbStatus],
+                      ['Withdrawal period', product.phi],
+                      ['PPE', product.ppe],
+                      ['Storage', product.storageWarning],
+                    ].filter(([, value]) => value).map(([label, value]) => (
+                      <p key={label}><span className="font-semibold">{label}:</span> {value}</p>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs leading-relaxed" style={{ color: '#8b7d6b' }}>
+                    Veterinary medicines, vaccines, acaricides, and animal-health products should be used only as directed on the official label and under qualified animal-health guidance where required.
+                  </p>
+                </div>
+              )}
+              {product.category === 'livestock_feeds' && (
+                <div className="mt-5 p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
+                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#5c7a4a' }}>Feed quality note</p>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>
+                    Buy properly labelled feed from reliable suppliers. Store feeds in a dry, clean place away from moisture, pests, and chemicals.
+                  </p>
+                </div>
+              )}
               <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
                 {product.safetyNote || 'Use as directed on the official product label. Product information is for enquiry purposes only and does not replace professional agronomic advice.'}
               </p>
