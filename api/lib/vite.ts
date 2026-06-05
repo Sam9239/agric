@@ -13,10 +13,20 @@ export function serveStaticFiles(app: App) {
   app.use("*", serveStatic({ root: "./dist/public" }));
 
   app.notFound((c) => {
+    const method = c.req.raw.method;
+    const requestPath = c.req.path;
     const accept = c.req.header("accept") ?? "";
-    if (!accept.includes("text/html")) {
+
+    const isPageRequest =
+      (method === "GET" || method === "HEAD") &&
+      !requestPath.startsWith("/api/") &&
+      !requestPath.startsWith("/uploads/") &&
+      path.extname(requestPath) === "";
+
+    if (!isPageRequest && !accept.includes("text/html")) {
       return c.json({ error: "Not Found" }, 404);
     }
+
     const indexPath = path.resolve(distPath, "index.html");
     const content = fs.readFileSync(indexPath, "utf-8");
     return c.html(content);
