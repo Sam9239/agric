@@ -3,6 +3,7 @@ import type { HttpBindings } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import fs from "fs";
 import path from "path";
+import { injectSeo } from "./seo";
 
 type App = Hono<{ Bindings: HttpBindings }>;
 
@@ -31,7 +32,11 @@ export function serveStaticFiles(app: App) {
     app.on(["GET", "HEAD"], file, serveStatic({ root: "./dist/public" }));
   }
 
-  // SPA fallback: every other GET/HEAD request returns the React app shell.
-  // React Router takes over and renders /about, /products, /products/:id, etc.
-  app.on(["GET", "HEAD"], "*", (c) => c.html(indexHtml));
+  // SPA fallback: every other GET/HEAD request returns the React app shell,
+  // but with per-route <title>/description/canonical/OG tags injected so each
+  // page has unique metadata for Google. React Router still renders the page.
+  app.on(["GET", "HEAD"], "*", (c) => {
+    const pathname = new URL(c.req.url).pathname;
+    return c.html(injectSeo(indexHtml, pathname));
+  });
 }
