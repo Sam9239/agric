@@ -15,31 +15,31 @@ type Meta = { title: string; description: string; path: string };
 // naturally in copy so the page also ranks for that spelling.
 const ROUTES: Record<string, Meta> = {
   "/": {
-    title: `${BRAND} | Farm Inputs, Animal Feeds & Agro Products in Kenya`,
+    title: `${BRAND} | Farm Inputs in Kenya`,
     description:
       "Jaosef Agro Supplies (Josef Agro Supplies) provides quality farm inputs in Kenya - seeds, fertilisers, crop protection, irrigation, animal feeds, poultry supplies, dairy equipment and farm tools. Nationwide delivery from Nairobi.",
     path: "/",
   },
   "/about": {
-    title: `About Jaosef Agro Supplies | Agricultural Supply Shop in Kenya`,
+    title: `About Jaosef Agro Supplies | Nairobi Agrovet`,
     description:
       "Learn about Jaosef Agro Supplies, a Nairobi-based agribusiness supplying fertilisers, certified seed, crop protection, irrigation equipment and animal feeds to smallholder and commercial farms across Kenya.",
     path: "/about",
   },
   "/products": {
-    title: `Products | Fertilisers, Seeds, Crop Protection & Animal Feeds - ${BRAND}`,
+    title: `Farm Inputs & Animal Feeds | ${BRAND}`,
     description:
       "Browse the Jaosef Agro Supplies catalogue: fertilisers & crop nutrition (DAP, CAN, Urea, NPK), certified seeds, crop protection, irrigation, farm tools, livestock & poultry feeds, animal health and dairy equipment in Kenya.",
     path: "/products",
   },
   "/farming-tips": {
-    title: `Farming Tips & Agronomy Advice in Kenya | ${BRAND}`,
+    title: `Farming Tips & Advice | ${BRAND}`,
     description:
       "Practical farming tips and agronomy guidance from Jaosef Agro Supplies - soil health, fertiliser use, crop protection, irrigation and livestock management for Kenyan farmers.",
     path: "/farming-tips",
   },
   "/contact": {
-    title: `Contact Jaosef Agro Supplies | Farm Inputs in Kenya`,
+    title: `Contact Us | ${BRAND}`,
     description:
       "Contact Jaosef Agro Supplies in Nairobi, Kenya. Call +254 746 804 727 or email jaosefagrosupplies@gmail.com for fertilisers, seeds, animal feeds and farm equipment enquiries.",
     path: "/contact",
