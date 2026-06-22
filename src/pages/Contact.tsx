@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { enquiryImageLimits } from '@contracts/site-content';
 import SEO from '@/components/SEO';
+import { siteUrl } from '@contracts/seo-content';
 import {
   Accordion,
   AccordionContent,
@@ -50,6 +51,24 @@ export default function Contact() {
   const [images, setImages] = useState<StagedImage[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${siteUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Contact',
+        item: `${siteUrl}/contact`,
+      },
+    ],
+  };
 
   const createEnquiry = trpc.enquiry.create.useMutation();
 
@@ -164,6 +183,7 @@ export default function Contact() {
         description="Contact Jaosef Agro Supplies for farm inputs in Kenya, product availability, crop and livestock supply enquiries, WhatsApp assistance, and agricultural guidance."
         path="/contact"
         image="/images/brand/jaosef-logo-light.webp"
+        jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
 

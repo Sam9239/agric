@@ -8,6 +8,7 @@ import TopBar from './TopBar';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services' },
   { label: 'Products', href: '/products' },
   { label: 'Farming Tips', href: '/farming-tips' },
   { label: 'Contact', href: '/contact' },
@@ -71,7 +72,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-5 lg:gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -143,8 +144,8 @@ export default function Navigation() {
                   </Link>
                 ))}
                 <Link
-                  to="/#contact"
-                  onClick={(e) => handleAnchorClick(e, '/#contact')}
+                  to="/contact"
+                  onClick={(e) => handleAnchorClick(e, '/contact')}
                   className="mt-4 inline-flex items-center justify-center px-5 py-3 text-xs font-semibold text-white rounded-sm"
                   style={{ backgroundColor: '#c75c2e' }}
                 >

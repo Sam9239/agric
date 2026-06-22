@@ -20,6 +20,7 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import SEO from '@/components/SEO';
+import { siteUrl } from '@contracts/seo-content';
 
 const iconMap: Record<string, LucideIcon> = {
   sprout: Sprout,
@@ -38,6 +39,24 @@ const stepIcons: LucideIcon[] = [MousePointerClick, MessageSquare, CheckCircle2,
 export default function About() {
   const content = useSiteContent();
   const { about, enquiryProcess, whyChooseUs } = content;
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${siteUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'About',
+        item: `${siteUrl}/about`,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
@@ -46,6 +65,7 @@ export default function About() {
         description="Learn about Jaosef Agro Supplies, a Kenyan agricultural supply business supporting productive farming with quality crop inputs, livestock supplies, and practical guidance."
         path="/about"
         image="/images/brand/jaosef-logo-light.webp"
+        jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
 

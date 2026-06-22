@@ -3,7 +3,7 @@ import type { HttpBindings } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import fs from "fs";
 import path from "path";
-import { injectSeo } from "./seo";
+import { buildSitemapXml, injectSeo } from "./seo";
 
 type App = Hono<{ Bindings: HttpBindings }>;
 
@@ -24,7 +24,6 @@ export function serveStaticFiles(app: App) {
     "/favicon.svg",
     "/favicon.ico",
     "/robots.txt",
-    "/sitemap.xml",
     "/logo-mark.svg",
     "/logo.svg",
     "/manifest.json",
@@ -32,11 +31,23 @@ export function serveStaticFiles(app: App) {
     app.on(["GET", "HEAD"], file, serveStatic({ root: "./dist/public" }));
   }
 
+  app.on(["GET", "HEAD"], "/sitemap.xml", async (c) => {
+    c.header("Content-Type", "application/xml; charset=utf-8");
+    return c.body(await buildSitemapXml());
+  });
+
   // SPA fallback: every other GET/HEAD request returns the React app shell,
   // but with per-route <title>/description/canonical/OG tags injected so each
   // page has unique metadata for Google. React Router still renders the page.
-  app.on(["GET", "HEAD"], "*", (c) => {
+  app.on(["GET", "HEAD"], "*", async (c) => {
     const pathname = new URL(c.req.url).pathname;
-    return c.html(injectSeo(indexHtml, pathname));
+    if (path.extname(pathname)) {
+      return c.notFound();
+    }
+
+    const result = await injectSeo(indexHtml, pathname);
+    return result.status === 404
+      ? c.html(result.html, 404)
+      : c.html(result.html);
   });
 }

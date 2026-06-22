@@ -7,6 +7,7 @@ import WhatsAppButton from '../sections/WhatsAppButton';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import { productCategories } from '@contracts/product-catalog';
+import { categoryPath, siteUrl } from '@contracts/seo-content';
 import SEO from '@/components/SEO';
 
 const categoryLabels = productCategories;
@@ -54,6 +55,36 @@ export default function ProductDetail() {
   }
 
   const filteredRelated = relatedProducts?.filter((p) => p.id !== productId).slice(0, 4);
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${siteUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Products',
+        item: `${siteUrl}/products`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: categoryLabels[product.category],
+        item: `${siteUrl}${categoryPath(product.category)}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: product.name,
+        item: `${siteUrl}/products/${product.id}`,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
@@ -63,6 +94,7 @@ export default function ProductDetail() {
         path={`/products/${product.id}`}
         image={product.imageUrl}
         type="product"
+        jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
 
@@ -197,22 +229,23 @@ export default function ProductDetail() {
                   variants={fadeInUp}
                   initial="hidden"
                   animate="visible"
+                  className="h-full flex flex-col"
                 >
-                  <Link to={`/products/${rp.id}`} className="block group">
+                  <Link to={`/products/${rp.id}`} className="block group flex-1">
                     <div
-                      className="card-hover overflow-hidden"
-                      style={{ border: '1px solid #d4c9b8' }}
+                      className="card-hover overflow-hidden h-full flex flex-col"
+                      style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
                     >
                       <div className="p-4 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '1/1' }}>
                         <img
                           src={rp.imageUrl}
                           alt={`${rp.name} available from Jaosef Agro Supplies`}
-                          className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                           loading="lazy"
                           decoding="async"
                         />
                       </div>
-                      <div className="p-4">
+                      <div className="p-4 flex-1">
                         <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
                           {categoryLabels[rp.category]}
                         </p>
@@ -225,7 +258,7 @@ export default function ProductDetail() {
                       </div>
                     </div>
                   </Link>
-                  <div className="px-4 pb-4" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px' }}>
+                  <div className="px-4 pb-4" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px', backgroundColor: '#f5f0e8' }}>
                     <WhatsAppButton productName={rp.name} fullWidth />
                   </div>
                 </motion.div>

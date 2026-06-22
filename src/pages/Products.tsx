@@ -9,6 +9,7 @@ import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import { productCategories } from '@contracts/product-catalog';
 import SEO from '@/components/SEO';
+import { siteUrl } from '@contracts/seo-content';
 
 const categoryLabels = {
   all: 'All Products',
@@ -33,27 +34,58 @@ const fadeInUp = {
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category');
+  const searchParam = searchParams.get('search') ?? '';
   const initialCategory = isProductCategoryFilter(categoryParam)
     ? categoryParam
     : 'all';
   const [activeCategory, setActiveCategory] = useState<ProductCategoryFilter>(initialCategory);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(searchParam);
 
   const { data: products, isLoading } = trpc.product.list.useQuery(
     activeCategory === 'all' ? undefined : { category: activeCategory }
   );
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${siteUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Products',
+        item: `${siteUrl}/products`,
+      },
+    ],
+  };
 
   useEffect(() => {
     setActiveCategory(initialCategory);
   }, [initialCategory]);
 
+  useEffect(() => {
+    setSearchQuery(searchParam);
+  }, [searchParam]);
+
+  const updateProductParams = (category: ProductCategoryFilter, search: string) => {
+    const next = new URLSearchParams();
+    if (category !== 'all') next.set('category', category);
+    if (search.trim()) next.set('search', search.trim());
+    setSearchParams(next);
+  };
+
   const handleCategoryChange = (cat: ProductCategoryFilter) => {
     setActiveCategory(cat);
-    if (cat === 'all') {
-      setSearchParams({});
-    } else {
-      setSearchParams({ category: cat });
-    }
+    updateProductParams(cat, searchQuery);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    updateProductParams(activeCategory, value);
   };
 
   const filteredProducts = products?.filter((p) =>
@@ -70,6 +102,7 @@ export default function Products() {
         description="Browse farm inputs and agro products from Jaosef Agro Supplies, including fertilisers, certified seeds, crop protection, irrigation supplies, livestock feeds, animal health products, and farm tools."
         path="/products"
         image="/images/brand/jaosef-logo-light.webp"
+        jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
 
@@ -125,7 +158,7 @@ export default function Products() {
                   placeholder="Search products..."
                   aria-label="Search products"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-sm outline-none transition-colors duration-200"
                   style={{
                     border: '1px solid #d4c9b8',
@@ -170,7 +203,7 @@ export default function Products() {
                   placeholder="Search products..."
                   aria-label="Search products"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   className="w-full pl-9 pr-3 py-2 text-sm outline-none transition-colors duration-200"
                   style={{
                     border: '1px solid #d4c9b8',
@@ -198,22 +231,23 @@ export default function Products() {
                       variants={fadeInUp}
                       initial="hidden"
                       animate="visible"
+                      className="h-full flex flex-col"
                     >
-                      <Link to={`/products/${product.id}`} className="block group">
+                      <Link to={`/products/${product.id}`} className="block group flex-1">
                         <div
-                          className="card-hover overflow-hidden"
-                          style={{ border: '1px solid #d4c9b8' }}
+                          className="card-hover overflow-hidden h-full flex flex-col"
+                          style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}
                         >
-                          <div className="p-3 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '4/3' }}>
+                          <div className="p-4 flex items-center justify-center aspect-[4/3]" style={{ backgroundColor: '#e8dfd1' }}>
                             <img
                               src={product.imageUrl}
                               alt={`${product.name} available from Jaosef Agro Supplies`}
-                              className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                               loading="lazy"
                               decoding="async"
                             />
                           </div>
-                          <div className="p-3.5">
+                          <div className="p-4 flex-1">
                             <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
                               {categoryLabels[product.category]}
                             </p>
@@ -226,7 +260,7 @@ export default function Products() {
                           </div>
                         </div>
                       </Link>
-                      <div className="px-3.5 pb-3.5" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px' }}>
+                      <div className="px-4 pb-4" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px', backgroundColor: '#f5f0e8' }}>
                         <WhatsAppButton productName={product.name} fullWidth />
                       </div>
                     </motion.div>

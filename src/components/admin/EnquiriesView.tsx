@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   MessageSquare,
   Search,
@@ -93,17 +93,11 @@ export default function EnquiriesView() {
     return filtered;
   }, [enquiries, query, statusFilter, sort]);
 
-  useEffect(() => {
-    if (filteredAndSorted.length === 0) {
-      if (selectedId !== null) setSelectedId(null);
-      return;
-    }
-    if (selectedId === null || !filteredAndSorted.some((e) => e.id === selectedId)) {
-      setSelectedId(filteredAndSorted[0].id);
-    }
-  }, [filteredAndSorted, selectedId]);
-
-  const selected = filteredAndSorted.find((e) => e.id === selectedId) ?? null;
+  const selected =
+    filteredAndSorted.find((e) => e.id === selectedId) ??
+    filteredAndSorted[0] ??
+    null;
+  const activeSelectedId = selected?.id ?? null;
 
   function openOnMobile(e: Enquiry) {
     setSelectedId(e.id);
@@ -191,7 +185,7 @@ export default function EnquiriesView() {
               </div>
             )}
             {filteredAndSorted.map((e) => {
-              const isSelected = e.id === selectedId;
+              const isSelected = e.id === activeSelectedId;
               const images = parseImageUrls(e.imageUrls);
               return (
                 <button

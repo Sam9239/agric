@@ -21,6 +21,7 @@ import { trpc } from '@/providers/trpc';
 import { useEffect, useState } from 'react';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { productCategories, type ProductCategory } from '@contracts/product-catalog';
+import { categoryPath } from '@contracts/seo-content';
 import SEO from '@/components/SEO';
 
 const categoryImages: Record<ProductCategory, string> = {
@@ -252,7 +253,7 @@ export default function Home() {
                   backgroundColor: 'rgba(245, 240, 232, 0.05)',
                 }}
               >
-                Learn About Us
+                About Jaosef Agro Supplies
               </Link>
             </motion.div>
           </div>
@@ -332,7 +333,7 @@ export default function Home() {
               className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-80"
               style={{ color: '#c75c2e' }}
             >
-              More about us
+              About Jaosef Agro Supplies
               <ArrowRight size={14} />
             </Link>
           </motion.div>
@@ -358,17 +359,17 @@ export default function Home() {
           </motion.div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
             {(Object.entries(categoryLabels) as [ProductCategory, string][]).map(([key, label], i) => (
-              <motion.div key={key} custom={i} variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <Link to={`/products?category=${key}`} className="block group">
+              <motion.div key={key} custom={i} variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="h-full">
+                <Link to={categoryPath(key)} className="block group h-full">
                   <div className="overflow-hidden h-full flex flex-col" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
                     <div
-                      className="p-3 flex items-center justify-center aspect-[4/3]"
+                      className="p-4 flex items-center justify-center aspect-[4/3]"
                       style={{ backgroundColor: '#e8dfd1' }}
                     >
                       <img
                         src={categoryImages[key]}
                         alt={`${label} farm inputs in Kenya from Jaosef Agro Supplies`}
-                        className="max-w-full max-h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                         loading="lazy"
                         decoding="async"
                       />
@@ -415,19 +416,19 @@ export default function Home() {
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {featuredProducts?.map((product, i) => (
-              <motion.div key={product.id} custom={i} variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <Link to={`/products/${product.id}`} className="block group">
-                  <div className="card-hover overflow-hidden" style={{ border: '1px solid #d4c9b8' }}>
+              <motion.div key={product.id} custom={i} variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="h-full flex flex-col">
+                <Link to={`/products/${product.id}`} className="block group flex-1">
+                  <div className="card-hover overflow-hidden h-full flex flex-col" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
                     <div className="p-4 flex items-center justify-center" style={{ backgroundColor: '#e8dfd1', aspectRatio: '1/1' }}>
                       <img
                         src={product.imageUrl}
                         alt={`${product.name} available from Jaosef Agro Supplies`}
-                        className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                         loading="lazy"
                         decoding="async"
                       />
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 flex-1">
                       <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
                         {categoryLabels[product.category]}
                       </p>
@@ -440,7 +441,7 @@ export default function Home() {
                     </div>
                   </div>
                 </Link>
-                <div className="px-4 pb-4" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px' }}>
+                <div className="px-4 pb-4" style={{ border: '1px solid #d4c9b8', borderTop: 'none', marginTop: '-1px', backgroundColor: '#f5f0e8' }}>
                   <WhatsAppButton productName={product.name} fullWidth />
                 </div>
               </motion.div>

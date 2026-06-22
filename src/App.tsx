@@ -7,7 +7,8 @@ const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Products = lazy(() => import('./pages/Products'))
-const ProductDetail = lazy(() => import('./pages/ProductDetail'))
+const ProductRoute = lazy(() => import('./pages/ProductRoute'))
+const Services = lazy(() => import('./pages/Services'))
 const FarmingTips = lazy(() => import('./pages/FarmingTips'))
 const TipDetail = lazy(() => import('./pages/TipDetail'))
 const AdminLogin = lazy(() => import('./pages/AdminLogin'))
@@ -34,9 +35,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/products/:id" element={<ProductRoute />} />
           <Route path="/farming-tips" element={<FarmingTips />} />
           <Route path="/farming-tips/:id" element={<TipDetail />} />
           <Route path="/admin" element={<AdminLogin />} />

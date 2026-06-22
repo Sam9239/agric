@@ -9,6 +9,7 @@ type SEOProps = {
   path?: string;
   image?: string;
   type?: 'website' | 'article' | 'product';
+  jsonLd?: unknown | unknown[];
 };
 
 function absoluteUrl(pathOrUrl: string) {
@@ -43,6 +44,7 @@ export default function SEO({
   path = '/',
   image = DEFAULT_IMAGE,
   type = 'website',
+  jsonLd,
 }: SEOProps) {
   useEffect(() => {
     const canonical = absoluteUrl(path);
@@ -60,7 +62,22 @@ export default function SEO({
     setMeta('meta[name="twitter:title"]', 'content', title);
     setMeta('meta[name="twitter:description"]', 'content', description);
     setMeta('meta[name="twitter:image"]', 'content', ogImage);
-  }, [description, image, path, title, type]);
+
+    document
+      .querySelectorAll('script[data-seo-jsonld="true"]')
+      .forEach((script) => script.remove());
+
+    if (jsonLd) {
+      const items = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+      for (const item of items) {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.dataset.seoJsonld = 'true';
+        script.textContent = JSON.stringify(item);
+        document.head.appendChild(script);
+      }
+    }
+  }, [description, image, jsonLd, path, title, type]);
 
   return null;
 }

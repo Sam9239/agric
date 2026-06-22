@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { productCategories } from '@contracts/product-catalog';
+import { categoryPath } from '@contracts/seo-content';
 
 function TikTokIcon({ size = 16 }: { size?: number }) {
   return (
@@ -13,6 +14,7 @@ function TikTokIcon({ size = 16 }: { size?: number }) {
 
 const quickLinks = [
   { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services' },
   { label: 'Products', href: '/products' },
   { label: 'Farming Tips', href: '/farming-tips' },
   { label: 'Contact', href: '/contact' },
@@ -22,7 +24,7 @@ const quickLinks = [
 
 const categoryLinks = Object.entries(productCategories).map(([key, label]) => ({
   label,
-  href: `/products?category=${key}`,
+  href: categoryPath(key as keyof typeof productCategories),
 }));
 
 export default function Footer() {

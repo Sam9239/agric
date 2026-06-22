@@ -6,6 +6,7 @@ import Footer from '../sections/Footer';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import SEO from '@/components/SEO';
+import { siteUrl } from '@contracts/seo-content';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -18,6 +19,24 @@ const fadeInUp = {
 
 export default function FarmingTips() {
   const { data: tips, isLoading } = trpc.tip.list.useQuery();
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${siteUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Farming Tips',
+        item: `${siteUrl}/farming-tips`,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
@@ -26,6 +45,7 @@ export default function FarmingTips() {
         description="Read practical farming tips from Jaosef Agro Supplies for Kenyan crop and livestock farmers, including soil health, crop protection, poultry, dairy, and safe input use."
         path="/farming-tips"
         image="/images/hero/hero-02-maize-consultation-desktop.webp"
+        jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
 

@@ -6,6 +6,7 @@ import Footer from '../sections/Footer';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import SEO from '@/components/SEO';
+import { siteUrl } from '@contracts/seo-content';
 
 export default function TipDetail() {
   const { id } = useParams<{ id: string }>();
@@ -41,6 +42,31 @@ export default function TipDetail() {
     );
   }
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${siteUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Farming Tips',
+        item: `${siteUrl}/farming-tips`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: tip.title,
+        item: `${siteUrl}/farming-tips/${tip.id}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <SEO
@@ -49,6 +75,7 @@ export default function TipDetail() {
         path={`/farming-tips/${tip.id}`}
         image={tip.imageUrl}
         type="article"
+        jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
 
