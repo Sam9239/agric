@@ -28,6 +28,8 @@ import { productCategories, type CatalogueProduct, type ProductCategory } from '
 import type { FarmingTip } from '@db/schema';
 import SiteContentEditor from '@/components/admin/SiteContentEditor';
 import EnquiriesView from '@/components/admin/EnquiriesView';
+import ImageEditor from '@/components/admin/ImageEditor';
+import LivePreviewCard from '@/components/admin/LivePreviewCard';
 
 type TabType = 'overview' | 'products' | 'enquiries' | 'tips' | 'siteContent' | 'security';
 type ProductForm = {
@@ -85,6 +87,12 @@ const sidebarItems: { id: TabType; label: string; icon: typeof Package }[] = [
   { id: 'security', label: 'Security', icon: ShieldCheck },
 ];
 
+// Crop presets matching how each image is displayed on the public site.
+const imageAspects = {
+  product: { aspect: 1, label: 'Square (1:1) — product card & detail page' },
+  tip: { aspect: 16 / 10, label: 'Wide (16:10) — farming tip cards' },
+} as const;
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -93,6 +101,14 @@ export default function AdminDashboard() {
   const [editingProduct, setEditingProduct] = useState<CatalogueProduct | null>(null);
   const [editingTip, setEditingTip] = useState<FarmingTip | null>(null);
   const [uploadingImageFor, setUploadingImageFor] = useState<'product' | 'tip' | null>(null);
+  // Image crop editor: set when a file is picked (or "Adjust" is clicked);
+  // nothing is uploaded until the admin confirms the crop.
+  const [imageEditor, setImageEditor] = useState<{
+    src: string;
+    target: 'product' | 'tip';
+    isObjectUrl: boolean;
+    filename: string;
+  } | null>(null);
   const [totpSetup, setTotpSetup] = useState<{ secret: string; uri: string } | null>(null);
   const [totpEnableCode, setTotpEnableCode] = useState('');
   const [totpDisableCode, setTotpDisableCode] = useState('');
@@ -273,6 +289,42 @@ export default function AdminDashboard() {
     }
   };
 
+  const openImageEditorForFile = (file: File, target: 'product' | 'tip') => {
+    setImageEditor({
+      src: URL.createObjectURL(file),
+      target,
+      isObjectUrl: true,
+      filename: file.name,
+    });
+  };
+
+  const openImageEditorForUrl = (url: string, target: 'product' | 'tip') => {
+    if (!url.trim()) {
+      toast.error('No image to adjust yet.');
+      return;
+    }
+    setImageEditor({
+      src: url,
+      target,
+      isObjectUrl: false,
+      filename: url.split('/').pop() || 'image',
+    });
+  };
+
+  const closeImageEditor = () => {
+    if (imageEditor?.isObjectUrl) URL.revokeObjectURL(imageEditor.src);
+    setImageEditor(null);
+  };
+
+  const handleCroppedImage = async (blob: Blob) => {
+    if (!imageEditor) return;
+    const base = imageEditor.filename.replace(/\.\w+$/, '') || 'image';
+    const file = new File([blob], `${base}.webp`, { type: 'image/webp' });
+    const target = imageEditor.target;
+    closeImageEditor();
+    await uploadImage(file, target);
+  };
+
   const openProductModal = (product?: CatalogueProduct) => {
     if (product) {
       setEditingProduct(product);
@@ -335,7 +387,7 @@ export default function AdminDashboard() {
     irrigation: '#2f6f73',
     tools: '#1a3a2f',
     nursery: '#6f8d45',
-    safety: '#c75c2e',
+    safety: '#9e451a',
     post_harvest: '#78624d',
     livestock_feeds: '#7a5c2e',
     animal_health: '#8b3a2f',
@@ -431,7 +483,7 @@ export default function AdminDashboard() {
               className="flex shrink-0 items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all duration-200 md:w-full md:gap-3 md:px-4 md:py-3"
               style={{
                 color: activeTab === item.id ? '#f5f0e8' : 'rgba(245, 240, 232, 0.7)',
-                borderLeft: activeTab === item.id ? '3px solid #c75c2e' : '3px solid transparent',
+                borderLeft: activeTab === item.id ? '3px solid #b8511f' : '3px solid transparent',
                 backgroundColor: activeTab === item.id ? 'rgba(255,255,255,0.05)' : 'transparent',
               }}
             >
@@ -461,7 +513,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-4 sm:p-6 md:ml-[240px] md:p-10">
+      <main id="main-content" className="flex-1 p-4 sm:p-6 md:ml-[240px] md:p-10">
         {activeTab === 'siteContent' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
             <SiteContentEditor />
@@ -504,7 +556,7 @@ export default function AdminDashboard() {
                   onClick={() => setupTotp.mutate()}
                   disabled={setupTotp.isPending}
                   className="mt-6 inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-all disabled:opacity-50"
-                  style={{ backgroundColor: '#c75c2e' }}
+                  style={{ backgroundColor: '#b8511f' }}
                 >
                   {setupTotp.isPending ? 'Preparing...' : 'Enable authenticator'}
                 </button>
@@ -559,7 +611,7 @@ export default function AdminDashboard() {
                       onClick={() => enableTotp.mutate({ secret: totpSetup.secret, code: totpEnableCode })}
                       disabled={enableTotp.isPending || totpEnableCode.length !== 6}
                       className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-all disabled:opacity-50"
-                      style={{ backgroundColor: '#c75c2e' }}
+                      style={{ backgroundColor: '#b8511f' }}
                     >
                       {enableTotp.isPending ? 'Verifying...' : 'Verify and enable'}
                     </button>
@@ -600,7 +652,7 @@ export default function AdminDashboard() {
                     onClick={() => disableTotp.mutate({ code: totpDisableCode })}
                     disabled={disableTotp.isPending || totpDisableCode.length !== 6}
                     className="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white transition-all disabled:opacity-50"
-                    style={{ backgroundColor: '#c75c2e' }}
+                    style={{ backgroundColor: '#b8511f' }}
                   >
                     {disableTotp.isPending ? 'Disabling...' : 'Disable authenticator'}
                   </button>
@@ -617,7 +669,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
               {[
                 { label: 'Total Products', value: totalProducts, icon: Package, color: '#1a3a2f' },
-                { label: 'Total Enquiries', value: totalEnquiries, icon: Mail, color: '#c75c2e' },
+                { label: 'Total Enquiries', value: totalEnquiries, icon: Mail, color: '#9e451a' },
                 { label: 'Farming Tips', value: totalTips, icon: BookOpen, color: '#5c7a4a' },
                 { label: 'New Enquiries', value: newEnquiries, icon: TrendingUp, color: '#4a7c59' },
               ].map((stat, i) => (
@@ -659,7 +711,7 @@ export default function AdminDashboard() {
                         <td className="px-4 py-3">
                           <span
                             className="text-xs px-2 py-0.5 text-white"
-                            style={{ backgroundColor: e.status === 'new' ? '#c75c2e' : '#5c7a4a' }}
+                            style={{ backgroundColor: e.status === 'new' ? '#9e451a' : '#5c7a4a' }}
                           >
                             {e.status === 'new' ? 'New' : 'Replied'}
                           </span>
@@ -693,7 +745,7 @@ export default function AdminDashboard() {
               <button
                 onClick={() => openProductModal()}
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
-                style={{ backgroundColor: '#c75c2e' }}
+                style={{ backgroundColor: '#b8511f' }}
               >
                 <Plus size={16} /> Add Product
               </button>
@@ -708,7 +760,7 @@ export default function AdminDashboard() {
                   value={productSearch}
                   onChange={(e) => setProductSearch(e.target.value)}
                   placeholder="Search name, category, description…"
-                  className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#c75c2e]"
+                  className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#b8511f]"
                   style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
                 />
               </div>
@@ -716,7 +768,7 @@ export default function AdminDashboard() {
                 <select
                   value={productCategoryFilter}
                   onChange={(e) => setProductCategoryFilter(e.target.value as 'all' | ProductCategory)}
-                  className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#c75c2e]"
+                  className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#b8511f]"
                   style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
                 >
                   <option value="all">All categories</option>
@@ -727,7 +779,7 @@ export default function AdminDashboard() {
                 <select
                   value={productFeaturedFilter}
                   onChange={(e) => setProductFeaturedFilter(e.target.value as 'all' | 'featured' | 'standard')}
-                  className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#c75c2e]"
+                  className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#b8511f]"
                   style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
                 >
                   <option value="all">All</option>
@@ -762,8 +814,8 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-4 py-3 text-sm" style={{ color: '#3d3d3d' }}>
                         {p.featured ? (
-                          <span className="inline-flex items-center gap-1" style={{ color: '#c75c2e' }}>
-                            <Star size={13} fill="#c75c2e" /> Featured
+                          <span className="inline-flex items-center gap-1" style={{ color: '#9e451a' }}>
+                            <Star size={13} fill="#b8511f" /> Featured
                           </span>
                         ) : (
                           <span style={{ color: '#8b7d6b' }}>—</span>
@@ -774,7 +826,7 @@ export default function AdminDashboard() {
                           <button onClick={() => openProductModal(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${p.name}`}>
                             <Pencil size={16} />
                           </button>
-                          <button onClick={() => handleDeleteProduct(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${p.name}`}>
+                          <button onClick={() => handleDeleteProduct(p)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#9e451a' }} aria-label={`Delete ${p.name}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -816,7 +868,7 @@ export default function AdminDashboard() {
               <button
                 onClick={() => openTipModal()}
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
-                style={{ backgroundColor: '#c75c2e' }}
+                style={{ backgroundColor: '#b8511f' }}
               >
                 <Plus size={16} /> Add Tip
               </button>
@@ -830,7 +882,7 @@ export default function AdminDashboard() {
                 value={tipSearch}
                 onChange={(e) => setTipSearch(e.target.value)}
                 placeholder="Search title, content, date…"
-                className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#c75c2e]"
+                className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#b8511f]"
                 style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
               />
             </div>
@@ -860,7 +912,7 @@ export default function AdminDashboard() {
                           <button onClick={() => openTipModal(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#5c7a4a' }} aria-label={`Edit ${t.title}`}>
                             <Pencil size={16} />
                           </button>
-                          <button onClick={() => handleDeleteTip(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#c75c2e' }} aria-label={`Delete ${t.title}`}>
+                          <button onClick={() => handleDeleteTip(t)} className="p-1 transition-colors hover:opacity-70" style={{ color: '#9e451a' }} aria-label={`Delete ${t.title}`}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -962,7 +1014,7 @@ export default function AdminDashboard() {
               ))}
               {(productForm.category === 'crop_protection' || productForm.category === 'animal_health') && (
                 <div className="pt-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#c75c2e' }}>
+                  <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9e451a' }}>
                     {productForm.category === 'animal_health' ? 'Animal health safety details' : 'Crop protection safety details'}
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1019,19 +1071,31 @@ export default function AdminDashboard() {
                       disabled={uploadingImageFor !== null}
                       onChange={(event) => {
                         const file = event.target.files?.[0];
-                        if (file) uploadImage(file, 'product');
+                        if (file) openImageEditorForFile(file, 'product');
                         event.target.value = '';
                       }}
                     />
                   </label>
                   {productForm.imageUrl && (
-                    <img
-                      src={productForm.imageUrl}
-                      alt="Product preview"
-                      className="h-14 w-14 object-cover"
-                      style={{ border: '1px solid #d4c9b8' }}
-                    />
+                    <button
+                      type="button"
+                      onClick={() => openImageEditorForUrl(productForm.imageUrl, 'product')}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold"
+                      style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+                    >
+                      <Pencil size={14} />
+                      Adjust image
+                    </button>
                   )}
+                </div>
+                <div className="mt-4">
+                  <LivePreviewCard
+                    variant="product"
+                    imageUrl={productForm.imageUrl}
+                    name={productForm.name}
+                    categoryLabel={productCategories[productForm.category]}
+                    shortDescription={productForm.shortDescription}
+                  />
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -1053,7 +1117,7 @@ export default function AdminDashboard() {
                 </button>
                 <button
                   className="flex-1 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
-                  style={{ backgroundColor: '#c75c2e' }}
+                  style={{ backgroundColor: '#b8511f' }}
                   onClick={saveProduct}
                 >
                   Save
@@ -1135,19 +1199,31 @@ export default function AdminDashboard() {
                       disabled={uploadingImageFor !== null}
                       onChange={(event) => {
                         const file = event.target.files?.[0];
-                        if (file) uploadImage(file, 'tip');
+                        if (file) openImageEditorForFile(file, 'tip');
                         event.target.value = '';
                       }}
                     />
                   </label>
                   {tipForm.imageUrl && (
-                    <img
-                      src={tipForm.imageUrl}
-                      alt="Tip preview"
-                      className="h-14 w-20 object-cover"
-                      style={{ border: '1px solid #d4c9b8' }}
-                    />
+                    <button
+                      type="button"
+                      onClick={() => openImageEditorForUrl(tipForm.imageUrl, 'tip')}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold"
+                      style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
+                    >
+                      <Pencil size={14} />
+                      Adjust image
+                    </button>
                   )}
+                </div>
+                <div className="mt-4">
+                  <LivePreviewCard
+                    variant="tip"
+                    imageUrl={tipForm.imageUrl}
+                    title={tipForm.title}
+                    excerpt={tipForm.excerpt}
+                    date={tipForm.date}
+                  />
                 </div>
               </div>
               <div>
@@ -1171,7 +1247,7 @@ export default function AdminDashboard() {
                 </button>
                 <button
                   className="flex-1 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
-                  style={{ backgroundColor: '#c75c2e' }}
+                  style={{ backgroundColor: '#b8511f' }}
                   onClick={saveTip}
                 >
                   Save
@@ -1182,6 +1258,17 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {/* Crop & resize editor — opens on file pick or "Adjust image" */}
+      {imageEditor && (
+        <ImageEditor
+          src={imageEditor.src}
+          aspect={imageAspects[imageEditor.target].aspect}
+          aspectLabel={imageAspects[imageEditor.target].label}
+          busy={uploadingImageFor !== null}
+          onCancel={closeImageEditor}
+          onConfirm={handleCroppedImage}
+        />
+      )}
     </div>
   );
 }

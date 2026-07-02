@@ -24,7 +24,7 @@ export default function PageBackButton({ fallback = '/', light = false, classNam
       type="button"
       onClick={goBack}
       className={`inline-flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-80 ${className}`}
-      style={{ color: light ? '#f5f0e8' : '#5c7a4a' }}
+      style={{ color: light ? '#f5f0e8' : '#4a6339' }}
     >
       <ArrowLeft size={16} />
       Back

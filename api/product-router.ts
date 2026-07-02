@@ -64,6 +64,21 @@ function nextDemoProductId() {
   return Math.max(0, ...demoProducts.map((product) => product.id)) + 1;
 }
 
+async function withPublicProductFallback<T>(
+  query: () => Promise<T>,
+  fallback: () => T,
+) {
+  if (!hasDatabase()) {
+    return fallback();
+  }
+
+  try {
+    return await query();
+  } catch {
+    return fallback();
+  }
+}
+
 export const productRouter = createRouter({
   list: publicQuery
     .input(
@@ -72,54 +87,58 @@ export const productRouter = createRouter({
       }).optional()
     )
     .query(async ({ input }) => {
-      if (!hasDatabase()) {
-        return input?.category && input.category !== "all"
-          ? demoProducts.filter((product) => product.category === input.category)
-          : demoProducts;
-      }
-
-      const db = getDb();
-      if (input?.category && input.category !== "all") {
-        const rows = await db
-          .select()
-          .from(products)
-          .where(eq(products.category, input.category))
-          .orderBy(desc(products.createdAt));
-        return rows.map(normaliseProduct);
-      }
-      const rows = await db.select().from(products).orderBy(desc(products.createdAt));
-      return rows.map(normaliseProduct);
+      return withPublicProductFallback(
+        async () => {
+          const db = getDb();
+          if (input?.category && input.category !== "all") {
+            const rows = await db
+              .select()
+              .from(products)
+              .where(eq(products.category, input.category))
+              .orderBy(desc(products.createdAt));
+            return rows.map(normaliseProduct);
+          }
+          const rows = await db.select().from(products).orderBy(desc(products.createdAt));
+          return rows.map(normaliseProduct);
+        },
+        () =>
+          input?.category && input.category !== "all"
+            ? demoProducts.filter((product) => product.category === input.category)
+            : demoProducts,
+      );
     }),
 
   featured: publicQuery.query(async () => {
-    if (!hasDatabase()) {
-      return demoProducts.filter((product) => product.featured).slice(0, 8);
-    }
-
-    const db = getDb();
-    const rows = await db
-      .select()
-      .from(products)
-      .where(eq(products.featured, true))
-      .orderBy(desc(products.createdAt))
-      .limit(8);
-    return rows.map(normaliseProduct);
+    return withPublicProductFallback(
+      async () => {
+        const db = getDb();
+        const rows = await db
+          .select()
+          .from(products)
+          .where(eq(products.featured, true))
+          .orderBy(desc(products.createdAt))
+          .limit(8);
+        return rows.map(normaliseProduct);
+      },
+      () => demoProducts.filter((product) => product.featured).slice(0, 8),
+    );
   }),
 
   byId: publicQuery
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
-      if (!hasDatabase()) {
-        return demoProducts.find((product) => product.id === input.id) ?? null;
-      }
-
-      const db = getDb();
-      const result = await db
-        .select()
-        .from(products)
-        .where(eq(products.id, input.id))
-        .limit(1);
-      return result[0] ? normaliseProduct(result[0]) : null;
+      return withPublicProductFallback(
+        async () => {
+          const db = getDb();
+          const result = await db
+            .select()
+            .from(products)
+            .where(eq(products.id, input.id))
+            .limit(1);
+          return result[0] ? normaliseProduct(result[0]) : null;
+        },
+        () => demoProducts.find((product) => product.id === input.id) ?? null,
+      );
     }),
 
   byCategory: publicQuery
@@ -129,39 +148,42 @@ export const productRouter = createRouter({
       })
     )
     .query(async ({ input }) => {
-      if (!hasDatabase()) {
-        return demoProducts.filter((product) => product.category === input.category);
-      }
-
-      const db = getDb();
-      const rows = await db
-        .select()
-        .from(products)
-        .where(eq(products.category, input.category))
-        .orderBy(desc(products.createdAt));
-      return rows.map(normaliseProduct);
+      return withPublicProductFallback(
+        async () => {
+          const db = getDb();
+          const rows = await db
+            .select()
+            .from(products)
+            .where(eq(products.category, input.category))
+            .orderBy(desc(products.createdAt));
+          return rows.map(normaliseProduct);
+        },
+        () => demoProducts.filter((product) => product.category === input.category),
+      );
     }),
 
   related: publicQuery
     .input(z.object({ id: z.number(), category: categorySchema }))
     .query(async ({ input }) => {
-      if (!hasDatabase()) {
-        return demoProducts
-          .filter(
-            (product) =>
-              product.category === input.category && product.id !== input.id,
-          )
-          .slice(0, 4);
-      }
-
-      const db = getDb();
-      const rows = await db
-        .select()
-        .from(products)
-        .where(eq(products.category, input.category))
-        .orderBy(desc(products.createdAt))
-        .limit(4);
-      return rows.map(normaliseProduct);
+      return withPublicProductFallback(
+        async () => {
+          const db = getDb();
+          const rows = await db
+            .select()
+            .from(products)
+            .where(eq(products.category, input.category))
+            .orderBy(desc(products.createdAt))
+            .limit(4);
+          return rows.map(normaliseProduct);
+        },
+        () =>
+          demoProducts
+            .filter(
+              (product) =>
+                product.category === input.category && product.id !== input.id,
+            )
+            .slice(0, 4),
+      );
     }),
 
   create: adminQuery.input(productInput).mutation(async ({ input }) => {

@@ -14,9 +14,12 @@ import {
   categoryLandings,
   categoryPath,
   categorySlugToKey,
+  routeMeta,
   siteUrl,
 } from "@contracts/seo-content";
+import { defaultSiteContent } from "@contracts/site-content";
 import { demoProducts, demoTips, hasDatabase } from "../demo-data";
+import { loadSiteContent } from "../site-content-router";
 import { getDb } from "../queries/connection";
 
 const OG_IMAGE = `${siteUrl}/images/hero/hero-01-agro-shop-desktop.webp`;
@@ -58,66 +61,43 @@ type SeoTip = {
   updatedAt: Date;
 };
 
+// Titles/descriptions come from the shared routeMeta map in
+// @contracts/seo-content so client <SEO> components stay in sync.
 function staticRoutes(): Record<string, Meta> {
+  const withMeta = (path: string, extra?: Partial<Meta>): Meta => ({
+    ...routeMeta[path],
+    path,
+    ...extra,
+  });
+
   return {
-    "/": {
-      title: `${brandName} | Farm Inputs in Kenya`,
-      description:
-        "Jaosef Agro Supplies (Josef Agro Supplies) provides quality farm inputs in Kenya, including seeds, fertilisers, crop protection, irrigation, animal feeds, poultry supplies, dairy equipment and farm tools.",
-      path: "/",
-    },
-    "/about": {
-      title: `About ${brandName} | Nairobi Agrovet`,
-      description:
-        "Learn about Jaosef Agro Supplies, a Nairobi-based agribusiness supplying fertilisers, certified seed, crop protection, irrigation equipment, animal feeds, poultry supplies and dairy equipment across Kenya.",
-      path: "/about",
+    "/": withMeta("/"),
+    "/about": withMeta("/about", {
       schema: [breadcrumbSchema(["Home", "About"], ["/", "/about"])],
-    },
-    "/services": {
-      title: `Services | ${brandName}`,
-      description:
-        "Jaosef Agro Supplies supports Kenyan farmers with farm input supply, crop nutrition guidance, crop protection guidance, livestock feeds, poultry supplies, dairy equipment, irrigation and farmer enquiry support.",
-      path: "/services",
+    }),
+    "/services": withMeta("/services", {
       schema: [breadcrumbSchema(["Home", "Services"], ["/", "/services"])],
-    },
-    "/products": {
-      title: `Farm Inputs & Agro Products in Kenya | ${brandName}`,
-      description:
-        "Browse fertilisers, certified seeds, crop protection, irrigation supplies, livestock feeds, animal health products, poultry supplies, dairy equipment and farm tools from Jaosef Agro Supplies.",
-      path: "/products",
+    }),
+    "/products": withMeta("/products", {
       schema: [breadcrumbSchema(["Home", "Products"], ["/", "/products"])],
-    },
-    "/farming-tips": {
-      title: `Farming Tips for Kenyan Farmers | ${brandName}`,
-      description:
-        "Read practical farming tips from Jaosef Agro Supplies for Kenyan crop and livestock farmers, including soil health, fertiliser use, crop protection, poultry, dairy and safe input use.",
-      path: "/farming-tips",
+    }),
+    "/farming-tips": withMeta("/farming-tips", {
       type: "article",
       schema: [breadcrumbSchema(["Home", "Farming Tips"], ["/", "/farming-tips"])],
-    },
-    "/contact": {
-      title: `Contact ${brandName} | Farm Inputs in Kenya`,
-      description:
-        "Contact Jaosef Agro Supplies in Nairobi, Kenya. Call +254 746 804 727 or email jaosefagrosupplies@gmail.com for farm inputs, fertilisers, seeds, animal feeds and farm equipment enquiries.",
-      path: "/contact",
+    }),
+    "/contact": withMeta("/contact", {
       schema: [breadcrumbSchema(["Home", "Contact"], ["/", "/contact"])],
-    },
-    "/privacy-policy": {
-      title: `Privacy Policy | ${brandName}`,
-      description: "Privacy policy for Jaosef Agro Supplies.",
-      path: "/privacy-policy",
+    }),
+    "/privacy-policy": withMeta("/privacy-policy", {
       schema: [
         breadcrumbSchema(["Home", "Privacy Policy"], ["/", "/privacy-policy"]),
       ],
-    },
-    "/terms-disclaimer": {
-      title: `Terms & Disclaimer | ${brandName}`,
-      description: "Terms of use and disclaimer for Jaosef Agro Supplies.",
-      path: "/terms-disclaimer",
+    }),
+    "/terms-disclaimer": withMeta("/terms-disclaimer", {
       schema: [
         breadcrumbSchema(["Home", "Terms & Disclaimer"], ["/", "/terms-disclaimer"]),
       ],
-    },
+    }),
   };
 }
 
@@ -165,6 +145,66 @@ function breadcrumbSchema(names: string[], paths: string[]) {
       position: index + 1,
       name,
       item: absoluteUrl(paths[index] ?? "/"),
+    })),
+  };
+}
+
+const LOGO_URL = `${siteUrl}/images/brand/jaosef-logo-light.webp`;
+
+// Enquiry-only shop: no offers/price, so this markup aids entity understanding
+// rather than product rich results (which require offers or reviews).
+function productSchema(product: SeoProduct) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: truncate(product.shortDescription || product.description, 300),
+    image: absoluteUrl(product.imageUrl),
+    url: absoluteUrl(`/products/${product.id}`),
+    category: productCategories[product.category],
+    brand: { "@type": "Brand", name: brandName },
+  };
+}
+
+function articleSchema(tip: SeoTip) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: tip.title,
+    description: truncate(tip.excerpt, 300),
+    image: absoluteUrl(tip.imageUrl),
+    datePublished: dateFrom(tip.createdAt),
+    dateModified: dateFrom(tip.updatedAt ?? tip.createdAt),
+    mainEntityOfPage: absoluteUrl(`/farming-tips/${tip.id}`),
+    author: { "@type": "Organization", name: brandName, url: siteUrl },
+    publisher: {
+      "@type": "Organization",
+      name: brandName,
+      logo: { "@type": "ImageObject", url: LOGO_URL },
+    },
+  };
+}
+
+async function faqSchema(): Promise<unknown | null> {
+  let faq = defaultSiteContent.faq;
+  try {
+    const content = await loadSiteContent();
+    faq = content.faq;
+  } catch {
+    // fall back to the default FAQ so the schema is still emitted
+  }
+
+  const items = faq.items.filter(
+    (item) => item.question.trim() && item.answer.trim(),
+  );
+  if (items.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
     })),
   };
 }
@@ -254,7 +294,9 @@ async function allTips(): Promise<SeoTip[]> {
 
   try {
     const db = getDb();
-    return db.select().from(farmingTips);
+    // await is required: returning the bare promise would let a rejection
+    // escape this try/catch and 500 the sitemap when the DB is unreachable.
+    return await db.select().from(farmingTips);
   } catch {
     return demoTips;
   }
@@ -265,7 +307,19 @@ async function metaForPath(rawPathname: string): Promise<{ meta: Meta; status: 2
   const routes = staticRoutes();
 
   if (routes[pathname]) {
-    return { meta: routes[pathname], status: 200 };
+    const meta = routes[pathname];
+    // Contact page: attach FAQPage schema built from the (possibly
+    // admin-edited) site content FAQ entries.
+    if (pathname === "/contact") {
+      const faq = await faqSchema();
+      if (faq) {
+        return {
+          meta: { ...meta, schema: [...(meta.schema ?? []), faq] },
+          status: 200,
+        };
+      }
+    }
+    return { meta, status: 200 };
   }
 
   if (pathname.startsWith("/admin")) {
@@ -324,6 +378,7 @@ async function metaForPath(rawPathname: string): Promise<{ meta: Meta; status: 2
                   `/products/${product.id}`,
                 ],
               ),
+              productSchema(product),
             ],
           },
           status: 200,
@@ -352,6 +407,7 @@ async function metaForPath(rawPathname: string): Promise<{ meta: Meta; status: 2
               ["Home", "Farming Tips", tip.title],
               ["/", "/farming-tips", `/farming-tips/${tip.id}`],
             ),
+            articleSchema(tip),
           ],
         },
         status: 200,

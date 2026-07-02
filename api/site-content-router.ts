@@ -37,24 +37,28 @@ function mergeWithDefaults(partial: unknown): SiteContent {
   return parsed.success ? parsed.data : defaultSiteContent;
 }
 
-export const siteContentRouter = createRouter({
-  get: publicQuery.query(async (): Promise<SiteContent> => {
-    if (!hasDatabase()) {
-      return demoSiteContent;
-    }
+// Shared loader so server-side SEO injection (api/lib/seo.ts) reads the same
+// admin-edited content the tRPC endpoint serves.
+export async function loadSiteContent(): Promise<SiteContent> {
+  if (!hasDatabase()) {
+    return demoSiteContent;
+  }
 
+  try {
     const db = getDb();
     const rows = await db.select().from(siteSettings).limit(1);
     if (rows.length === 0) {
       return defaultSiteContent;
     }
-    try {
-      const parsed = JSON.parse(rows[0].data) as unknown;
-      return mergeWithDefaults(parsed);
-    } catch {
-      return defaultSiteContent;
-    }
-  }),
+    const parsed = JSON.parse(rows[0].data) as unknown;
+    return mergeWithDefaults(parsed);
+  } catch {
+    return defaultSiteContent;
+  }
+}
+
+export const siteContentRouter = createRouter({
+  get: publicQuery.query(loadSiteContent),
 
   update: adminQuery
     .input(siteContentSchema)

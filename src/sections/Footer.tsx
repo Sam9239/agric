@@ -41,7 +41,7 @@ export default function Footer() {
               alt="Jaosef Agro Supplies logo"
               className="h-10 w-auto mb-3"
             />
-            <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
+            <p className="mt-4 text-sm leading-relaxed" style={{ color: '#a89a86' }}>
               Quality agricultural inputs and farm supplies for Kenyan farmers, with a focus on responsible use and environmental protection.
             </p>
             <div className="mt-5 flex gap-3">
@@ -94,7 +94,7 @@ export default function Footer() {
                   <Link
                     to={link.href}
                     className="text-sm transition-colors duration-200 hover:text-[#f5f0e8]"
-                    style={{ color: '#8b7d6b' }}
+                    style={{ color: '#a89a86' }}
                   >
                     {link.label}
                   </Link>
@@ -113,7 +113,7 @@ export default function Footer() {
                   <Link
                     to={link.href}
                     className="text-sm transition-colors duration-200 hover:text-[#f5f0e8]"
-                    style={{ color: '#8b7d6b' }}
+                    style={{ color: '#a89a86' }}
                   >
                     {link.label}
                   </Link>
@@ -128,16 +128,16 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2">
-                <Phone size={14} style={{ color: '#8b7d6b' }} />
-                <a href={contact.phoneHref} className="text-sm hover:text-[#f5f0e8]" style={{ color: '#8b7d6b' }}>{contact.phoneDisplay}</a>
+                <Phone size={14} style={{ color: '#a89a86' }} />
+                <a href={contact.phoneHref} className="text-sm hover:text-[#f5f0e8]" style={{ color: '#a89a86' }}>{contact.phoneDisplay}</a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail size={14} style={{ color: '#8b7d6b' }} />
-                <a href={`mailto:${contact.email}`} className="text-sm hover:text-[#f5f0e8]" style={{ color: '#8b7d6b' }}>{contact.email}</a>
+                <Mail size={14} style={{ color: '#a89a86' }} />
+                <a href={`mailto:${contact.email}`} className="text-sm hover:text-[#f5f0e8]" style={{ color: '#a89a86' }}>{contact.email}</a>
               </li>
               <li className="flex items-start gap-2">
-                <MapPin size={14} className="mt-0.5 flex-shrink-0" style={{ color: '#8b7d6b' }} />
-                <span className="text-sm" style={{ color: '#8b7d6b' }}>{contact.location}</span>
+                <MapPin size={14} className="mt-0.5 flex-shrink-0" style={{ color: '#a89a86' }} />
+                <span className="text-sm" style={{ color: '#a89a86' }}>{contact.location}</span>
               </li>
             </ul>
           </div>
@@ -147,7 +147,7 @@ export default function Footer() {
           className="mt-10 pt-6 border-t"
           style={{ borderColor: 'rgba(255,255,255,0.1)' }}
         >
-          <p className="text-xs text-center" style={{ color: '#8b7d6b' }}>
+          <p className="text-xs text-center" style={{ color: '#a89a86' }}>
             © 2026 {brand.name}. All rights reserved.
           </p>
         </div>

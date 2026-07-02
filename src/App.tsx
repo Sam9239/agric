@@ -29,6 +29,9 @@ function PageLoader() {
 export default function App() {
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <RouteScrollManager />
       <FloatingWhatsApp />
       <Suspense fallback={<PageLoader />}>

@@ -2,12 +2,20 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import PageBackButton from '@/components/PageBackButton';
 import { siteConfig } from '@/config/site';
+import SEO from '@/components/SEO';
+import { routeMeta } from '@contracts/seo-content';
 
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title={routeMeta['/privacy-policy'].title}
+        description={routeMeta['/privacy-policy'].description}
+        path="/privacy-policy"
+      />
       <Navigation />
-      <main className="pt-28 pb-16 md:pt-32 md:pb-20">
+
+      <main id="main-content" className="pt-28 pb-16 md:pt-32 md:pb-20">
         <div className="max-w-[800px] mx-auto px-6">
           <PageBackButton fallback="/" className="mb-8" />
           <p className="section-label mb-4">PRIVACY POLICY</p>
@@ -26,13 +34,14 @@ export default function PrivacyPolicy() {
             </p>
             <p>
               To request correction or deletion of enquiry information, contact us at{' '}
-              <a href={`mailto:${siteConfig.email}`} className="font-semibold hover:opacity-80" style={{ color: '#c75c2e' }}>
+              <a href={`mailto:${siteConfig.email}`} className="font-semibold hover:opacity-80" style={{ color: '#9e451a' }}>
                 {siteConfig.email}
               </a>.
             </p>
           </div>
         </div>
       </main>
+
       <Footer />
     </div>
   );

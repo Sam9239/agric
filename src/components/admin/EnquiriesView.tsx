@@ -139,7 +139,7 @@ export default function EnquiriesView() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search name, email, phone, message…"
-            className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#c75c2e]"
+            className="w-full pl-10 pr-3 py-2.5 text-sm bg-white outline-none transition-colors focus:border-[#b8511f]"
             style={{ border: '1px solid #d4c9b8' }}
           />
         </div>
@@ -147,7 +147,7 @@ export default function EnquiriesView() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-            className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#c75c2e]"
+            className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#b8511f]"
             style={{ border: '1px solid #d4c9b8' }}
           >
             <option value="all">All</option>
@@ -157,7 +157,7 @@ export default function EnquiriesView() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
-            className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#c75c2e]"
+            className="px-3 py-2.5 text-sm bg-white outline-none focus:border-[#b8511f]"
             style={{ border: '1px solid #d4c9b8' }}
           >
             <option value="newest">Newest first</option>
@@ -196,7 +196,7 @@ export default function EnquiriesView() {
                   style={{
                     backgroundColor: isSelected ? '#e8dfd1' : 'transparent',
                     borderBottom: '1px solid #d4c9b8',
-                    borderLeft: isSelected ? '3px solid #c75c2e' : '3px solid transparent',
+                    borderLeft: isSelected ? '3px solid #b8511f' : '3px solid transparent',
                   }}
                 >
                   <div className="flex items-center justify-between gap-2 mb-1">
@@ -205,7 +205,7 @@ export default function EnquiriesView() {
                     </span>
                     <span
                       className="text-[10px] font-semibold px-1.5 py-0.5 text-white flex-shrink-0"
-                      style={{ backgroundColor: e.status === 'new' ? '#c75c2e' : '#5c7a4a' }}
+                      style={{ backgroundColor: e.status === 'new' ? '#9e451a' : '#5c7a4a' }}
                     >
                       {e.status === 'new' ? 'NEW' : 'REPLIED'}
                     </span>
@@ -245,7 +245,7 @@ export default function EnquiriesView() {
                 type="button"
                 onClick={() => setShowMobileDetail(false)}
                 className="lg:hidden mb-4 inline-flex items-center gap-1.5 text-xs font-semibold transition-opacity hover:opacity-80"
-                style={{ color: '#c75c2e' }}
+                style={{ color: '#9e451a' }}
               >
                 ← Back to list
               </button>
@@ -261,7 +261,7 @@ export default function EnquiriesView() {
                 </div>
                 <span
                   className="text-xs font-semibold px-2 py-0.5 text-white flex-shrink-0"
-                  style={{ backgroundColor: selected.status === 'new' ? '#c75c2e' : '#5c7a4a' }}
+                  style={{ backgroundColor: selected.status === 'new' ? '#9e451a' : '#5c7a4a' }}
                 >
                   {selected.status === 'new' ? 'NEW' : 'REPLIED'}
                 </span>
@@ -341,7 +341,7 @@ export default function EnquiriesView() {
                   onClick={() => handleDelete(selected)}
                   disabled={deleteEnquiry.isPending}
                   className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold transition-all hover:opacity-90 disabled:opacity-50"
-                  style={{ backgroundColor: 'transparent', color: '#c75c2e', border: '1px solid #c75c2e' }}
+                  style={{ backgroundColor: 'transparent', color: '#9e451a', border: '1px solid #b8511f' }}
                 >
                   <Trash2 size={14} /> Delete
                 </button>

@@ -20,7 +20,7 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import SEO from '@/components/SEO';
-import { siteUrl } from '@contracts/seo-content';
+import { routeMeta, siteUrl } from '@contracts/seo-content';
 
 const iconMap: Record<string, LucideIcon> = {
   sprout: Sprout,
@@ -61,13 +61,15 @@ export default function About() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <SEO
-        title="About Jaosef Agro Supplies | Agricultural Supply Shop in Kenya"
-        description="Learn about Jaosef Agro Supplies, a Kenyan agricultural supply business supporting productive farming with quality crop inputs, livestock supplies, and practical guidance."
+        title={routeMeta['/about'].title}
+        description={routeMeta['/about'].description}
         path="/about"
         image="/images/brand/jaosef-logo-light.webp"
         jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
+
+      <main id="main-content">
 
       {/* About Hero */}
       <section
@@ -89,7 +91,7 @@ export default function About() {
             transition={{ duration: 0.6 }}
             className="max-w-[760px]"
           >
-            <p className="section-label-light mb-4" style={{ color: '#c75c2e' }}>
+            <p className="section-label-light mb-4" style={{ color: '#e8895c' }}>
               {about.eyebrow}
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] leading-[1.1] text-[#f5f0e8]">
@@ -150,8 +152,8 @@ export default function About() {
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
             {[
-              { eyebrow: 'MISSION', heading: about.mission.heading, body: about.mission.body, accent: '#c75c2e' },
-              { eyebrow: 'VISION', heading: about.vision.heading, body: about.vision.body, accent: '#5c7a4a' },
+              { eyebrow: 'MISSION', heading: about.mission.heading, body: about.mission.body, accent: '#9e451a' },
+              { eyebrow: 'VISION', heading: about.vision.heading, body: about.vision.body, accent: '#4a6339' },
             ].map((card, i) => (
               <motion.div
                 key={card.eyebrow}
@@ -197,7 +199,7 @@ export default function About() {
             transition={{ duration: 0.5 }}
             className="text-center max-w-[760px] mx-auto mb-12 md:mb-14"
           >
-            <p className="section-label-light mb-3" style={{ color: '#c75c2e' }}>
+            <p className="section-label-light mb-3" style={{ color: '#e8895c' }}>
               {about.sustainability.eyebrow}
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl text-[#f5f0e8]">
@@ -210,7 +212,7 @@ export default function About() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {about.sustainability.pillars.map((pillar, i) => {
               const Icon = iconMap[pillar.iconKey] ?? Leaf;
-              const accents = ['#c75c2e', '#5c7a4a', '#d4a444', '#25d366'];
+              const accents = ['#d76a3c', '#7a9c64', '#d4a444', '#25d366'];
               const accent = accents[i % accents.length];
               return (
                 <motion.div
@@ -289,7 +291,7 @@ export default function About() {
                     <Icon size={22} strokeWidth={1.8} />
                     <span
                       className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold"
-                      style={{ backgroundColor: '#c75c2e', color: '#ffffff' }}
+                      style={{ backgroundColor: '#b8511f', color: '#ffffff' }}
                     >
                       {i + 1}
                     </span>
@@ -358,7 +360,7 @@ export default function About() {
       </section>
 
       {/* Closing CTA */}
-      <section className="relative py-16 md:py-20 overflow-hidden" style={{ backgroundColor: '#c75c2e' }}>
+      <section className="relative py-16 md:py-20 overflow-hidden" style={{ backgroundColor: '#b8511f' }}>
         <div
           className="absolute inset-0 opacity-15 pointer-events-none"
           style={{
@@ -382,7 +384,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-3 text-base sm:text-lg text-white/90 max-w-[640px] mx-auto"
+            className="mt-3 text-base sm:text-lg text-white max-w-[640px] mx-auto"
           >
             Whether you need inputs, advice, or both — send us a message and we'll get back to you.
           </motion.p>
@@ -412,6 +414,8 @@ export default function About() {
           </motion.div>
         </div>
       </section>
+
+      </main>
 
       <Footer />
     </div>

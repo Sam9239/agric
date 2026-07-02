@@ -214,3 +214,50 @@ export function categoryPath(category: ProductCategory) {
   return `/products/${categoryLandings[category].slug}`;
 }
 
+// Single source of truth for static page titles/descriptions.
+// Used by BOTH the server meta injection (api/lib/seo.ts) and the client
+// <SEO> components so they can never drift apart.
+// Rule: titles stay under ~60 characters or Google truncates them.
+export type RouteMeta = { title: string; description: string };
+
+export const routeMeta: Record<string, RouteMeta> = {
+  "/": {
+    title: `${brandName} | Farm Inputs in Kenya`,
+    description:
+      "Jaosef Agro Supplies (Josef Agro Supplies) provides quality farm inputs in Kenya, including seeds, fertilisers, crop protection, irrigation, animal feeds, poultry supplies, dairy equipment and farm tools.",
+  },
+  "/about": {
+    title: `About ${brandName} | Nairobi Agrovet`,
+    description:
+      "Learn about Jaosef Agro Supplies, a Nairobi-based agribusiness supplying fertilisers, certified seed, crop protection, irrigation equipment, animal feeds, poultry supplies and dairy equipment across Kenya.",
+  },
+  "/services": {
+    title: `Services | ${brandName}`,
+    description:
+      "Jaosef Agro Supplies supports Kenyan farmers with farm input supply, crop nutrition guidance, crop protection guidance, livestock feeds, poultry supplies, dairy equipment, irrigation and farmer enquiry support.",
+  },
+  "/products": {
+    title: `Farm Inputs & Agro Products in Kenya | ${brandName}`,
+    description:
+      "Browse fertilisers, certified seeds, crop protection, irrigation supplies, livestock feeds, animal health products, poultry supplies, dairy equipment and farm tools from Jaosef Agro Supplies.",
+  },
+  "/farming-tips": {
+    title: `Farming Tips for Kenyan Farmers | ${brandName}`,
+    description:
+      "Read practical farming tips from Jaosef Agro Supplies for Kenyan crop and livestock farmers, including soil health, fertiliser use, crop protection, poultry, dairy and safe input use.",
+  },
+  "/contact": {
+    title: `Contact ${brandName} | Farm Inputs in Kenya`,
+    description:
+      "Contact Jaosef Agro Supplies in Nairobi, Kenya. Call +254 746 804 727 or email jaosefagrosupplies@gmail.com for farm inputs, fertilisers, seeds, animal feeds and farm equipment enquiries.",
+  },
+  "/privacy-policy": {
+    title: `Privacy Policy | ${brandName}`,
+    description: "Privacy policy for Jaosef Agro Supplies.",
+  },
+  "/terms-disclaimer": {
+    title: `Terms & Disclaimer | ${brandName}`,
+    description: "Terms of use and disclaimer for Jaosef Agro Supplies.",
+  },
+};
+

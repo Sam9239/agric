@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import SEO from '@/components/SEO';
+import { routeMeta } from '@contracts/seo-content';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import Navigation from '@/sections/Navigation';
 import Footer from '@/sections/Footer';
@@ -81,13 +82,15 @@ export default function Services() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <SEO
-        title="Services | Jaosef Agro Supplies"
-        description="Jaosef Agro Supplies supports Kenyan farmers with farm input supply, crop nutrition guidance, crop protection guidance, livestock feeds, poultry supplies, dairy equipment, irrigation, and farmer enquiry support."
+        title={routeMeta['/services'].title}
+        description={routeMeta['/services'].description}
         path="/services"
         image="/images/hero/hero-01-agro-shop-desktop.webp"
         jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
+
+      <main id="main-content">
 
       <section className="relative pt-32 pb-16 md:pt-44 md:pb-24 overflow-hidden" style={{ backgroundColor: '#1a3a2f' }}>
         <div
@@ -105,7 +108,7 @@ export default function Services() {
             transition={{ duration: 0.6 }}
             className="max-w-[760px]"
           >
-            <p className="section-label-light mb-4" style={{ color: '#c75c2e' }}>
+            <p className="section-label-light mb-4" style={{ color: '#e8895c' }}>
               {services.eyebrow}
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] leading-[1.1] text-[#f5f0e8]">
@@ -204,12 +207,12 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="relative py-16 md:py-20 overflow-hidden" style={{ backgroundColor: '#c75c2e' }}>
+      <section className="relative py-16 md:py-20 overflow-hidden" style={{ backgroundColor: '#b8511f' }}>
         <div className="max-w-[900px] mx-auto px-5 sm:px-6 relative text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl text-white">
             Need help choosing the right input?
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-white/90 max-w-[640px] mx-auto">
+          <p className="mt-4 text-base sm:text-lg text-white max-w-[640px] mx-auto">
             Send us your crop or livestock need and we will help you confirm practical options.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
@@ -232,6 +235,8 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      </main>
 
       <Footer />
     </div>

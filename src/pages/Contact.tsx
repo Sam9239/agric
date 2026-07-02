@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { enquiryImageLimits } from '@contracts/site-content';
 import SEO from '@/components/SEO';
-import { siteUrl } from '@contracts/seo-content';
+import { routeMeta, siteUrl } from '@contracts/seo-content';
 import {
   Accordion,
   AccordionContent,
@@ -179,13 +179,15 @@ export default function Contact() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <SEO
-        title="Contact Jaosef Agro Supplies | Farm Inputs in Kenya"
-        description="Contact Jaosef Agro Supplies for farm inputs in Kenya, product availability, crop and livestock supply enquiries, WhatsApp assistance, and agricultural guidance."
+        title={routeMeta['/contact'].title}
+        description={routeMeta['/contact'].description}
         path="/contact"
         image="/images/brand/jaosef-logo-light.webp"
         jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
+
+      <main id="main-content">
 
       {/* Contact Hero */}
       <section
@@ -199,7 +201,7 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="max-w-[760px]"
           >
-            <p className="section-label-light mb-4" style={{ color: '#c75c2e' }}>
+            <p className="section-label-light mb-4" style={{ color: '#e8895c' }}>
               GET IN TOUCH
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] leading-[1.1] text-[#f5f0e8]">
@@ -226,59 +228,59 @@ export default function Contact() {
               <h2 className="text-2xl sm:text-3xl md:text-[32px]" style={{ color: '#1a3a2f' }}>
                 Send an enquiry
               </h2>
-              <p className="mt-2 text-sm" style={{ color: '#8b7d6b' }}>
+              <p className="mt-2 text-sm" style={{ color: '#6b5f4f' }}>
                 Fields marked * are required.
               </p>
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-5">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#8b7d6b' }}>
+                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#6b5f4f' }}>
                     Your Name *
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#c75c2e]"
+                    className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#b8511f]"
                     style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
                     required
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#8b7d6b' }}>
+                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#6b5f4f' }}>
                       Email *
                     </label>
                     <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#c75c2e]"
+                      className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#b8511f]"
                       style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#8b7d6b' }}>
+                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#6b5f4f' }}>
                       Phone (optional)
                     </label>
                     <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#c75c2e]"
+                      className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#b8511f]"
                       style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#8b7d6b' }}>
+                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#6b5f4f' }}>
                     Message *
                   </label>
                   <textarea
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#c75c2e] resize-none"
+                    className="w-full px-4 py-3 text-base bg-white outline-none transition-colors duration-200 focus:border-[#b8511f] resize-none"
                     style={{ border: '1px solid #d4c9b8', color: '#1a3a2f' }}
                     rows={6}
                     placeholder="Tell us about your farm — crop, region, what you need…"
@@ -288,10 +290,10 @@ export default function Contact() {
 
                 {/* Image attachments */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#8b7d6b' }}>
+                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#6b5f4f' }}>
                     Attach photos (optional)
                   </label>
-                  <p className="text-xs mb-3" style={{ color: '#8b7d6b' }}>
+                  <p className="text-xs mb-3" style={{ color: '#6b5f4f' }}>
                     Up to {enquiryImageLimits.maxFiles} images, {maxFileMb}MB each. JPG, PNG, or WebP. Useful for showing pests, crops, or product references.
                   </p>
 
@@ -356,7 +358,7 @@ export default function Contact() {
                   type="submit"
                   disabled={submitting}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
-                  style={{ backgroundColor: '#c75c2e' }}
+                  style={{ backgroundColor: '#b8511f' }}
                 >
                   {submitting ? <Loader2 size={16} className="animate-spin" /> : null}
                   {submitting ? 'Sending…' : 'Send Enquiry'}
@@ -380,7 +382,7 @@ export default function Contact() {
 
               <div className="space-y-4 pt-2">
                 <a href={contact.phoneHref} className="flex items-start gap-3 group">
-                  <Phone size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#c75c2e' }} />
+                  <Phone size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#9e451a' }} />
                   <div>
                     <p className="text-xs uppercase tracking-wider" style={{ color: 'rgba(245, 240, 232, 0.55)' }}>Phone</p>
                     <p className="text-base group-hover:opacity-80 transition-opacity">{contact.phoneDisplay}</p>
@@ -388,7 +390,7 @@ export default function Contact() {
                 </a>
 
                 <a href={`mailto:${contact.email}`} className="flex items-start gap-3 group">
-                  <Mail size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#c75c2e' }} />
+                  <Mail size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#9e451a' }} />
                   <div>
                     <p className="text-xs uppercase tracking-wider" style={{ color: 'rgba(245, 240, 232, 0.55)' }}>Email</p>
                     <p className="text-base group-hover:opacity-80 transition-opacity break-all">{contact.email}</p>
@@ -396,15 +398,15 @@ export default function Contact() {
                 </a>
 
                 <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 group">
-                  <MessageCircle size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#25d366' }} />
+                  <MessageCircle size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#0e7a5c' }} />
                   <div>
                     <p className="text-xs uppercase tracking-wider" style={{ color: 'rgba(245, 240, 232, 0.55)' }}>WhatsApp</p>
-                    <p className="text-base group-hover:opacity-80 transition-opacity" style={{ color: '#25d366' }}>Chat with us</p>
+                    <p className="text-base group-hover:opacity-80 transition-opacity" style={{ color: '#0e7a5c' }}>Chat with us</p>
                   </div>
                 </a>
 
                 <div className="flex items-start gap-3">
-                  <MapPin size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#c75c2e' }} />
+                  <MapPin size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#9e451a' }} />
                   <div>
                     <p className="text-xs uppercase tracking-wider" style={{ color: 'rgba(245, 240, 232, 0.55)' }}>Location</p>
                     <p className="text-base">{contact.location}</p>
@@ -412,7 +414,7 @@ export default function Contact() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#c75c2e' }} />
+                  <Clock size={18} className="mt-0.5 flex-shrink-0" style={{ color: '#9e451a' }} />
                   <div>
                     <p className="text-xs uppercase tracking-wider" style={{ color: 'rgba(245, 240, 232, 0.55)' }}>Hours</p>
                     <p className="text-base whitespace-pre-line">{contact.hours}</p>
@@ -478,6 +480,8 @@ export default function Contact() {
           </Accordion>
         </div>
       </section>
+
+      </main>
 
       <Footer />
     </div>

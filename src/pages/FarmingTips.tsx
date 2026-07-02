@@ -6,7 +6,7 @@ import Footer from '../sections/Footer';
 import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import SEO from '@/components/SEO';
-import { siteUrl } from '@contracts/seo-content';
+import { routeMeta, siteUrl } from '@contracts/seo-content';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -41,13 +41,15 @@ export default function FarmingTips() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <SEO
-        title="Farming Tips for Kenyan Farmers | Jaosef Agro Supplies"
-        description="Read practical farming tips from Jaosef Agro Supplies for Kenyan crop and livestock farmers, including soil health, crop protection, poultry, dairy, and safe input use."
+        title={routeMeta['/farming-tips'].title}
+        description={routeMeta['/farming-tips'].description}
         path="/farming-tips"
         image="/images/hero/hero-02-maize-consultation-desktop.webp"
         jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
+
+      <main id="main-content">
 
       {/* Page Header */}
       <section style={{ backgroundColor: '#1a3a2f' }} className="pt-24 pb-14 md:pt-28 md:pb-16">
@@ -60,7 +62,7 @@ export default function FarmingTips() {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl text-[#f5f0e8]">Farming Tips</h1>
-            <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: '#8b7d6b' }}>
+            <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: 'rgba(245, 240, 232, 0.78)' }}>
               Practical advice for better yields
             </p>
           </motion.div>
@@ -105,16 +107,17 @@ export default function FarmingTips() {
                       />
                     </div>
                     <div className="pt-5">
-                      <p className="text-xs" style={{ color: '#8b7d6b' }}>
+                      <p className="text-xs" style={{ color: '#6b5f4f' }}>
                         {tip.date}
                       </p>
-                      <h3 className="font-display text-xl md:text-[22px] mt-2 transition-colors duration-300 group-hover:text-[#c75c2e]" style={{ color: '#1a3a2f' }}>
+                      <h3 className="font-display text-xl md:text-[22px] mt-2 transition-colors duration-300 group-hover:text-[#9e451a]" style={{ color: '#1a3a2f' }}>
                         {tip.title}
                       </h3>
                       <p className="text-[15px] mt-2 leading-relaxed" style={{ color: '#3d3d3d' }}>
-                        {tip.excerpt?.slice(0, 150)}...
+                        {tip.excerpt?.slice(0, 150)}
+                        {(tip.excerpt?.length ?? 0) > 150 ? '...' : ''}
                       </p>
-                      <span className="inline-flex items-center gap-1 mt-3 text-[13px] font-semibold" style={{ color: '#c75c2e' }}>
+                      <span className="link-underline inline-flex items-center gap-1 mt-3 text-[13px] font-semibold" style={{ color: '#9e451a' }}>
                         Read More <ArrowRight size={12} />
                       </span>
                     </div>
@@ -125,6 +128,8 @@ export default function FarmingTips() {
           )}
         </div>
       </section>
+
+      </main>
 
       <Footer />
     </div>

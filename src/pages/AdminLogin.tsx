@@ -112,7 +112,7 @@ export default function AdminLogin() {
               </div>
 
               {error && (
-                <p className="mt-3 text-sm" style={{ color: '#c75c2e' }}>
+                <p className="mt-3 text-sm" style={{ color: '#9e451a' }}>
                   {error}
                 </p>
               )}
@@ -121,7 +121,7 @@ export default function AdminLogin() {
                 type="submit"
                 disabled={adminLogin.isPending || !password}
                 className="w-full mt-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
-                style={{ backgroundColor: '#c75c2e' }}
+                style={{ backgroundColor: '#b8511f' }}
               >
                 {adminLogin.isPending ? 'Verifying…' : 'Continue'}
               </button>
@@ -151,7 +151,7 @@ export default function AdminLogin() {
               />
 
               {error && (
-                <p className="mt-3 text-sm" style={{ color: '#c75c2e' }}>
+                <p className="mt-3 text-sm" style={{ color: '#9e451a' }}>
                   {error}
                 </p>
               )}
@@ -160,7 +160,7 @@ export default function AdminLogin() {
                 type="submit"
                 disabled={adminLogin.isPending || totpCode.length !== 6}
                 className="w-full mt-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
-                style={{ backgroundColor: '#c75c2e' }}
+                style={{ backgroundColor: '#b8511f' }}
               >
                 {adminLogin.isPending ? 'Verifying…' : 'Login'}
               </button>
@@ -180,7 +180,7 @@ export default function AdminLogin() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 hover:opacity-80 transition-opacity"
-                  style={{ color: '#c75c2e' }}
+                  style={{ color: '#9e451a' }}
                 >
                   <HelpCircle size={12} />
                   Lost your phone?

@@ -20,7 +20,7 @@ export default function AdminLostDevice() {
         <div className="flex items-center gap-2 mb-6">
           <div
             className="flex items-center justify-center w-10 h-10 rounded-full"
-            style={{ backgroundColor: '#c75c2e' }}
+            style={{ backgroundColor: '#b8511f' }}
           >
             <AlertCircle size={20} className="text-white" />
           </div>
@@ -60,7 +60,7 @@ export default function AdminLostDevice() {
               className="flex items-center gap-3 p-4 transition-all hover:scale-[1.01]"
               style={{ backgroundColor: '#1a3a2f', color: '#f5f0e8' }}
             >
-              <Phone size={18} style={{ color: '#c75c2e' }} />
+              <Phone size={18} style={{ color: '#9e451a' }} />
               <div className="flex-1">
                 <p className="text-[10px] uppercase tracking-wider" style={{ color: 'rgba(245, 240, 232, 0.55)' }}>
                   Call
@@ -73,7 +73,7 @@ export default function AdminLostDevice() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-4 transition-all hover:scale-[1.01]"
-              style={{ backgroundColor: '#25d366', color: '#ffffff' }}
+              style={{ backgroundColor: '#25d366', color: '#0b3b28' }}
             >
               <MessageCircle size={18} />
               <div className="flex-1">
@@ -93,7 +93,7 @@ export default function AdminLostDevice() {
           <Link
             to="/admin"
             className="inline-flex items-center gap-1.5 text-sm font-semibold hover:opacity-80 transition-opacity"
-            style={{ color: '#c75c2e' }}
+            style={{ color: '#9e451a' }}
           >
             <ArrowLeft size={14} />
             Back to admin login

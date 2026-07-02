@@ -68,6 +68,8 @@ export default function ProductCategory({ categoryKey }: ProductCategoryProps) {
       />
       <Navigation />
 
+      <main id="main-content">
+
       <section className="pt-24 pb-14 md:pt-28 md:pb-16" style={{ backgroundColor: '#1a3a2f' }}>
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
           <PageBackButton light fallback="/products" className="mb-8" />
@@ -77,7 +79,7 @@ export default function ProductCategory({ categoryKey }: ProductCategoryProps) {
             transition={{ duration: 0.6 }}
             className="max-w-[760px]"
           >
-            <p className="section-label-light mb-4" style={{ color: '#c75c2e' }}>
+            <p className="section-label-light mb-4" style={{ color: '#e8895c' }}>
               PRODUCT CATEGORY
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl text-[#f5f0e8]">
@@ -142,7 +144,7 @@ export default function ProductCategory({ categoryKey }: ProductCategoryProps) {
             <Link
               to="/products"
               className="inline-flex items-center gap-1 text-sm font-semibold transition-colors hover:opacity-80"
-              style={{ color: '#c75c2e' }}
+              style={{ color: '#9e451a' }}
             >
               View All Products <ArrowRight size={14} />
             </Link>
@@ -178,7 +180,7 @@ export default function ProductCategory({ categoryKey }: ProductCategoryProps) {
                         />
                       </div>
                       <div className="p-4 flex-1">
-                        <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
+                        <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#4a6339' }}>
                           {productCategories[product.category]}
                         </p>
                         <h3 className="font-display text-lg font-medium mt-1" style={{ color: '#1a3a2f' }}>
@@ -198,17 +200,19 @@ export default function ProductCategory({ categoryKey }: ProductCategoryProps) {
             </div>
           ) : (
             <div className="text-center py-16">
-              <Sprout size={44} className="mx-auto mb-4" style={{ color: '#8b7d6b' }} />
+              <Sprout size={44} className="mx-auto mb-4" style={{ color: '#6b5f4f' }} />
               <h3 className="font-display text-2xl" style={{ color: '#1a3a2f' }}>
                 Products coming soon
               </h3>
-              <p className="mt-2 text-base" style={{ color: '#8b7d6b' }}>
+              <p className="mt-2 text-base" style={{ color: '#6b5f4f' }}>
                 Contact us for current availability in this category.
               </p>
             </div>
           )}
         </div>
       </section>
+
+      </main>
 
       <Footer />
     </div>

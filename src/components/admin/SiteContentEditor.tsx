@@ -6,7 +6,7 @@ import { productCategories, type ProductCategory } from '@contracts/product-cata
 import { RotateCcw, Save } from 'lucide-react';
 
 const inputClass =
-  'w-full px-3 py-2 text-sm bg-white outline-none transition-colors duration-200 focus:border-[#c75c2e]';
+  'w-full px-3 py-2 text-sm bg-white outline-none transition-colors duration-200 focus:border-[#b8511f]';
 const inputStyle = { border: '1px solid #d4c9b8', color: '#1a3a2f' } as const;
 
 function clone<T>(value: T): T {
@@ -138,7 +138,7 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
             onClick={handleSave}
             disabled={updateMutation.isPending}
             className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] disabled:opacity-50"
-            style={{ backgroundColor: '#c75c2e' }}
+            style={{ backgroundColor: '#b8511f' }}
           >
             <Save size={14} />
             {updateMutation.isPending ? 'Saving…' : 'Save Changes'}
@@ -407,7 +407,7 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
                       setField('about', { ...draft.about, story: { ...draft.about.story, paragraphs } });
                     }}
                     className="text-xs"
-                    style={{ color: '#c75c2e' }}
+                    style={{ color: '#9e451a' }}
                   >
                     Remove
                   </button>
@@ -443,7 +443,7 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
       <Section title="About Page — Mission & Vision">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-3" style={{ borderRight: '1px dashed #d4c9b8', paddingRight: '1rem' }}>
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#c75c2e' }}>Mission</p>
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#9e451a' }}>Mission</p>
             <Field label="Heading">
               <input
                 type="text"
@@ -823,7 +823,7 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
                     setField('faq', { ...draft.faq, items });
                   }}
                   className="text-xs"
-                  style={{ color: '#c75c2e' }}
+                  style={{ color: '#9e451a' }}
                 >
                   Remove
                 </button>
@@ -950,7 +950,7 @@ function SiteContentForm({ initialContent }: { initialContent: SiteContent }) {
           onClick={handleSave}
           disabled={updateMutation.isPending}
           className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] disabled:opacity-50"
-          style={{ backgroundColor: '#c75c2e' }}
+          style={{ backgroundColor: '#b8511f' }}
         >
           <Save size={14} />
           {updateMutation.isPending ? 'Saving…' : 'Save Changes'}

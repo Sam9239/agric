@@ -47,7 +47,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#f5f0e8' }}>
         <h2 className="font-display text-2xl" style={{ color: '#1a3a2f' }}>Product not found</h2>
-        <Link to="/products" className="mt-4 text-sm font-semibold flex items-center gap-1" style={{ color: '#c75c2e' }}>
+        <Link to="/products" className="mt-4 text-sm font-semibold flex items-center gap-1" style={{ color: '#9e451a' }}>
           <ArrowLeft size={14} /> Back to Products
         </Link>
       </div>
@@ -98,6 +98,8 @@ export default function ProductDetail() {
       />
       <Navigation />
 
+      <main id="main-content">
+
       {/* Product Header */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16" style={{ backgroundColor: '#e8dfd1' }}>
         <div className="max-w-[1200px] mx-auto px-6">
@@ -121,13 +123,13 @@ export default function ProductDetail() {
 
             {/* Product Info */}
             <div className="flex flex-col justify-center">
-              <p className="text-[11px] font-medium uppercase tracking-[2px]" style={{ color: '#5c7a4a' }}>
+              <p className="text-[11px] font-medium uppercase tracking-[2px]" style={{ color: '#4a6339' }}>
                 {categoryLabels[product.category]}
               </p>
               <h1 className="font-display text-3xl md:text-4xl mt-3" style={{ color: '#1a3a2f' }}>
                 {product.name}
               </h1>
-              <p className="text-lg font-medium mt-3" style={{ color: '#c75c2e' }}>
+              <p className="text-lg font-medium mt-3" style={{ color: '#9e451a' }}>
                 Enquire for current availability
               </p>
               <p className="mt-5 text-base leading-[1.7]" style={{ color: '#3d3d3d' }}>
@@ -141,14 +143,14 @@ export default function ProductDetail() {
                   ['Pack sizes', product.packSizes],
                 ].filter(([, value]) => value).map(([label, value]) => (
                   <div key={label} className="p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
-                    <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#8b7d6b' }}>{label}</p>
+                    <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#6b5f4f' }}>{label}</p>
                     <p className="text-sm mt-1 leading-relaxed" style={{ color: '#3d3d3d' }}>{value}</p>
                   </div>
                 ))}
               </div>
               {product.category === 'crop_protection' && (
                 <div className="mt-5 p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
-                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#c75c2e' }}>Crop protection safety</p>
+                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#9e451a' }}>Crop protection safety</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-sm" style={{ color: '#3d3d3d' }}>
                     {[
                       ['Active ingredient', product.activeIngredient],
@@ -168,7 +170,7 @@ export default function ProductDetail() {
               )}
               {product.category === 'animal_health' && (
                 <div className="mt-5 p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
-                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#c75c2e' }}>Animal health safety</p>
+                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#9e451a' }}>Animal health safety</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-sm" style={{ color: '#3d3d3d' }}>
                     {[
                       ['Active ingredient', product.activeIngredient],
@@ -183,20 +185,20 @@ export default function ProductDetail() {
                       <p key={label}><span className="font-semibold">{label}:</span> {value}</p>
                     ))}
                   </div>
-                  <p className="mt-3 text-xs leading-relaxed" style={{ color: '#8b7d6b' }}>
+                  <p className="mt-3 text-xs leading-relaxed" style={{ color: '#6b5f4f' }}>
                     Veterinary medicines, vaccines, acaricides, and animal-health products should be used only as directed on the official label and under qualified animal-health guidance where required.
                   </p>
                 </div>
               )}
               {product.category === 'livestock_feeds' && (
                 <div className="mt-5 p-4" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
-                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#5c7a4a' }}>Feed quality note</p>
+                  <p className="text-[10px] uppercase tracking-[2px]" style={{ color: '#4a6339' }}>Feed quality note</p>
                   <p className="mt-2 text-sm leading-relaxed" style={{ color: '#3d3d3d' }}>
                     Buy properly labelled feed from reliable suppliers. Store feeds in a dry, clean place away from moisture, pests, and chemicals.
                   </p>
                 </div>
               )}
-              <p className="mt-4 text-sm leading-relaxed" style={{ color: '#8b7d6b' }}>
+              <p className="mt-4 text-sm leading-relaxed" style={{ color: '#6b5f4f' }}>
                 {product.safetyNote || 'Use as directed on the official product label. Product information is for enquiry purposes only and does not replace professional agronomic advice.'}
               </p>
               <div className="mt-6">
@@ -205,7 +207,7 @@ export default function ProductDetail() {
               <Link
                 to="/products"
                 className="mt-4 inline-flex items-center gap-1 text-sm font-medium transition-colors hover:opacity-80"
-                style={{ color: '#5c7a4a' }}
+                style={{ color: '#4a6339' }}
               >
                 <ArrowLeft size={14} /> Back to Products
               </Link>
@@ -246,7 +248,7 @@ export default function ProductDetail() {
                         />
                       </div>
                       <div className="p-4 flex-1">
-                        <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
+                        <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#4a6339' }}>
                           {categoryLabels[rp.category]}
                         </p>
                         <h3 className="font-display text-base font-medium mt-1" style={{ color: '#1a3a2f' }}>
@@ -267,6 +269,8 @@ export default function ProductDetail() {
           </div>
         </section>
       )}
+
+      </main>
 
       <Footer />
     </div>

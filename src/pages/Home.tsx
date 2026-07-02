@@ -1,8 +1,10 @@
 import { Link } from 'react-router';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
   ChevronDown,
+  Pause,
+  Play,
   MessageCircle,
   Sprout,
   ShieldCheck,
@@ -21,7 +23,7 @@ import { trpc } from '@/providers/trpc';
 import { useEffect, useState } from 'react';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { productCategories, type ProductCategory } from '@contracts/product-catalog';
-import { categoryPath } from '@contracts/seo-content';
+import { categoryPath, routeMeta } from '@contracts/seo-content';
 import SEO from '@/components/SEO';
 
 const categoryImages: Record<ProductCategory, string> = {
@@ -111,6 +113,28 @@ const heroSlides = [
   },
 ];
 
+const trustStats = [
+  { value: 4, suffix: '+', label: 'Years serving farmers' },
+  { value: 80, suffix: '+', label: 'Farm inputs stocked' },
+  { value: 3, suffix: '+', label: 'Counties reached' },
+  { value: 200, suffix: '+', label: 'Farmer enquiries helped' },
+];
+
+const tickerItems = [
+  'Maize seed',
+  'DAP',
+  'CAN',
+  'NPK',
+  'Foliar feeds',
+  'Fungicides',
+  'Drip kits',
+  'Knapsack sprayers',
+  'Layers mash',
+  'Dairy meal',
+  'Seedling trays',
+  'Farm tools',
+];
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
@@ -120,18 +144,81 @@ const fadeInUp = {
   }),
 };
 
+function CountUpStat({
+  value,
+  suffix,
+  label,
+}: {
+  value: number;
+  suffix: string;
+  label: string;
+}) {
+  const [started, setStarted] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!started) return;
+    if (prefersReducedMotion) {
+      const frame = requestAnimationFrame(() => setCurrent(value));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const duration = 1200;
+    const start = performance.now();
+    let frame = 0;
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCurrent(Math.round(value * eased));
+      if (progress < 1) {
+        frame = requestAnimationFrame(tick);
+      }
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [prefersReducedMotion, started, value]);
+
+  return (
+    <motion.div
+      onViewportEnter={() => setStarted(true)}
+      viewport={{ once: true, amount: 0.6 }}
+      className="jaosef-stat"
+    >
+      <span className="jaosef-stat-number">
+        {current.toLocaleString()}
+        {suffix}
+      </span>
+      <span className="jaosef-stat-label">{label}</span>
+    </motion.div>
+  );
+}
+
 export default function Home() {
   const content = useSiteContent();
-  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+  // Monotonic tick: the active slide is tick % length. Slides mount
+  // progressively (active + the upcoming one) so the browser never downloads
+  // all hero images upfront; after one full cycle everything stays mounted.
+  const [heroTick, setHeroTick] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+  // null = user hasn't touched the pause button; default follows the OS
+  // reduced-motion preference (auto-rotation off for those users, WCAG 2.2.2).
+  const [heroPaused, setHeroPaused] = useState<boolean | null>(null);
+  const heroRotating = !(heroPaused ?? prefersReducedMotion);
+  const activeHeroSlide = heroTick % heroSlides.length;
+  const mountedCount = Math.min(heroTick + 2, heroSlides.length);
   const { data: featuredProducts } = trpc.product.featured.useQuery();
   const { data: recentTips } = trpc.tip.recent.useQuery();
 
   useEffect(() => {
+    if (!heroRotating) return;
     const timer = window.setInterval(() => {
-      setActiveHeroSlide((current) => (current + 1) % heroSlides.length);
+      setHeroTick((tick) => tick + 1);
     }, 5000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [heroRotating]);
 
   const headlineWords = content.hero.headline.split(' ');
   const whatsappEnquiry = `${content.contact.whatsappUrl}?text=${encodeURIComponent(
@@ -141,42 +228,47 @@ export default function Home() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <SEO
-        title="Jaosef Agro Supplies | Farm Inputs, Animal Feeds & Agro Products in Kenya"
-        description="Jaosef Agro Supplies provides quality farm inputs in Kenya, including seeds, fertilisers, crop protection products, irrigation supplies, animal feeds, poultry supplies, dairy equipment, and farm tools."
+        title={routeMeta['/'].title}
+        description={routeMeta['/'].description}
         path="/"
         image="/images/brand/jaosef-logo-light.webp"
       />
       <Navigation />
 
+      <main id="main-content">
+
       {/* Hero Section — sits below navbar so image isn't overlapped */}
       <section
-        className="relative w-full overflow-hidden mt-[60px] md:mt-[104px] min-h-[calc(100svh-60px)] md:min-h-[calc(100svh-104px)]"
+        className="relative w-full overflow-hidden min-h-screen"
         style={{ backgroundColor: '#1a3a2f' }}
       >
         {/* Background slideshow */}
         <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (
-            <picture key={slide.desktopSrc}>
-              <source media="(max-width: 767px)" srcSet={slide.mobileSrc} />
-              <img
-                src={slide.desktopSrc}
-                alt={
-                  index === 0
-                    ? 'Jaosef Agro Supplies agricultural products and farm inputs in Kenya'
-                    : slide.alt
-                }
-                className="absolute inset-0 h-full w-full object-cover"
-                style={{
-                  opacity: activeHeroSlide === index ? 1 : 0,
-                  objectPosition: 'center center',
-                  transition: 'opacity 1200ms ease-in-out',
-                }}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                fetchPriority={index === 0 ? 'high' : 'low'}
-                decoding="async"
-              />
-            </picture>
-          ))}
+          {heroSlides.map((slide, index) => {
+            if (index >= mountedCount) return null;
+            return (
+              <picture key={slide.desktopSrc}>
+                <source media="(max-width: 767px)" srcSet={slide.mobileSrc} />
+                <img
+                  src={slide.desktopSrc}
+                  alt={
+                    index === 0
+                      ? 'Jaosef Agro Supplies agricultural products and farm inputs in Kenya'
+                      : slide.alt
+                  }
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{
+                    opacity: activeHeroSlide === index ? 1 : 0,
+                    objectPosition: 'center center',
+                    transition: 'opacity 1200ms ease-in-out',
+                  }}
+                  loading="eager"
+                  fetchPriority={index === 0 ? 'high' : 'low'}
+                  decoding="async"
+                />
+              </picture>
+            );
+          })}
           {/* Vertical gradient (darkens top + bottom for legibility) */}
           <div
             className="absolute inset-0"
@@ -259,16 +351,47 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Slide indicators — visually hidden but still focusable for accessibility */}
-        <div className="sr-only">
-          {heroSlides.map((slide, index) => (
-            <button
-              key={slide.desktopSrc}
-              type="button"
-              onClick={() => setActiveHeroSlide(index)}
-              aria-label={`Show homepage image ${index + 1}`}
-            />
-          ))}
+        {/* Slide controls: visible dots + pause/play (WCAG 2.2.2) */}
+        <div
+          className="absolute bottom-5 right-5 sm:right-8 z-10 flex items-center gap-3"
+          role="group"
+          aria-label="Slideshow controls"
+        >
+          {/* Dots hidden on phones (11 dots collide with the scroll cue) */}
+          <div className="hidden sm:flex items-center gap-1.5">
+            {heroSlides.map((slide, index) => (
+              <button
+                key={slide.desktopSrc}
+                type="button"
+                onClick={() => setHeroTick(index)}
+                aria-label={`Show slide ${index + 1} of ${heroSlides.length}`}
+                aria-current={activeHeroSlide === index}
+                className="p-1 group/dot focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f5f0e8]"
+              >
+                <span
+                  className="block h-1.5 rounded-full transition-all duration-300 group-hover/dot:opacity-100"
+                  style={{
+                    width: activeHeroSlide === index ? 18 : 6,
+                    backgroundColor: '#f5f0e8',
+                    opacity: activeHeroSlide === index ? 0.95 : 0.45,
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => setHeroPaused(heroRotating)}
+            aria-label={heroRotating ? 'Pause slideshow' : 'Play slideshow'}
+            className="flex items-center justify-center w-8 h-8 rounded-full border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f5f0e8]"
+            style={{
+              borderColor: 'rgba(245, 240, 232, 0.4)',
+              color: '#f5f0e8',
+              backgroundColor: 'rgba(15, 30, 24, 0.35)',
+            }}
+          >
+            {heroRotating ? <Pause size={13} /> : <Play size={13} className="ml-0.5" />}
+          </button>
         </div>
 
         {/* Scroll cue */}
@@ -287,6 +410,26 @@ export default function Home() {
             <ChevronDown size={16} />
           </motion.span>
         </motion.div>
+      </section>
+
+      {/* Trust stats */}
+      <section className="jaosef-stats-strip" aria-label="Jaosef Agro Supplies at a glance">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4">
+            {trustStats.map((stat) => (
+              <CountUpStat key={stat.label} {...stat} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Product ticker */}
+      <section className="jaosef-ticker" aria-label="Popular farm inputs and supplies">
+        <div className="jaosef-ticker-track">
+          {[...tickerItems, ...tickerItems].map((item, index) => (
+            <span key={`${item}-${index}`}>{item}</span>
+          ))}
+        </div>
       </section>
 
       {/* Mission strip */}
@@ -330,8 +473,8 @@ export default function Home() {
           >
             <Link
               to="/about"
-              className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-80"
-              style={{ color: '#c75c2e' }}
+              className="link-underline inline-flex items-center gap-2 text-sm font-semibold"
+              style={{ color: '#9e451a' }}
             >
               About Jaosef Agro Supplies
               <ArrowRight size={14} />
@@ -350,7 +493,7 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-center mb-10 md:mb-12"
           >
-            <p className="section-label-light mb-3" style={{ color: '#5c7a4a' }}>
+            <p className="section-label-light mb-3" style={{ color: '#4a6339' }}>
               OUR CATEGORIES
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl" style={{ color: '#1a3a2f' }}>
@@ -361,7 +504,7 @@ export default function Home() {
             {(Object.entries(categoryLabels) as [ProductCategory, string][]).map(([key, label], i) => (
               <motion.div key={key} custom={i} variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="h-full">
                 <Link to={categoryPath(key)} className="block group h-full">
-                  <div className="overflow-hidden h-full flex flex-col" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
+                  <div className="category-card overflow-hidden h-full flex flex-col" style={{ border: '1px solid #d4c9b8', backgroundColor: '#f5f0e8' }}>
                     <div
                       className="p-4 flex items-center justify-center aspect-[4/3]"
                       style={{ backgroundColor: '#e8dfd1' }}
@@ -408,8 +551,8 @@ export default function Home() {
             </div>
             <Link
               to="/products"
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold transition-colors hover:opacity-80 whitespace-nowrap"
-              style={{ color: '#c75c2e' }}
+              className="link-underline hidden sm:inline-flex items-center gap-1 text-sm font-semibold whitespace-nowrap"
+              style={{ color: '#9e451a' }}
             >
               View All <ArrowRight size={14} />
             </Link>
@@ -429,7 +572,7 @@ export default function Home() {
                       />
                     </div>
                     <div className="p-4 flex-1">
-                      <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
+                      <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#4a6339' }}>
                         {categoryLabels[product.category]}
                       </p>
                       <h3 className="font-display text-lg font-medium mt-1" style={{ color: '#1a3a2f' }}>
@@ -450,8 +593,8 @@ export default function Home() {
           <div className="mt-8 sm:hidden text-center">
             <Link
               to="/products"
-              className="inline-flex items-center gap-1 text-sm font-semibold"
-              style={{ color: '#c75c2e' }}
+              className="link-underline inline-flex items-center gap-1 text-sm font-semibold"
+              style={{ color: '#9e451a' }}
             >
               View All Products <ArrowRight size={14} />
             </Link>
@@ -477,7 +620,7 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-center max-w-[640px] mx-auto mb-12 md:mb-14"
           >
-            <p className="section-label-light mb-3" style={{ color: '#c75c2e' }}>
+            <p className="section-label-light mb-3" style={{ color: '#e8895c' }}>
               {content.whyChooseUs.eyebrow}
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl text-[#f5f0e8]">
@@ -490,7 +633,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {content.whyChooseUs.items.map((item, i) => {
               const Icon = iconMap[item.iconKey] ?? BadgeCheck;
-              const accentColors = ['#c75c2e', '#5c7a4a', '#d4a444', '#25d366'];
+              const accentColors = ['#d76a3c', '#7a9c64', '#d4a444', '#25d366'];
               const accent = accentColors[i % accentColors.length];
               return (
                 <motion.div
@@ -551,8 +694,8 @@ export default function Home() {
             </div>
             <Link
               to="/farming-tips"
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold transition-colors hover:opacity-80 whitespace-nowrap"
-              style={{ color: '#c75c2e' }}
+              className="link-underline hidden sm:inline-flex items-center gap-1 text-sm font-semibold whitespace-nowrap"
+              style={{ color: '#9e451a' }}
             >
               View All <ArrowRight size={14} />
             </Link>
@@ -570,14 +713,15 @@ export default function Home() {
                     decoding="async"
                   />
                   <div className="pt-4 sm:pt-5">
-                    <p className="text-xs" style={{ color: '#8b7d6b' }}>{tip.date}</p>
+                    <p className="text-xs" style={{ color: '#6b5f4f' }}>{tip.date}</p>
                     <h3 className="font-display text-lg sm:text-xl mt-2 transition-colors duration-300 group-hover:opacity-80" style={{ color: '#1a3a2f' }}>
                       {tip.title}
                     </h3>
                     <p className="text-sm mt-2 leading-relaxed" style={{ color: '#3d3d3d' }}>
-                      {tip.excerpt?.slice(0, 120)}...
+                      {tip.excerpt?.slice(0, 120)}
+                      {(tip.excerpt?.length ?? 0) > 120 ? '...' : ''}
                     </p>
-                    <span className="inline-flex items-center gap-1 mt-3 text-xs font-semibold" style={{ color: '#c75c2e' }}>
+                    <span className="link-underline inline-flex items-center gap-1 mt-3 text-xs font-semibold" style={{ color: '#9e451a' }}>
                       Read More <ArrowRight size={12} />
                     </span>
                   </div>
@@ -588,8 +732,8 @@ export default function Home() {
           <div className="mt-8 sm:hidden text-center">
             <Link
               to="/farming-tips"
-              className="inline-flex items-center gap-1 text-sm font-semibold"
-              style={{ color: '#c75c2e' }}
+              className="link-underline inline-flex items-center gap-1 text-sm font-semibold"
+              style={{ color: '#9e451a' }}
             >
               View All Tips <ArrowRight size={14} />
             </Link>
@@ -598,7 +742,7 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section className="relative py-16 md:py-20 overflow-hidden" style={{ backgroundColor: '#c75c2e' }}>
+      <section className="relative py-16 md:py-20 overflow-hidden" style={{ backgroundColor: '#b8511f' }}>
         <div
           className="absolute inset-0 opacity-20 pointer-events-none"
           style={{
@@ -622,7 +766,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-4 text-base sm:text-lg text-white/90 max-w-[640px] mx-auto"
+            className="mt-4 text-base sm:text-lg text-white max-w-[640px] mx-auto"
           >
             {content.ctaBanner.body}
           </motion.p>
@@ -638,7 +782,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-sm transition-all duration-200 hover:scale-[1.02] shadow-lg"
-              style={{ backgroundColor: '#25d366', color: '#ffffff' }}
+              style={{ backgroundColor: '#25d366', color: '#0b3b28' }}
             >
               <MessageCircle size={16} />
               {content.ctaBanner.primaryLabel}
@@ -654,6 +798,8 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      </main>
 
       <Footer />
     </div>

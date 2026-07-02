@@ -4,19 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#1a3a2f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/hero-01-agro-shop-desktop.webp"
+      media="(min-width: 768px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/hero-01-agro-shop-mobile.webp"
+      media="(max-width: 767px)"
+      fetchpriority="high"
+    />
     <meta
       name="description"
       content="Jaosef Agro Supplies (Josef Agro Supplies) provides quality farm inputs in Kenya, including seeds, fertilisers, crop protection products, irrigation supplies, animal feeds, poultry supplies, dairy equipment, and farm tools."
     />
-    <meta
-      name="keywords"
-      content="Jaosef Agro Supplies, Jaosef Agro, Jaosef Supplies, Jaosef Supply, Jaosef Agro Supply, Josef Agro Supplies, Josef Agro, Josef Agro Supply, agro supplies Kenya, farm inputs Kenya, agricultural supplies Kenya, fertilisers Kenya, certified seeds Kenya, crop protection Kenya, irrigation supplies Kenya, animal feeds Kenya, poultry supplies Kenya, dairy supplies Kenya, farm tools Kenya, agrovet Nairobi"
-    />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://jaosefagrosupplies.co.ke/" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Jaosef Agro Supplies" />
+    <meta property="og:locale" content="en_KE" />
     <meta property="og:title" content="Jaosef Agro Supplies | Farm Inputs in Kenya" />
     <meta
       property="og:description"
@@ -73,8 +92,13 @@
           "Animal Health & Veterinary Supplies",
           "Dairy, Poultry & Livestock Equipment"
         ],
-        "sameAs": [
-          "https://jaosefagrosupplies.co.ke/"
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "08:00",
+            "closes": "18:00"
+          }
         ]
       }
     </script>

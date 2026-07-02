@@ -2,12 +2,20 @@ import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import PageBackButton from '@/components/PageBackButton';
 import { siteConfig } from '@/config/site';
+import SEO from '@/components/SEO';
+import { routeMeta } from '@contracts/seo-content';
 
 export default function TermsDisclaimer() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
+      <SEO
+        title={routeMeta['/terms-disclaimer'].title}
+        description={routeMeta['/terms-disclaimer'].description}
+        path="/terms-disclaimer"
+      />
       <Navigation />
-      <main className="pt-28 pb-16 md:pt-32 md:pb-20">
+
+      <main id="main-content" className="pt-28 pb-16 md:pt-32 md:pb-20">
         <div className="max-w-[800px] mx-auto px-6">
           <PageBackButton fallback="/" className="mb-8" />
           <p className="section-label mb-4">TERMS & DISCLAIMER</p>
@@ -30,6 +38,7 @@ export default function TermsDisclaimer() {
           </div>
         </div>
       </main>
+
       <Footer />
     </div>
   );

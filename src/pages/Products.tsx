@@ -9,7 +9,7 @@ import PageBackButton from '@/components/PageBackButton';
 import { trpc } from '@/providers/trpc';
 import { productCategories } from '@contracts/product-catalog';
 import SEO from '@/components/SEO';
-import { siteUrl } from '@contracts/seo-content';
+import { routeMeta, siteUrl } from '@contracts/seo-content';
 
 const categoryLabels = {
   all: 'All Products',
@@ -98,13 +98,15 @@ export default function Products() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f0e8' }}>
       <SEO
-        title="Farm Inputs & Agro Products in Kenya | Jaosef Agro Supplies"
-        description="Browse farm inputs and agro products from Jaosef Agro Supplies, including fertilisers, certified seeds, crop protection, irrigation supplies, livestock feeds, animal health products, and farm tools."
+        title={routeMeta['/products'].title}
+        description={routeMeta['/products'].description}
         path="/products"
         image="/images/brand/jaosef-logo-light.webp"
         jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
+
+      <main id="main-content">
 
       {/* Page Header */}
       <section style={{ backgroundColor: '#1a3a2f' }} className="pt-24 pb-14 md:pt-28 md:pb-16">
@@ -117,7 +119,7 @@ export default function Products() {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl text-[#f5f0e8]">Our Products</h1>
-            <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: '#8b7d6b' }}>
+            <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: 'rgba(245, 240, 232, 0.78)' }}>
               Browse quality agricultural inputs and enquire directly for current availability and product guidance.
             </p>
           </motion.div>
@@ -131,7 +133,7 @@ export default function Products() {
             {/* Mobile category dropdown + search (visible below lg) */}
             <div className="lg:hidden flex flex-col gap-3 mb-2">
               <label className="block">
-                <span className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#8b7d6b' }}>
+                <span className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#6b5f4f' }}>
                   Category
                 </span>
                 <select
@@ -152,7 +154,7 @@ export default function Products() {
                 </select>
               </label>
               <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8b7d6b' }} />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#6b5f4f' }} />
                 <input
                   type="text"
                   placeholder="Search products..."
@@ -197,7 +199,7 @@ export default function Products() {
 
               {/* Search */}
               <div className="mt-5 relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8b7d6b' }} />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#6b5f4f' }} />
                 <input
                   type="text"
                   placeholder="Search products..."
@@ -248,7 +250,7 @@ export default function Products() {
                             />
                           </div>
                           <div className="p-4 flex-1">
-                            <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#5c7a4a' }}>
+                            <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#4a6339' }}>
                               {categoryLabels[product.category]}
                             </p>
                             <h3 className="font-display text-base sm:text-lg font-medium mt-1" style={{ color: '#1a3a2f' }}>
@@ -268,11 +270,11 @@ export default function Products() {
                 </div>
               ) : (
                 <div className="text-center py-20">
-                  <Sprout size={48} className="mx-auto mb-4" style={{ color: '#8b7d6b' }} />
+                  <Sprout size={48} className="mx-auto mb-4" style={{ color: '#6b5f4f' }} />
                   <h3 className="font-display text-2xl" style={{ color: '#1a3a2f' }}>
                     No products found
                   </h3>
-                  <p className="mt-2 text-base" style={{ color: '#8b7d6b' }}>
+                  <p className="mt-2 text-base" style={{ color: '#6b5f4f' }}>
                     {searchQuery
                       ? 'Try a different search term'
                       : 'Check back soon for new arrivals.'}
@@ -283,6 +285,8 @@ export default function Products() {
           </div>
         </div>
       </section>
+
+      </main>
 
       <Footer />
     </div>

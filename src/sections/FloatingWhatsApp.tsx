@@ -62,7 +62,7 @@ export default function FloatingWhatsApp() {
           transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           whileHover={{ scale: 1.08 }}
         >
-          <MessageCircle size={24} className="text-white sm:h-7 sm:w-7" strokeWidth={2.2} />
+          <MessageCircle size={24} className="text-[#0b3b28] sm:h-7 sm:w-7" strokeWidth={2.2} />
         </motion.span>
       </span>
     </motion.a>

@@ -43,7 +43,17 @@ export default defineConfig({
           if (id.includes("framer-motion")) {
             return "motion-vendor";
           }
-          if (id.includes("react") || id.includes("scheduler")) {
+          // Admin-only heavyweights: keep them out of the shared vendor chunk
+          // so public pages never download them.
+          if (id.includes("recharts") || id.includes("d3-") || id.includes("victory-vendor")) {
+            return "charts-vendor";
+          }
+          if (id.includes("date-fns") || id.includes("react-day-picker") || id.includes("react-easy-crop")) {
+            return "admin-vendor";
+          }
+          // Core React only — matching every "react-*" package created a
+          // circular react-vendor <-> vendor chunk dependency.
+          if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) {
             return "react-vendor";
           }
           return "vendor";

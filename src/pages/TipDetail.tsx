@@ -35,7 +35,7 @@ export default function TipDetail() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#f5f0e8' }}>
         <h2 className="font-display text-2xl" style={{ color: '#1a3a2f' }}>Article not found</h2>
-        <Link to="/farming-tips" className="mt-4 text-sm font-semibold flex items-center gap-1" style={{ color: '#c75c2e' }}>
+        <Link to="/farming-tips" className="mt-4 text-sm font-semibold flex items-center gap-1" style={{ color: '#9e451a' }}>
           <ArrowLeft size={14} /> Back to Tips
         </Link>
       </div>
@@ -79,6 +79,8 @@ export default function TipDetail() {
       />
       <Navigation />
 
+      <main id="main-content">
+
       <article className="pt-28 pb-16 md:pt-32 md:pb-20">
         <div className="max-w-[800px] mx-auto px-6">
           <motion.div
@@ -97,7 +99,7 @@ export default function TipDetail() {
               decoding="async"
             />
 
-            <p className="text-xs font-medium tracking-[2px] uppercase" style={{ color: '#5c7a4a' }}>
+            <p className="text-xs font-medium tracking-[2px] uppercase" style={{ color: '#4a6339' }}>
               {tip.date}
             </p>
             <h1 className="font-display text-3xl md:text-4xl mt-3" style={{ color: '#1a3a2f' }}>
@@ -138,8 +140,8 @@ export default function TipDetail() {
                     decoding="async"
                   />
                   <div>
-                    <p className="text-xs" style={{ color: '#8b7d6b' }}>{rt.date}</p>
-                    <h4 className="font-display text-base font-medium mt-1 transition-colors duration-300 group-hover:text-[#c75c2e]" style={{ color: '#1a3a2f' }}>
+                    <p className="text-xs" style={{ color: '#6b5f4f' }}>{rt.date}</p>
+                    <h4 className="font-display text-base font-medium mt-1 transition-colors duration-300 group-hover:text-[#9e451a]" style={{ color: '#1a3a2f' }}>
                       {rt.title}
                     </h4>
                   </div>
@@ -149,6 +151,8 @@ export default function TipDetail() {
           </div>
         </section>
       )}
+
+      </main>
 
       <Footer />
     </div>

@@ -18,17 +18,17 @@ export default function TopBar() {
 
   return (
     <div
-      className="hidden md:block fixed top-0 left-0 right-0 z-[51] h-9 text-[12px]"
+      className="hidden md:block h-9 text-[12px]"
       style={{ backgroundColor: '#0f2a20', color: '#c4b9a4' }}
     >
       <div className="max-w-[1200px] mx-auto px-6 h-full flex items-center justify-between">
         <div className="flex items-center gap-5">
           <span className="flex items-center gap-1.5">
-            <MapPin size={12} style={{ color: '#5c7a4a' }} />
+            <MapPin size={12} style={{ color: '#4a6339' }} />
             <span>{contact.location}</span>
           </span>
           <span className="hidden lg:flex items-center gap-1.5">
-            <Phone size={12} style={{ color: '#5c7a4a' }} />
+            <Phone size={12} style={{ color: '#4a6339' }} />
             <a href={contact.phoneHref} className="hover:text-[#f5f0e8] transition-colors">
               {contact.phoneDisplay}
             </a>
@@ -39,7 +39,7 @@ export default function TopBar() {
             href={`mailto:${contact.email}`}
             className="hidden lg:flex items-center gap-1.5 hover:text-[#f5f0e8] transition-colors"
           >
-            <Mail size={12} style={{ color: '#5c7a4a' }} />
+            <Mail size={12} style={{ color: '#4a6339' }} />
             <span>{contact.email}</span>
           </a>
           <div className="flex items-center gap-2">
