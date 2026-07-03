@@ -13,6 +13,20 @@ import { handleEnquiryImageUpload } from "./enquiry-upload-router";
 
 const app = new Hono<{ Bindings: HttpBindings }>();
 
+// Canonical host: 301 www.* to the bare domain. Both hosts currently resolve,
+// and serving the full site on both makes Google see two duplicate sites —
+// which dilutes site-name and ranking signals.
+app.use(async (c, next) => {
+  const host = c.req.header("host");
+  if (host?.toLowerCase().startsWith("www.")) {
+    const url = new URL(c.req.url);
+    url.host = host.slice(4);
+    url.protocol = "https:";
+    return c.redirect(url.toString(), 301);
+  }
+  return next();
+});
+
 app.use(
   secureHeaders({
     // HSTS is ignored by browsers over plain http, so this is safe for
