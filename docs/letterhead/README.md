@@ -6,6 +6,7 @@ Company stationery built from the site branding (deep green `#1A3A2F`, harvest o
 | --- | --- |
 | `Jaosef-Agro-Supplies-Letterhead-Blank.docx` | Blank A4 letterhead (repeating header and footer). Type into it or save as a Word template. |
 | `Jaosef-Agro-Supplies-Quotation-Letter.docx` | Quotation letter with demo items, totals and terms. Replace the demo data before sending. |
+| `Jaosef-Agro-Supplies-Introduction-Letter.docx` | General business letter (company introduction and supply proposal to a co-operative) with demo details. |
 | `*.pdf` | Print-ready copies of the two documents. |
 | `Jaosef-Agro-Supplies-Logo.png` | Transparent logo (1458 x 461) for other documents. |
 | `Jaosef-Agro-Supplies-Letterhead-Pack.zip` | All of the above in one download. |
